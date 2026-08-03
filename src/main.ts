@@ -5,7 +5,7 @@ import router from "./router";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import "remixicon/fonts/remixicon.css";
-import "@/assets/style.css";
+import "@/assets/tailwind.css";
 
 import InputFieldWithIcon from "@/components/global/fields/InputFieldWithIcon.vue";
 import CheckboxToggle from "@/components/global/fields/CheckboxToggle.vue";

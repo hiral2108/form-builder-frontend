@@ -25,6 +25,30 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/",
+    component: () => import("@/layouts/SettingPage.vue"),
+    children: [
+      {
+        path: "/dashboard",
+        name: "DashboardPage",
+        component: () => import("@/views/sidebarSettingpages/DashboardPage.vue"),
+        meta: { requireAuth: true, title: "Dashboard", subtitle: "Build, manage, and track all your forms." },
+      },
+      {
+        path: "/forms",
+        name: "FormsPage",
+        component: () => import("@/views/sidebarSettingpages/FormsPage.vue"),
+        meta: { requireAuth: true, title: "Forms", subtitle: "Manage your active and draft forms in one place." },
+      },
+      {
+        path: "/submissions",
+        name: "SubmissionsPage",
+        component: () => import("@/views/sidebarSettingpages/SubmissionsPage.vue"),
+        meta: { requireAuth: true, title: "Submissions", subtitle: "Review and analyze form user responses." },
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

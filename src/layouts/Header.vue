@@ -1,5 +1,5 @@
 <template>
-  <header class="sticky top-0 z-20 h-16 bg-white border-b border-slate-200 flex items-center px-6 gap-4 justify-between">
+  <header class="h-16 bg-white flex items-center px-6 gap-4 justify-between flex-shrink-0">
     <div class="flex items-center gap-4 flex-1 min-w-0">
       <!-- Mobile sidebar toggle trigger -->
       <button
@@ -8,11 +8,15 @@
       >
         <i class="ri-menu-line text-xl"></i>
       </button>
+      
+      <!-- Render the correct props here -->
       <div class="min-w-0">
-        <h1 class="text-base font-semibold text-slate-800 leading-tight truncate">
-          {{ pageTitle }}
+        <h1 class="text-xl font-bold text-slate-800 leading-tight tracking-tight">
+          {{ title }}
         </h1>
-        <p class="text-[10px] text-slate-400 hidden sm:block truncate">{{ pageSubtitle }}</p>
+        <p class="text-xs text-slate-400 mt-0.5 hidden sm:block">
+          {{ subtitle }}
+        </p>
       </div>
     </div>
 
@@ -51,14 +55,11 @@
   </header>
 </template>
 
-<script setup lang="ts">
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-
+<script setup lang="ts"> 
 defineEmits(["toggle-mobile-sidebar"]);
 
-const route = useRoute();
-
-const pageTitle = computed(() => (route.meta.title as string) || "Dashboard");
-const pageSubtitle = computed(() => (route.meta.subtitle as string) || "");
+defineProps({
+  title: String,
+  subtitle: String,
+});
 </script>

@@ -1,12 +1,12 @@
 <template>
-  <header class="h-16 bg-white flex items-center px-6 gap-4 justify-between flex-shrink-0">
+  <header class="h-18 bg-white flex items-center px-6 gap-4 justify-between flex-shrink-0">
     <div class="flex items-center gap-4 flex-1 min-w-0">
       <!-- Mobile sidebar toggle trigger -->
       <button
         @click="$emit('toggle-mobile-sidebar')"
         class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 transition-colors cursor-pointer"
       >
-        <i class="ri-menu-line text-xl"></i>
+        <img v-svg-inline src="@/assets/icons/settingpage/menu-line.svg" class="h-5 w-5"/>
       </button>
       
       <!-- Render the correct props here -->
@@ -23,7 +23,11 @@
     <div class="flex items-center gap-3 flex-shrink-0">
       <!-- Search Input -->
       <div class="relative hidden md:block">
-        <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+        <img 
+          v-svg-inline 
+          src="@/assets/icons/settingpage/search-line.svg"
+          class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4.5 h-4.5"
+        />
         <input 
           placeholder="Search..." 
           class="w-56 pl-9 pr-4 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 placeholder-slate-400 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 focus:bg-white" 
@@ -34,7 +38,11 @@
       <!-- Notifications -->
       <div class="relative">
         <button class="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer">
-          <i class="ri-notification-3-line text-xl"></i>
+          <img 
+            v-svg-inline 
+            src="@/assets/icons/settingpage/notification-3-line.svg"
+            class="w-5.5 h-5.5"
+          />
           <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500"></span>
         </button>
       </div>

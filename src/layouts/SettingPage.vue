@@ -16,10 +16,15 @@
         <!-- Branding Header -->
         <div class="h-16 flex items-center px-6 justify-between app-icon">
           <router-link to="/dashboard" class="flex items-center gap-2.5 min-w-0">
-            <div class="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center flex-shrink-0 shadow-sm">
-              <i class="ri-file-list-3-line text-white text-base"></i>
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-r from-teal-600 to-teal-700 flex items-center justify-center flex-shrink-0 shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40">
+              <img v-svg-inline src="@/assets/icons/settingpage/file-list-3-line.svg" class="text-white w-5 h-5"/>
             </div>
-            <span class="font-bold text-slate-900 text-base tracking-tight truncate collapse-hidden-item">FormFlow</span>
+            <!-- <span class="font-bold text-teal-900 text-xl tracking-tight truncate collapse-hidden-item">{{appName}}</span> -->
+             <span 
+              class="font-bold text-teal-900 text-xl tracking-tight truncate collapse-hidden-item"
+              style="font-family: math;">
+              {{appName}}
+            </span>
           </router-link>
         </div>
 
@@ -37,8 +42,8 @@
                 class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-teal-600 rounded-r-full"
               ></span>
               
-              <div class="w-5 h-5 flex items-center justify-center flex-shrink-0">
-                <i :class="[item.icon, 'text-lg']"></i>
+              <div class="w-5 h-5 flex items-center justify-center flex-shrink-0 text-lg">
+                <img v-svg-inline :src="item.icon" :alt="item.label" />
               </div>
               <span class="collapse-hidden-item">{{ item.label }}</span>
             </router-link>
@@ -64,13 +69,23 @@
         </div>
 
         <!-- Floating Sidebar Collapse Toggle Button (Sticks on the border) -->
-        <button 
-          v-show="!isMobile"
-          @click="collapseMenu"
-          class="hidden lg:flex absolute right-[-34px] bottom-30 w-8.5 h-8.5 bg-white border border-slate-200 rounded-full items-center justify-center text-slate-400 hover:text-slate-600 shadow-sm cursor-pointer z-50 transition-all duration-300 hover:scale-105"
-        >
-          <i :class="[isCollapsed ? 'ri-arrow-right-s-line' : 'ri-arrow-left-s-line', 'text-sm']"></i>
-        </button>
+        <template v-if="!isCollapsed">
+            <button
+              @click="collapseMenu"
+              :class="{ hidden: isCollapsed || isMobile }"
+              class="hidden lg:flex absolute right-[-18px] bottom-20 w-8.5 h-8.5 bg-white border border-slate-200 rounded-full items-center justify-center text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-sm cursor-pointer z-50 transition-all duration-300 hover:scale-105"
+            >
+              <img v-svg-inline :src="arrowLeft" alt="Hide Icon" class="h-5 w-5 text-slate-600" />
+            </button>
+          </template>
+          <template v-else>
+            <button
+              @click="collapseMenu"
+              class="hidden lg:flex absolute right-[-18px] bottom-20 w-8.5 h-8.5 bg-white border border-slate-200 rounded-full items-center justify-center text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-sm cursor-pointer z-50 transition-all duration-300 hover:scale-105"
+            >
+              <img v-svg-inline :src="arrowRight" alt="Show Icon"  class="h-5 w-5 text-slate-600"/>
+            </button>
+          </template>
       </aside>
 
       <!-- Main Panel area (No partition background) -->
@@ -81,11 +96,12 @@
         <!-- Header -->
         <Header @toggle-mobile-sidebar="isMobileSidebarOpen = !isMobileSidebarOpen" :title="pageTitle" :subtitle="pageSubtitle" />
 
-        <!-- Curved Content Container (Slate grey background) -->
-        <div class="flex-1 p-4 pt-0 bg-white min-h-0 relative">
+        <!-- Curved Content Container -->
+        <div class="flex-1 pt-0 pr-4 pb-4 pl-0 bg-white min-h-0 relative">
           <div class="w-full h-full bg-slate-50 border border-slate-200/50 rounded-[20px] overflow-auto p-6 relative">
-            <!-- Nested router view -->
-            <router-view />
+            <router-view v-slot="{ Component }">
+            <component :is="Component" :is-collapsible="isCollapsed" />
+          </router-view>
           </div>
         </div>
       </main>
@@ -94,14 +110,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch, computed } from "vue";
+import { ref, onMounted, onUnmounted, watch, computed, inject } from "vue";
 import { useRoute } from "vue-router";
 import Header from "./Header.vue";
+import dashboardNav from "@/assets/icons/settingpage/dashboard-line.svg";
+import formNav from "@/assets/icons/settingpage/file-list-2-line.svg";
+import submissionNav from "@/assets/icons/settingpage/task-line.svg";
+import arrowLeft from "@/assets/icons/settingpage/arrow-left-s-line.svg"
+import arrowRight from "@/assets/icons/settingpage/arrow-right-s-line.svg"
 
 const route = useRoute();
 const isCollapsed = ref(false);
 const isMobile = ref(false);
 const isMobileSidebarOpen = ref(false);
+
+const appName = inject("appName");
 
 const collapseMenu = () => {
   isCollapsed.value = !isCollapsed.value;
@@ -114,6 +137,34 @@ const handleResize = () => {
   }
 };
 
+const navItems = [
+  {
+    label: "Dashboard",
+    routeName: "DashboardPage",
+    path: "/dashboard",
+    icon: dashboardNav,
+  },
+  {
+    label: "Forms",
+    routeName: "FormsPage",
+    path: "/forms",
+    icon: formNav,
+  },
+  {
+    label: "Submissions",
+    routeName: "SubmissionsPage",
+    path: "/submissions",
+    icon: submissionNav,
+  },
+];
+const pageMeta: Record<string, { title: string; subtitle?: string }> = {
+    DashboardPage: { title: "Dashboard", subtitle: "Build, manage, and track all your forms." },
+    FormsPage: { title: "Forms", subtitle: "Manage your active and draft forms in one place." },
+    SubmissionsPage: { title: "Submissions", subtitle: "Review and analyze form user responses." },
+};
+const pageTitle = computed(() => pageMeta[route.name as string]?.title || "");
+const pageSubtitle = computed(() => pageMeta[route.name as string]?.subtitle || "");
+
 onMounted(() => {
   handleResize();
   window.addEventListener("resize", handleResize);
@@ -125,62 +176,46 @@ onUnmounted(() => {
 
 watch(
   () => route.name,
-  () => {
+  (newName) => {
     isMobileSidebarOpen.value = false;
-  }
+    // Automatically collapse sidebar on FormSettingsPage
+    if (newName === "FormSettingsPage") {
+      isCollapsed.value = true;
+    } else {
+      isCollapsed.value = false;
+    }
+  },
+  { immediate: true }
 );
-
-const navItems = [
-  {
-    label: "Dashboard",
-    routeName: "DashboardPage",
-    path: "/dashboard",
-    icon: "ri-dashboard-line",
-  },
-  {
-    label: "Forms",
-    routeName: "FormsPage",
-    path: "/forms",
-    icon: "ri-file-list-3-line",
-  },
-  {
-    label: "Submissions",
-    routeName: "SubmissionsPage",
-    path: "/submissions",
-    icon: "ri-inbox-archive-line",
-  },
-];
-const pageMeta: Record<string, { title: string; subtitle?: string }> = {
-    DashboardPage: { title: "Dashboard", subtitle: "Build, manage, and track all your forms." },
-    FormsPage: { title: "Forms", subtitle: "Manage your active and draft forms in one place." },
-    SubmissionsPage: { title: "Submissions", subtitle: "Review and analyze form user responses." },
-};
-const pageTitle = computed(() => pageMeta[route.name as string]?.title || "");
-const pageSubtitle = computed(() => pageMeta[route.name as string]?.subtitle || "");
 </script>
 
 <style scoped>
-.collapse-sidebar {
+.collapse-sidebar.setting-sidebar {
   width: 80px !important;
-  .collapse-hidden-item {
-    display: none !important;
-  }
-  .app-icon {
-    justify-content: center;
-  }
-  .setting-sidebar-item {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    justify-content: center !important;
-  }
-  .user-detail-section {
-    padding: 3px 0 !important;
-    justify-content: center;
-  }
-  .setting-sidebar-item.active {
-    background-color: transparent !important;
-    box-shadow: none !important;
-  }
+}
+
+.collapse-sidebar .collapse-hidden-item {
+  display: none !important;
+}
+
+.collapse-sidebar .app-icon {
+  justify-content: center;
+}
+
+.collapse-sidebar .setting-sidebar-item {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  justify-content: center !important;
+}
+
+.collapse-sidebar .user-detail-section {
+  padding: 3px 0 !important;
+  justify-content: center;
+}
+
+.collapse-sidebar .setting-sidebar-item.active {
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .setting-sidebar-item.active {
@@ -228,5 +263,11 @@ const pageSubtitle = computed(() => pageMeta[route.name as string]?.subtitle || 
 .collapse-sidebar .tooltip-wrapper:hover .sidebar-tooltip {
   opacity: 1;
   transform: translateY(-50%) scaleX(1);
+}
+
+.menu-close img,
+.menu-open img {
+  height: 16px !important;
+  width: 16px !important;
 }
 </style>

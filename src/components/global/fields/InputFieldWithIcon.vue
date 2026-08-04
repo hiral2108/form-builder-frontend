@@ -5,7 +5,7 @@
         v-if="label"
         :for="getFieldID"
         :class="labelClass"
-        class="block text-sm font-semibold text-gray-700 mb-2"
+        class="block text-sm font-semibold text-gray-700 mb-1"
         >{{ label }}</label
       >
       <div class="relative">
@@ -34,7 +34,7 @@
             classes,
           ]"
           ref="inputField"
-          class="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 focus:!bg-white"
+          class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-700 focus:border-transparent transition-all duration-200 focus:!bg-white"
           :placeholder="placeholder"
           @input="onChange"
           @blur="onBlur"

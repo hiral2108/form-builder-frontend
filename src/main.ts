@@ -9,18 +9,31 @@ import "@/assets/tailwind.css";
 
 import InputFieldWithIcon from "@/components/global/fields/InputFieldWithIcon.vue";
 import CheckboxToggle from "@/components/global/fields/CheckboxToggle.vue";
+import ButtonLoader from "@/components/global/ButtonLoader.vue";
+import CustomDefaultCheckbox from "@/components/global/fields/CustomDefaultCheckbox.vue";
 
-const app = createApp(App);
-app.use(createPinia());
-app.use(router);
-
+import VueSvgInlinePlugin from "@/utils/vue-svg-inline-vite.ts";
 const toastOptions = {
   timeout: 3000,
   position: "top-right",
 };
+
+const app = createApp(App);
+
+app.use(createPinia());
+app.use(router);
 app.use(Toast, toastOptions);
+app.use(VueSvgInlinePlugin, {
+  cache: {
+    persistent: false,
+  },
+});
+
+app.provide("appName", "FormFlow");
 
 app.component("InputFieldWithIcon", InputFieldWithIcon);
 app.component("CheckboxToggle", CheckboxToggle);
+app.component("ButtonLoader", ButtonLoader);
+app.component("CustomDefaultCheckbox", CustomDefaultCheckbox);
 
 app.mount("#app");

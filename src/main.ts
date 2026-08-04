@@ -11,6 +11,8 @@ import InputFieldWithIcon from "@/components/global/fields/InputFieldWithIcon.vu
 import CheckboxToggle from "@/components/global/fields/CheckboxToggle.vue";
 import ButtonLoader from "@/components/global/ButtonLoader.vue";
 import CustomDefaultCheckbox from "@/components/global/fields/CustomDefaultCheckbox.vue";
+import InputField from "@/components/global/fields/InputField.vue";
+import ModalComponent from "@/components/global/ModalComponent.vue";
 
 import VueSvgInlinePlugin from "@/utils/vue-svg-inline-vite.ts";
 const toastOptions = {
@@ -35,5 +37,7 @@ app.component("InputFieldWithIcon", InputFieldWithIcon);
 app.component("CheckboxToggle", CheckboxToggle);
 app.component("ButtonLoader", ButtonLoader);
 app.component("CustomDefaultCheckbox", CustomDefaultCheckbox);
+app.component("InputField", InputField);
+app.component("ModalComponent", ModalComponent);
 
 app.mount("#app");

@@ -14,7 +14,7 @@
         <h1 class="text-xl font-bold text-slate-800 leading-tight tracking-tight">
           {{ title }}
         </h1>
-        <p class="text-xs text-slate-400 mt-0.5 hidden sm:block">
+        <p class="text-sm text-slate-500 mt-0.5 hidden sm:block">
           {{ subtitle }}
         </p>
       </div>

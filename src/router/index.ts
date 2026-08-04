@@ -47,6 +47,12 @@ const routes = [
         component: () => import("@/views/sidebarSettingpages/SubmissionsPage.vue"),
         // meta: { requireAuth: true},
       },
+      {
+        path: "/form-settings/:uniqueId?",
+        name: "FormSettingsPage",
+        component: () => import("@/views/sidebarSettingpages/FormSettingsPage.vue"),
+        // meta: { requireAuth: true},
+      },
     ],
   },
 ];

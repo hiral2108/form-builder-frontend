@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center gap-2">
-    <label class="flex items-center gap-3 cursor-pointer group w-fit">
+    <label class="flex items-center gap-2 cursor-pointer group w-fit">
       <!-- Checkbox -->
       <input
         type="checkbox"
@@ -12,15 +12,15 @@
 
       <!-- Custom box -->
       <div
-        class="w-5 h-5 border-2 rounded flex items-center justify-center transition-all flex-[0_0_20px]
+        class="border-2 rounded flex items-center justify-center transition-all
                border-gray-300
-               peer-checked:bg-blue-500 peer-checked:border-blue-500
+               peer-checked:bg-teal-500 peer-checked:border-teal-500
                peer-disabled:cursor-not-allowed peer-disabled:bg-gray-300 peer-disabled:border-gray-300"
+                :class="[size === 'sm' ? 'w-4 h-4 flex-[0_0_16px]' : 'w-5 h-5 flex-[0_0_20px]']"
       >
         <svg
           v-if="isChecked"
-          width="18"
-          height="18"
+           :class="[size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5']"
           viewBox="0 0 15 14"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -28,12 +28,13 @@
           <path
             d="M6.05291 8.85505L11.4177 3.48839L12.234 4.31672L6.05291 10.5117L2.34424 6.79005L3.16061 5.97339L6.05291 8.85505Z"
             fill="white"
+            stroke="white"
           />
         </svg>
       </div>
 
       <!-- Label -->
-      <span class="text-sm font-medium text-gray-700" v-if="label">
+      <span :class="labelClass" v-if="label">
         {{ label }}
       </span>
     </label>
@@ -83,7 +84,15 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false
-  }
+  },
+   size: {
+    type: String,
+    default: 'md'
+  },
+  labelClass: {
+    type: String,
+    default: 'text-sm font-semibold text-gray-700'
+  },
 })
 
 const emit = defineEmits<{

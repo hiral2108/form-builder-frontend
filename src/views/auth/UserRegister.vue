@@ -8,72 +8,70 @@
       <h1 class="text-2xl font-bold text-slate-800">Create your account</h1>
       <p class="text-slate-500 mt-1 text-sm">Start building forms in minutes</p>
     </div>
-      <form>
+      <form autocomplete="off" @submit.prevent="handleRegister">
         <div class="mb-4">
-          <label for="reg-name" class="block text-sm font-medium text-slate-700 mb-1.5">Full Name</label>
-          <input
-            id="reg-name"
-            class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-all"
-            placeholder="John Doe"
-            type="text"
-            value="" 
-          />
+          <InputFieldWithIcon
+          type="text"
+          icon="user"
+          label="Name"
+          :has-icon="true"
+          placeholder="Enter your name"
+          :hasError="$v.name.$dirty && $v.name.$error"
+          :validationMessage="$v.name.$errors"
+          :value="form.name"
+          @input="form.name = $event"
+          @blur="$v.name.$touch"
+        />
         </div>
         <div class="mb-4">
-          <label for="reg-email" class="block text-sm font-medium text-slate-700 mb-1.5">Email Address</label>
-          <input
-            id="reg-email"
-            class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 transition-all"
-            placeholder="you@company.com"
-            autocomplete="email"
-            type="email"
-            value="" 
-          />
+         <InputFieldWithIcon
+          type="email"
+          icon="email"
+          label="Email Address"
+          :has-icon="true"
+          placeholder="Enter your email"
+          :hasError="$v.email.$dirty && $v.email.$error"
+          :validationMessage="$v.email.$errors"
+          :value="form.email"
+          @input="form.email = $event"
+          @blur="$v.email.$touch"
+        />
         </div>
         <div class="mb-4">
-          <label for="reg-pw" class="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
-          <div class="relative">
-            <input
-              id="reg-pw"
-              class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 pr-10 transition-all"
-              placeholder="Min. 8 characters"
-              autocomplete="new-password"
-              type="password"
-              value="" 
-            />
-            <button
-              type="button"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
-            >
-              <i class="ri-eye-off-line text-lg"></i>
-            </button>
-          </div>
+          <InputFieldWithIcon
+          type="password"
+          icon="password"
+          label="Password"
+          :has-icon="true"
+          placeholder="Enter your password"
+          :hasError="$v.password.$dirty && $v.password.$error"
+          :validationMessage="$v.password.$errors"
+          :value="form.password"
+          @input="form.password = $event"
+          @blur="$v.password.$touch"
+        />
         </div>
         <div class="mb-5">
-          <label for="reg-cpw" class="block text-sm font-medium text-slate-700 mb-1.5">Confirm Password</label>
-          <div class="relative">
-            <input
-              id="reg-cpw"
-              class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 pr-10 transition-all"
-              placeholder="Re-enter your password"
-              autocomplete="new-password"
-              type="password"
-              value="" 
-            />
-            <button
-              type="button"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
-            >
-              <i class="ri-eye-off-line text-lg"></i>
-            </button>
-          </div>
+         <InputFieldWithIcon
+          type="password"
+          icon="password"
+          label="Confirm Password"
+          :has-icon="true"
+          placeholder="Confirm your password"
+          :hasError="$v.confirmPassword.$dirty && $v.confirmPassword.$error"
+          :validationMessage="$v.confirmPassword.$errors"
+          :value="form.confirmPassword"
+          @input="form.confirmPassword = $event"
+          @blur="$v.confirmPassword.$touch"
+        />
         </div>
-        <button
-          type="submit"
-          class="w-full py-2.5 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-sm font-semibold transition-colors shadow-lg shadow-teal-700/10 hover:shadow-teal-700/20 flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer"
-        >
-          Create Account
-        </button>
+        <button type="submit" :disabled="isLoading" class="relative w-full cursor-pointer bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 whitespace-nowrap disabled:opacity-50">
+        <span class="flex items-center justify-center gap-2">
+            Create Account
+          <img v-svg-inline src="@/assets/icons/auth/user-plus.svg" />
+          <ButtonLoader v-if="isLoading" :classes="['absolute','right-4']" />
+        </span>
+      </button>
       </form>
        <p class="text-center text-sm text-slate-500 mt-4">
       Already have an account?
@@ -84,3 +82,77 @@
    
   </div>
 </template>
+<script setup lang="ts">
+import { computed, reactive, ref } from 'vue'
+import { showErrorMessage, showSuccessMessage } from '@/utils';
+import AuthService from '@/services/api/auth-services'
+import { useShopUser } from '@/composable/useShopUser'
+
+// Validators
+import useVuelidate from '@vuelidate/core'
+import { email, helpers, required, minLength, sameAs } from '@vuelidate/validators'
+import { useRouter } from 'vue-router'
+
+const isLoading = ref<boolean>(false)
+const router = useRouter()
+const { getCurrentUser } = useShopUser()
+
+const form = reactive({
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: ''
+})
+
+const rules = computed(() => {
+  return {
+    name: { required: helpers.withMessage('Name is required', required) },
+    email: {
+      required: helpers.withMessage('Email is required', required),
+      email: helpers.withMessage('Please enter a valid email address', email)
+    },
+    password: {
+      required: helpers.withMessage('Password is required', required),
+      minLength: helpers.withMessage('Password must contain at least 6 characters', minLength(6))
+    },
+    confirmPassword: {
+      required: helpers.withMessage('Confirm password is required', required),
+      sameAsPassword: helpers.withMessage('Passwords do not match', sameAs(computed(() => form.password)))
+    }
+  }
+})
+
+const $v = useVuelidate(rules, form)
+
+const handleRegister = async () => {
+  $v.value.$touch()
+  if ($v.value.$pending || $v.value.$error) {
+    return false
+  }
+
+  await registerUser();
+}
+
+const registerUser = async () => {
+  isLoading.value = true
+  try {
+    const payload = {
+      name: form.name,
+      email: form.email,
+      password: form.password,
+      src: 'Shopify',
+    }
+    const { access_token, message } = await new AuthService().register(payload)
+    sessionStorage.setItem('authToken', access_token)
+    showSuccessMessage(message)
+    await getCurrentUser()
+    isLoading.value = false
+    return router.push('/dashboard')
+
+  } catch (error: ApiError<any> | any) {
+    console.log(error.response.data.message)
+    showErrorMessage(error)
+    isLoading.value = false
+  }
+}
+</script>

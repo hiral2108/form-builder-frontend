@@ -4,7 +4,7 @@
       <div class="text-center mb-8">
         <div
           class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 text-white mb-4 shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40">
-          <i class="ri-file-list-3-line text-2xl"></i>
+          <img v-svg-inline src="@/assets/icons/settingpage/file-list-3-line.svg" class="text-white w-6 h-6"/>
         </div>
         <h1 class="text-2xl font-bold text-slate-800">{{ appName }}</h1>
         <p class="text-slate-500 mt-1 text-sm">Sign in to your account to continue</p>

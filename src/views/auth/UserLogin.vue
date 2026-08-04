@@ -3,7 +3,7 @@
     <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-8">
       <div class="text-center mb-8">
         <div
-          class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-teal-700 text-white mb-4 shadow-lg shadow-teal-700/20">
+          class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 text-white mb-4 shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40">
           <i class="ri-file-list-3-line text-2xl"></i>
         </div>
         <h1 class="text-2xl font-bold text-slate-800">{{ appName }}</h1>
@@ -36,18 +36,29 @@
             @input="form.password = $event"
             @blur="$v.password.$touch" />
         </div>
-        <div class="flex items-center justify-between mb-2">
-          <CustomDefaultCheckbox label="Remember me" v-model="form.remember_me" :trueValue="1" :falseValue="0" />
+        <div class="flex items-center justify-between mb-3.5 mt-3.5">
+          <CustomDefaultCheckbox
+            label="Remember me"
+            v-model="form.remember_me"
+            :trueValue="1"
+            :falseValue="0"
+            size="sm"
+            labelClass="text-sm text-gray-700" />
         </div>
         <div
-            v-if="form.remember_me === 1"
-            class="flex items-center justify-center text-center text-xs text-teal-600 transition-all duration-200 mb-3">
-            <span>You will remain logged in for 30 days</span>
-          </div>
+          v-if="form.remember_me === 1"
+          class="flex items-center justify-center text-center text-xs text-teal-600 transition-all duration-200 mb-3">
+          <span>You will remain logged in for 30 days</span>
+        </div>
         <button
           type="submit"
           :disabled="isLoading"
-          class="relative w-full cursor-pointer bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 whitespace-nowrap">
+          class="relative w-full bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg shadow-teal-500/30 transition-all duration-200 whitespace-nowrap disabled:cursor-pointer"
+          :class="[
+            isLoading
+              ? 'blur-[0.5px] opacity-80 cursor-pointer'
+              : 'cursor-pointer hover:shadow-xl hover:shadow-teal-500/40 hover:scale-[1.02] active:scale-[0.98]',
+          ]">
           <span class="flex items-center justify-center gap-2"
             >Sign In
             <img v-svg-inline src="@/assets/icons/auth/right-arrow.svg" alt="Right Arrow" />
@@ -57,7 +68,7 @@
       </form>
       <p class="text-center text-sm text-slate-500 mt-4">
         Don't have an account?
-        <router-link class="text-teal-700 hover:text-teal-800 font-medium" to="/register">Create one</router-link>
+        <router-link class="text-teal-600 hover:text-teal-700 font-medium" to="/register">Create one</router-link>
       </p>
     </div>
   </div>
@@ -78,7 +89,7 @@
   import { showErrorMessage, showSuccessMessage } from "@/utils";
 
   const appName = inject("appName");
-   const toast = useToast();
+  const toast = useToast();
 
   const isLoading = ref<boolean>(false);
   const router = useRouter();
@@ -134,7 +145,7 @@
         await router.push("/dashboard").catch(() => {});
         isLoading.value = false;
       }
-    } catch (error: ApiError<any> | any) {
+    } catch (error: any) {
       showErrorMessage(error);
       isLoading.value = false;
     }

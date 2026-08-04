@@ -8,4 +8,77 @@ body {
 }
 * {
     box-sizing: border-box;
-}
+}
+
+/* ------------------------layout/setting page---------------------------- */
+.collapse-sidebar.setting-sidebar {
+  width: 80px !important;
+}
+
+.collapse-sidebar .collapse-hidden-item {
+  display: none !important;
+}
+
+.collapse-sidebar .app-icon {
+  justify-content: center;
+}
+
+.collapse-sidebar .setting-sidebar-item {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  justify-content: center !important;
+}
+
+.collapse-sidebar .user-detail-section {
+  padding: 3px 0 !important;
+  justify-content: center;
+}
+
+.setting-sidebar-item.active {
+  background-color: #f0fdfa; /* Light Teal-50 background */
+  color: #0d9488 !important; /* Teal-600 text */
+  font-weight: 600;
+}
+
+/* Sidebar tooltips when collapsed */
+.sidebar-tooltip {
+  display: none;
+}
+
+.collapse-sidebar .sidebar-tooltip {
+  display: inline-flex;
+  position: absolute;
+  left: 70px;
+  top: 50%;
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: left;
+  background-image: linear-gradient(to right, #14b8a6, #0d9488); /* Teal gradient */
+  color: #ffffff;
+  font-size: 14px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.2s linear;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Teal arrow pointing left */
+.collapse-sidebar .sidebar-tooltip::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 6px solid #14b8a6; /* Matches gradient start color */
+}
+
+/* On hover show the tooltip */
+.collapse-sidebar .tooltip-wrapper:hover .sidebar-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) scaleX(1);
+}

@@ -1,5 +1,5 @@
 <template>
-   <div class="h-full bg-slate-50/50 flex flex-col overflow-hidden">
+   <div class="h-[calc(100vh-128px)] bg-slate-50/50 flex flex-col overflow-hidden">
     <header
       class="fixed top-0 left-0 w-full bg-white z-38 h-18 flex items-center px-4 lg:px-6 transition-all duration-300 ease-in-out"
       :class="isCollapsible ? 'lg:pl-20' : 'lg:pl-60'">

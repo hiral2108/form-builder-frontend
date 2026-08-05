@@ -11,40 +11,42 @@
         <span>Create Form</span>
       </button>
     </div>
-        <!-- Dashboard filter bar -->
-    <div class="flex items-center gap-3 flex-wrap mb-6">
-      <!-- Filter Dropdown wrapper -->
-      <div class="relative flex-shrink-0">
-        <!-- Calendar SVG icon positioned absolute inside input -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
+    <!-- Dashboard Filter Bar -->
+    <div class="flex items-end gap-3 flex-wrap mb-6 dashboard-filter">
+      <!-- Filter Select with Calendar Icon -->
+      <div class="relative flex-shrink-0 select-box-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
           <path d="M9 1v2h6V1h2v2h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2Zm11 7H4v12h16V8Zm-9 3v4H8v-4h3Zm5 0v4h-3v-4h3Z"></path>
         </svg>
-        
-        <SelectField v-model="selectedFilter" :options="filteredMenu" />
+        <SelectField v-model="selectedFilter" :options="filteredMenu" customClass="pl-10 !w-[200px]" />
       </div>
 
-      <!-- Custom Date Inputs (shows only if 'custom' is selected) -->
+      <!-- Custom Element Plus Date Range Picker -->
       <template v-if="selectedFilter === 'custom'">
-        <div class="flex items-center gap-2">
-          <input
-            type="date"
-            v-model="startDate"
-            class="px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 h-[38px]"
-          />
-          <span class="text-slate-400 text-sm">—</span>
-          <input
-            type="date"
-            v-model="endDate"
-            class="px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 h-[38px]"
-          />
-          <button
-            type="button"
-            @click="applyCustomFilter"
-            class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg text-sm font-semibold transition-colors cursor-pointer h-[38px] flex items-center justify-center shadow-sm shadow-teal-500/30 hover:shadow-md"
-          >
-            Apply
-          </button>
+        <div class="flex flex-col gap-1.5">
+          <div class="calender-input relative inline-grid w-[280px] filter-date-range-picker">
+            <ElDatePicker
+              v-model="dateRange"
+              type="daterange"
+              range-separator="-"
+              start-placeholder="Start date"
+              end-placeholder="End date"
+              format="DD-MM-YYYY"
+              value-format="YYYY-MM-DD"
+              :editable="true"
+              :clearable="false"
+              style="width: 100%"
+              popper-class="filter-date-range-popper"
+            />
+          </div>
         </div>
+        <button 
+          type="button" 
+          class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-[38px] text-white bg-teal-600 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm" 
+          @click="applyCustomFilter"
+        >
+          Apply
+        </button>
       </template>
     </div>
 
@@ -154,8 +156,9 @@
 import { inject, ref, computed } from 'vue';
 import CreateFormModal from "@/components/modals/CreateFormModal.vue";
 import LineChart from "@/components/global/fields/LineChart.vue";
-import SelectField from "@/components/global/fields/SelectField.vue"; 
-import { useToast } from "vue-toastification"; 
+import SelectField from "@/components/global/fields/SelectField.vue";
+import { ElDatePicker } from "element-plus";
+import "element-plus/dist/index.css";
 
 const appName = inject("appName");
 const showCreateFormModal = ref(false);
@@ -178,12 +181,9 @@ const dateData = ref(["29, Jul", "30, Jul", "31, Jul", "01, Aug", "02, Aug", "03
 const viewData = ref([1, 0, 0, 0, 0, 0, 0, 0]); // Blue starts at 1.0, drops to 0
 const clickData = ref([0, 1, 0, 0, 0, 0, 0, 0]); // Pink starts at 0, goes to 1.0 on 30 Jul, then 0
 
-const toast = useToast();
-
 // Filter States
 const selectedFilter = ref("last_7_days");
-const startDate = ref("");
-const endDate = ref("");
+const dateRange = ref<[string, string] | null>(null);
 const filteredMenu = {
   today: "Today",
   yesterday: "Yesterday",
@@ -194,11 +194,7 @@ const filteredMenu = {
   custom: "Custom",
 };
 const applyCustomFilter = () => {
-  if (startDate.value && endDate.value) {
-    toast.success(`Filter applied: ${startDate.value} to ${endDate.value}`);
-  } else {
-    toast.error("Please select both start and end dates");
-  }
+  if (!dateRange.value) return;
 };
 </script>
 

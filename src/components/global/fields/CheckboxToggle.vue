@@ -10,10 +10,10 @@
       :aria-label="ariaLabel"
     />
 
-    <!-- visual track + thumb -->
+    <!-- visual track + thumb (Styled in Teal-700 / Slate-200) -->
     <span
       class="w-11 h-6 peer-focus:outline-none rounded-full relative inline-block transition-colors flex-[0_0_44px]"
-      :class="isChecked ? 'bg-blue-500' : 'bg-gray-200'"
+      :class="isChecked ? 'bg-teal-700' : 'bg-slate-200'"
     >
       <span
         class="absolute top-[2px] left-[2px] bg-white border border-gray-300 rounded-full h-5 w-5 transition-transform"
@@ -57,12 +57,10 @@ const id = computed(() => props.id ?? `checkbox-toggle-${uuidv4()}`);
 
 // whether the control is checked (derived from modelValue + trueValue)
 const isChecked = computed(() => {
-  // strict equality so numbers/strings are honored
   return props.modelValue === props.trueValue;
 });
 
 function onChange(e: Event) {
-  // currentTarget is the element the listener is attached to — safe cast
   const input = e.currentTarget as HTMLInputElement | null;
   if (!input) return;
 

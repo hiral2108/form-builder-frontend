@@ -91,3 +91,77 @@ body {
   opacity: 1;
   transform: translateY(-50%) scaleX(1);
 }
+
+
+/* Element Plus Calendar Overrides */
+.calender-input .el-input::after {
+  content: url("data:image/svg+xml,<svg width='18' height='22' viewBox='0 0 20 22' fill='none' xmlns='http://www.w3.org/2000/svg'> <path d='M19 10.5V7.8C19 6.11984 19 5.27976 18.673 4.63803C18.3854 4.07354 17.9265 3.6146 17.362 3.32698C16.7202 3 15.8802 3 14.2 3H5.8C4.11984 3 3.27976 3 2.63803 3.32698C2.07354 3.6146 1.6146 4.07354 1.32698 4.63803C1 5.27976 1 6.11984 1 7.8V16.2C1 17.8802 1 18.7202 1.32698 19.362C1.6146 19.9265 2.07354 20.3854 2.63803 20.673C3.27976 21 4.11984 21 5.8 21H10.5M19 9H1M14 1V5M6 1V5M16 20V14M13 17H19' stroke='gray' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/> </svg>");
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  top: 8px;
+  right: 8px;
+  pointer-events: none;
+}
+.calender-input .el-input__wrapper {
+  padding-right: 32px !important;
+}
+.el-date-editor.is-focus .el-input__wrapper {
+  box-shadow: none !important;
+}
+.el-input__wrapper input {
+  font-size: 14px !important;
+  color: #334155 !important;
+}
+.el-input__prefix,
+.el-input__suffix {
+  display: none !important;
+}
+.el-date-editor.el-input,
+.el-date-editor.el-input__wrapper {
+  width: 100% !important;
+  height: 38px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+}
+.el-input__wrapper.is-focus,
+.el-input__wrapper:hover,
+.el-input__wrapper {
+  box-shadow: none !important;
+}
+
+/* Element Plus Datepicker Theme Customization (Teal Theme) */
+:root {
+  --el-color-primary: #0d9488 !important;
+  --el-color-primary-light-3: #2dd4bf !important;
+  --el-color-primary-light-5: #99f6e4 !important;
+  --el-color-primary-light-7: #ccfbf1 !important;
+  --el-color-primary-light-8: #f0fdfa !important;
+  --el-color-primary-light-9: #f5fdfc !important;
+}
+
+/* Range background highlights override */
+.el-date-table td.in-range .el-date-table-cell {
+  background-color: #f0fdfa !important; /* Light Teal-50 range background */
+}
+
+.el-date-table td.in-range:hover .el-date-table-cell {
+  background-color: #ccfbf1 !important; /* Teal-100 on range hover */
+}
+
+/* Endpoint Selected Dates (Start and End) overrides */
+.el-date-table td.start-date .el-date-table-cell__text,
+.el-date-table td.end-date .el-date-table-cell__text {
+  background-color: #0d9488 !important; /* Teal-600 background for selected days */
+  color: #ffffff !important;
+}
+
+/* Today indicator text override */
+.el-date-table td.today .el-date-table-cell__text {
+  color: #0d9488 !important;
+  font-weight: bold;
+}
+.el-date-table td.today.start-date .el-date-table-cell__text,
+.el-date-table td.today.end-date .el-date-table-cell__text {
+  color: #ffffff !important;
+}

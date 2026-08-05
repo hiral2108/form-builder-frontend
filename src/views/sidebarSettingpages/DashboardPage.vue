@@ -1,11 +1,54 @@
 <template>
   <div class="w-full">
     <!-- Welcome Header -->
-    <div class="mb-8">
+    <div class="mb-6 flex items-center justify-between gap-4">
       <h2 class="text-xl font-bold text-slate-800 tracking-tight">Welcome to {{ appName }}</h2>
+      <button 
+        @click="showCreateFormModal = true"
+        class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10"
+      >
+        <img v-svg-inline src="@/assets/icons/dashboardpage/add-line.svg" class="w-5 h-5"/>
+        <span>Create Form</span>
+      </button>
+    </div>
+        <!-- Dashboard filter bar -->
+    <div class="flex items-center gap-3 flex-wrap mb-6">
+      <!-- Filter Dropdown wrapper -->
+      <div class="relative flex-shrink-0">
+        <!-- Calendar SVG icon positioned absolute inside input -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
+          <path d="M9 1v2h6V1h2v2h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2Zm11 7H4v12h16V8Zm-9 3v4H8v-4h3Zm5 0v4h-3v-4h3Z"></path>
+        </svg>
+        
+        <SelectField v-model="selectedFilter" :options="filteredMenu" />
+      </div>
+
+      <!-- Custom Date Inputs (shows only if 'custom' is selected) -->
+      <template v-if="selectedFilter === 'custom'">
+        <div class="flex items-center gap-2">
+          <input
+            type="date"
+            v-model="startDate"
+            class="px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 h-[38px]"
+          />
+          <span class="text-slate-400 text-sm">—</span>
+          <input
+            type="date"
+            v-model="endDate"
+            class="px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 h-[38px]"
+          />
+          <button
+            type="button"
+            @click="applyCustomFilter"
+            class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg text-sm font-semibold transition-colors cursor-pointer h-[38px] flex items-center justify-center shadow-sm shadow-teal-500/30 hover:shadow-md"
+          >
+            Apply
+          </button>
+        </div>
+      </template>
     </div>
 
-        <!-- Visitors block container (matching the reference styling) -->
+    <!-- Visitors block container -->
     <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 mb-6">
       <div class="grid grid-cols-1 min-[960px]:grid-cols-3 gap-8 max-[1230px]:gap-4">
         
@@ -18,7 +61,9 @@
             <p class="text-sm font-medium text-slate-500 mb-1">Visitors This Cycle</p>
             <div class="flex items-center gap-2">
               <p class="text-2xl font-bold text-slate-800 mb-1">
-                {{ formattedUserVisitors }} <span class="text-slate-400 font-normal">/</span> <span class="text-slate-500">{{ formattedPlanVisitors }}</span>
+                {{ formattedUserVisitors }} 
+                <span class="text-slate-400 font-normal">/</span> 
+                <span class="text-slate-500">{{ formattedPlanVisitors }}</span>
               </p>
             </div>
           </div>
@@ -27,9 +72,7 @@
         <!-- Column 2: Next Reset Date -->
         <div class="flex items-center gap-4 border-l border-r border-slate-200/60 px-8 max-[960px]:border-l-transparent max-[960px]:border-r-transparent max-[960px]:px-0 max-[960px]:border-b max-[960px]:pb-4">
           <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-purple-600">
-              <path d="M9 1v2h6V1h2v2h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2Zm11 7H4v12h16V8Zm-9 3v4H8v-4h3Zm5 0v4h-3v-4h3Z"></path>
-            </svg>
+            <img v-svg-inline src="@/assets/icons/dashboardpage/reset_date.svg" class="w-6 h-6"/>
           </div>
           <div>
             <p class="text-sm font-medium text-slate-500 mb-1">Next Reset Date</p>
@@ -40,9 +83,7 @@
         <!-- Column 3: Forms Created -->
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-emerald-600">
-              <path d="M19 22H5a3 3 0 0 1-3-3V3a1 1 0 0 1 1-1h14l4 4v13a3 3 0 0 1-3 3ZM18 6h-6V4H4v14h16V6h-2ZM7 9h10v2H7V9Zm0 4h7v2H7v-2Z"></path>
-            </svg>
+            <img v-svg-inline src="@/assets/icons/dashboardpage/widgets_created.svg" class="w-6 h-6"/>
           </div>
           <div>
             <p class="text-sm font-medium text-slate-500 mb-1">Forms Created</p>
@@ -54,7 +95,7 @@
     </div>
 
     <!-- New Stats Card Grid (Visitors, Views, Conversion Rate) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
 
       <!-- Total Views Card -->
       <div class="bg-white rounded-xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 flex items-center gap-4 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
@@ -90,100 +131,34 @@
       </div>
     </div>
 
-    <!-- Stats Card Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
-      <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 flex items-center gap-4 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-indigo-50 text-indigo-600 flex-shrink-0 text-xl">
-          <img v-svg-inline src="@/assets/icons/dashboardpage/survey-line.svg" class="w-6 h-6"/>
-        </div>
-        <div>
-          <p class="text-2xl font-bold text-slate-800 tracking-tight">8</p>
-          <p class="text-sm font-semibold text-slate-500 tracking-wider">Total Forms</p>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 flex items-center gap-4 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-amber-50 text-amber-600 flex-shrink-0 text-xl">
-          
-          <img v-svg-inline src="@/assets/icons/dashboardpage/checkbox-circle-line.svg" class="w-6 h-6"/>
-        </div>
-        <div>
-          <p class="text-2xl font-bold text-slate-800 tracking-tight">7,425</p>
-          <p class="text-sm font-semibold text-slate-500 tracking-wider">Total Submissions</p>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 flex items-center gap-4 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center bg-teal-50 text-teal-600 flex-shrink-0 text-xl">
-          <img v-svg-inline src="@/assets/icons/settingpage/inbox-archive-line.svg" class="w-6 h-6"/>
-        </div>
-        <div>
-          <p class="text-2xl font-bold text-slate-800 tracking-tight">6</p>
-          <p class="text-sm font-semibold text-slate-500 tracking-wider">Active Forms</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Action Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-      <!-- Create Form Card -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-6 flex flex-col hover:shadow-[0_12px_24px_rgba(0,0,0,0.05)] hover:-translate-y-0.5 transition-all duration-300">
-        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 text-xl">
-          <img v-svg-inline src="@/assets/icons/dashboardpage/add-circle-line.svg" class="w-5 h-5"/>
-        </div>
-        <h3 class="text-base font-semibold text-slate-800 mb-1.5">Create New Form</h3>
-        <p class="text-sm text-slate-500 mb-5 flex-1 leading-relaxed">Build a custom form with the drag-and-drop builder. Choose from 20+ field types.</p>
-        <button 
-          @click="showCreateFormModal = true"
-          class="self-start px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer"
-        >
-          Create Form
-        </button>
-      </div>
-
-      <!-- View Submissions Card -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-6 flex flex-col hover:shadow-[0_12px_24px_rgba(0,0,0,0.05)] hover:-translate-y-0.5 transition-all duration-300">
-        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-4 text-xl">
-          <img v-svg-inline src="@/assets/icons/dashboardpage/chat-check-line.svg" class="w-5 h-5"/>
-        </div>
-        <h3 class="text-base font-semibold text-slate-800 mb-1.5">View Submissions</h3>
-        <p class="text-sm text-slate-500 mb-5 flex-1 leading-relaxed">Review and manage all form submissions. Filter, search, and export your data.</p>
-        <button 
-          @click="router.push('/submissions')"
-          class="self-start px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer"
-        >
-          View All
-        </button>
-      </div>
-
-      <!-- View Forms Card -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-6 flex flex-col hover:shadow-[0_12px_24px_rgba(0,0,0,0.05)] hover:-translate-y-0.5 transition-all duration-300">
-        <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center mb-4 text-xl">
-          <img v-svg-inline src="@/assets/icons/dashboardpage/file-chart-line.svg" class="w-5 h-5"/>
-        </div>
-        <h3 class="text-base font-semibold text-slate-800 mb-1.5">View Forms</h3>
-        <p class="text-sm text-slate-500 mb-5 flex-1 leading-relaxed">Manage all your forms in one place. Toggle status, edit titles, and organize.</p>
-        <button 
-          @click="router.push('/forms')"
-          class="self-start px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer"
-        >
-          View All
-        </button>
-      </div>
-    </div>
   </div>
+      <!-- Performance Analytics Chart Card -->
+    <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-6 mb-6 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
+      <div class="mb-4">
+        <h3 class="text-base font-bold text-slate-800 tracking-tight">Performance Analytics</h3>
+        <p class="text-xs text-slate-400 mt-0.5">Visual representation of views and form submissions over time.</p>
+      </div>
+      <div class="w-full h-70 relative">
+        <LineChart
+          :dateList="dateData"
+          :viewData="viewData"
+          :clickData="clickData"
+        />
+      </div>
+    </div>
   <CreateFormModal :isShowModal="showCreateFormModal" @closeModal="showCreateFormModal = false" />
 </template>
 
 <script setup lang="ts">
 
 import { inject, ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
 import CreateFormModal from "@/components/modals/CreateFormModal.vue";
+import LineChart from "@/components/global/fields/LineChart.vue";
+import SelectField from "@/components/global/fields/SelectField.vue"; 
+import { useToast } from "vue-toastification"; 
 
 const appName = inject("appName");
 const showCreateFormModal = ref(false);
-const router = useRouter();
 
 // Stats for the Visitors block (no database/plan checks)
 const visitorRate = ref(35); // 35% circle progress
@@ -198,6 +173,33 @@ const conversionRate = computed(() => {
   const totalSubmissions = 7425; 
   return ((totalSubmissions / views.value) * 100).toFixed(1) + "%";
 });
+
+const dateData = ref(["29, Jul", "30, Jul", "31, Jul", "01, Aug", "02, Aug", "03, Aug", "04, Aug", "05, Aug"]);
+const viewData = ref([1, 0, 0, 0, 0, 0, 0, 0]); // Blue starts at 1.0, drops to 0
+const clickData = ref([0, 1, 0, 0, 0, 0, 0, 0]); // Pink starts at 0, goes to 1.0 on 30 Jul, then 0
+
+const toast = useToast();
+
+// Filter States
+const selectedFilter = ref("last_7_days");
+const startDate = ref("");
+const endDate = ref("");
+const filteredMenu = {
+  today: "Today",
+  yesterday: "Yesterday",
+  last_7_days: "Last 7 days",
+  last_30_days: "Last 30 days",
+  this_month: "This month",
+  last_month: "Last month",
+  custom: "Custom",
+};
+const applyCustomFilter = () => {
+  if (startDate.value && endDate.value) {
+    toast.success(`Filter applied: ${startDate.value} to ${endDate.value}`);
+  } else {
+    toast.error("Please select both start and end dates");
+  }
+};
 </script>
 
 <style scoped>

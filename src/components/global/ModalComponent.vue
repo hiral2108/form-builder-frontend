@@ -4,7 +4,7 @@
       <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all qdp-modal-content" @click.stop>
         <div class="px-6 py-5 border-b border-slate-100">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-teal-50 text-teal-600 rounded-xl flex items-center justify-center" :class="headerIconClasses" v-if="headerIcon">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center" :class="[headerIconClasses || 'bg-teal-50 text-teal-600']" v-if="headerIcon">
               <span v-html="headerIcon"></span>
             </div>
             <div>
@@ -24,12 +24,11 @@
             {{ actionButtonTypeOneText }}
           </button>
           <button type="button"
-                  v-if="actionButtonTypeTwoText"
-                  @click="ButtonTwoAction"
-                  class="flex items-center gap-2 px-5 py-2 bg-teal-600 text-white rounded-lg font-semibold text-sm hover:bg-teal-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed transition-all whitespace-nowrap cursor-pointer modal-submit-btn"
-                  :class="actionButtonTypeTwoClasses"
-                  :disabled="isLoading"
-          >
+            v-if="actionButtonTypeTwoText"
+            @click="ButtonTwoAction"
+            class="flex items-center gap-2 px-5 py-2 text-white rounded-lg font-semibold text-sm disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed transition-all whitespace-nowrap cursor-pointer modal-submit-btn"
+            :class="[actionButtonTypeTwoClasses || 'bg-teal-600 hover:bg-teal-700']"
+            :disabled="isLoading">
             <span>{{ actionButtonTypeTwoText }}</span>
             <ButtonLoader v-if="isLoading && isShowLoader" />
           </button>

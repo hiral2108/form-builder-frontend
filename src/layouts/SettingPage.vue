@@ -98,8 +98,7 @@
 
         <!-- Curved Content Container -->
         <div class="flex-1 pt-0 pr-4 pb-4 pl-0 bg-white min-h-0 relative">
-          <div class="w-full h-full bg-slate-50 border border-slate-200/50 rounded-[20px] overflow-auto relative"
-          :class="route.name === 'FormSettingsPage' ? 'pl-6 pr-6 pb-6 pt-0' : 'p-6'">
+          <div class="w-full h-full bg-slate-50 border border-slate-200/50 rounded-[20px] overflow-auto relative p-6">
             <router-view v-slot="{ Component }">
             <component :is="Component" :is-collapsible="isCollapsed" />
           </router-view>

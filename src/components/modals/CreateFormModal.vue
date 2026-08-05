@@ -22,6 +22,7 @@
         label="Form Name"
         type="text"
         v-model="formTitle"
+        focusColor="teal"
         placeholder="Enter your form name"
         :hasError="$v.formTitle.$dirty && $v.formTitle.$error"
         :validationMessage="$v.formTitle.$errors"

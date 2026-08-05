@@ -1,7 +1,7 @@
 <template>
   <div class="input-field">
     <div class="input-wrapper">
-      <label v-if="label" :for="getFieldID" :class="labelClass" class="block text-sm font-semibold text-gray-700 mb-1">{{ label }}</label>
+      <label v-if="label" :for="getFieldID" :class="labelClass" class="block text-sm font-semibold text-gray-700 mb-1">{{ label }} <span v-if="required" class="text-red-500">*</span></label>
       <div class="relative">
               <input
         :disabled="disable"
@@ -68,6 +68,7 @@ const props = withDefaults(
     maxlength?: number
     vModel?: string | any
     focusColor?: 'blue' | 'teal' | 'emerald' | 'red' // Added prop type
+    required?: boolean
   }>(),
   {
     type: 'text',

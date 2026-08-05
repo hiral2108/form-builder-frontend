@@ -13,8 +13,12 @@ import ButtonLoader from "@/components/global/ButtonLoader.vue";
 import CustomDefaultCheckbox from "@/components/global/fields/CustomDefaultCheckbox.vue";
 import InputField from "@/components/global/fields/InputField.vue";
 import ModalComponent from "@/components/global/ModalComponent.vue";
+import TextareaField from "@/components/global/fields/TextareaField.vue";
+import SelectField from "@/components/global/fields/SelectField.vue";
+import CustomDefaultRadio from "@/components/global/fields/CustomDefaultRadio.vue";
 
 import VueSvgInlinePlugin from "@/utils/vue-svg-inline-vite.ts";
+
 const toastOptions = {
   timeout: 3000,
   position: "top-right",
@@ -39,5 +43,8 @@ app.component("ButtonLoader", ButtonLoader);
 app.component("CustomDefaultCheckbox", CustomDefaultCheckbox);
 app.component("InputField", InputField);
 app.component("ModalComponent", ModalComponent);
+app.component("TextareaField", TextareaField);
+app.component("SelectField", SelectField);
+app.component("CustomDefaultRadio", CustomDefaultRadio);
 
 app.mount("#app");

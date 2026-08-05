@@ -1,6 +1,6 @@
 <template>
   <div id="root">
-    <div class="flex h-screen bg-white overflow-hidden relative font-sans">
+    <div class="flex h-screen bg-white relative font-sans">
       <!-- Mobile Sidebar Backdrop overlay -->
       <div
         v-if="isMobile && isMobileSidebarOpen"
@@ -90,15 +90,15 @@
 
       <!-- Main Panel area (No partition background) -->
       <main
-        class="flex-1 flex flex-col relative h-screen overflow-hidden transition-all duration-300 bg-white"
+        class="flex-1 flex flex-col relative h-screen transition-all duration-300 bg-white"
         :class="[isMobile ? 'pl-4' : isCollapsed ? 'pl-20' : 'pl-60']"
       >
         <!-- Header -->
         <Header @toggle-mobile-sidebar="isMobileSidebarOpen = !isMobileSidebarOpen" :title="pageTitle" :subtitle="pageSubtitle" />
 
         <!-- Curved Content Container -->
-        <div class="flex-1 pt-0 pr-4 pb-4 pl-0 bg-white min-h-0 relative">
-          <div class="w-full h-full bg-slate-50 border border-slate-200/50 rounded-[20px] overflow-auto relative p-6">
+        <div class="flex-1 pt-0 pr-4 pb-2 pl-0 bg-white relative">
+          <div class="w-full bg-slate-50 border border-slate-200/50 rounded-[20px] relative p-6 min-h-[calc(100vh-80px)]">
             <router-view v-slot="{ Component }">
             <component :is="Component" :is-collapsible="isCollapsed" />
           </router-view>

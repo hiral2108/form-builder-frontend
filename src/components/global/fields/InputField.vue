@@ -3,31 +3,35 @@
     <div class="input-wrapper">
       <label v-if="label" :for="getFieldID" :class="labelClass" class="block text-sm font-semibold text-gray-700 mb-1">{{ label }}</label>
       <div class="relative">
-        <input
-          :disabled="disable"
-          :value="modelValue"
-          :type="type"
-          :id="getFieldID"
-          :readonly="readonly"
-          :autofocus="autofocus"
-          autocomplete="off"
-          :maxlength="maxlength"
-          :class="[
-            {
-              'border-red-500 bg-red-50': hasError,
-              rtl: isRTL(String(modelValue))
-            },
-            classes
-          ]"
-          ref="inputField"
-          class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all duration-200 bg-white"
-          :placeholder="placeholder"
-          @input="onChange"
-          @blur="onBlur"
-          @focusin="focusInHandler"
-          @keydown="$emit('keydown', $event)"
-          @focusout="focusOutHandler"
-        />
+              <input
+        :disabled="disable"
+        :value="modelValue"
+        :type="type"
+        :id="getFieldID"
+        :readonly="readonly"
+        :autofocus="autofocus"
+        autocomplete="off"
+        :maxlength="maxlength"
+        :class="[
+          {
+            'border-red-500 bg-red-50': hasError,
+            rtl: isRTL(String(modelValue)),
+            'focus:ring-blue-500': !focusColor || focusColor === 'blue',
+            'focus:ring-teal-500': focusColor === 'teal',
+            'focus:ring-emerald-500': focusColor === 'emerald',
+            'focus:ring-red-500': focusColor === 'red'
+          },
+          classes
+        ]"
+        ref="inputField"
+        class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 bg-white"
+        :placeholder="placeholder"
+        @input="onChange"
+        @blur="onBlur"
+        @focusin="focusInHandler"
+        @keydown="$emit('keydown', $event)"
+        @focusout="focusOutHandler"
+      />
       </div>
         <div v-for="(error, index) in validationMessage" :key="index">
         <span v-if="index == 0" class="text-red-700 text-sm">
@@ -63,13 +67,15 @@ const props = withDefaults(
     autofocus?: boolean
     maxlength?: number
     vModel?: string | any
+    focusColor?: 'blue' | 'teal' | 'emerald' | 'red' // Added prop type
   }>(),
   {
     type: 'text',
     placeholder: '',
     readonly: false,
     hasIcon: false,
-    disable: false
+    disable: false,
+    focusColor: 'blue' // Added default fallback
   }
 )
 

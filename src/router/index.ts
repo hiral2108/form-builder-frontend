@@ -38,7 +38,7 @@ const routes = [
       {
         path: "/forms",
         name: "FormsPage",
-        component: () => import("@/views/sidebarSettingpages/FormsPage.vue"),
+        component: () => import("@/views/sidebarSettingpages/FormsListPage.vue"),
         // meta: { requireAuth: true },
       },
       {

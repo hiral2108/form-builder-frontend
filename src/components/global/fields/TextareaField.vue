@@ -5,6 +5,7 @@
       v-if="label"
       :for="id"
       class="block text-sm font-semibold text-gray-700 mb-1"
+      :class="labelClass"
     >
       {{ label }} <span v-if="required" class="text-red-500">*</span>
     </label>
@@ -47,6 +48,10 @@ defineProps({
     default: ''
   },
   label: {
+    type: String,
+    default: ''
+  },
+  labelClass: {
     type: String,
     default: ''
   },

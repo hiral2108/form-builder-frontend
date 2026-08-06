@@ -2,7 +2,7 @@
   <Listbox v-model="selectedValue">
     <div class="relative">
       <!-- Dropdown Button -->
-      <ListboxButton class="border border-solid! border-slate-300 bg-white w-full rounded-lg py-2 px-3 gap-1 flex justify-between items-center text-sm custom-select-box cursor-pointer" :class="customClass">
+      <ListboxButton class="border border-solid! border-slate-300 bg-white w-full rounded-xl py-2 px-3 gap-1 flex justify-between items-center text-sm custom-select-box cursor-pointer" :class="customClass">
         {{ selectedTitle }}
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
@@ -10,7 +10,7 @@
       </ListboxButton>
 
       <!-- Dropdown Options -->
-      <ListboxOptions class="absolute w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 overflow-y-auto max-h-64 py-1">
+      <ListboxOptions class="absolute w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-50 overflow-y-auto max-h-64 py-1">
         <ListboxOption
           v-for="(option, key) in options"
           :key="key"

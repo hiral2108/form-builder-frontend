@@ -16,6 +16,8 @@ import ModalComponent from "@/components/global/ModalComponent.vue";
 import TextareaField from "@/components/global/fields/TextareaField.vue";
 import SelectField from "@/components/global/fields/SelectField.vue";
 import CustomDefaultRadio from "@/components/global/fields/CustomDefaultRadio.vue";
+import RadioTypeSelector from "@/components/global/fields/RadioTypeSelector.vue";
+import InputColorPicker from "@/components/global/fields/InputColorPicker.vue";
 
 import VueSvgInlinePlugin from "@/utils/vue-svg-inline-vite.ts";
 
@@ -46,5 +48,7 @@ app.component("ModalComponent", ModalComponent);
 app.component("TextareaField", TextareaField);
 app.component("SelectField", SelectField);
 app.component("CustomDefaultRadio", CustomDefaultRadio);
+app.component("RadioTypeSelector", RadioTypeSelector);
+app.component("InputColorPicker", InputColorPicker);
 
 app.mount("#app");

@@ -5,15 +5,22 @@ export interface FormFieldType {
   type: string;
   label: string;
   placeholder: string;
-  required: boolean;
+  firstNameLabel?: string;
+  firstNamePlaceholder?: string;
+  lastNameLabel?: string;
+  lastNamePlaceholder?: string;
+  required: number;
   options?: string[];
-  labelPlacement?: "default" | "right" | "left" | "center";
+  labelPlacement?: "left" | "center" | "right";
+  nameFormat?: "single" | "split";
   requiredMessage?: string;
   validateEmail?: number;
   emailErrorMessage?: string;
-  validatePhone?: number;
-  phoneErrorMessage?: string;
+  uniqueEmail?: number;
+  uniqueEmailErrorMessage?: string;
   rows?: number;
+  timeFormat?: "12h" | "24h";
+  showPasswordIcon?: number;
 }
 
 export interface FormFieldSettingType {

@@ -1,9 +1,11 @@
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
     <section
-      class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm lg:sticky lg:top-[80px] max-h-[calc(100vh-160px)] overflow-y-auto scrollbar-thin">
-      <h3 class="font-semibold text-slate-800 text-md mb-4 tracking-tight">Field Library</h3>
-      <div class="grid grid-cols-1 gap-2">
+      class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm lg:sticky lg:top-[80px] max-h-[calc(100vh-160px)] overflow-y-auto scrollbar-thin">
+      <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
+        <h3 data-v-971cfb3b="" class="font-semibold text-slate-800 text-md">Field Library</h3>
+      </div>
+      <div class="grid grid-cols-1 gap-2 p-5">
         <button
           v-for="item in fieldLibrary"
           :key="item.type"
@@ -24,14 +26,14 @@
 
     <section
       class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl shadow-sm h-full flex flex-col overflow-hidden">
-      <div class="border-b border-slate-100 px-6 py-4 flex items-center justify-between flex-shrink-0">
+      <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
         <h3 class="font-semibold text-slate-800 text-md">Form Preview</h3>
         <span v-if="formFieldSetting.fields.length > 0" class="text-xs text-slate-400 font-medium"
           >Click on a field to edit it</span
         >
       </div>
 
-      <div class="p-8 overflow-y-auto flex-1 scrollbar-thin">
+      <div class="p-5 overflow-y-auto flex-1 scrollbar-thin">
         <form @submit.prevent class="space-y-5">
           <div
             v-if="formFieldSetting.fields.length === 0"
@@ -46,44 +48,41 @@
             v-for="(field, index) in formFieldSetting.fields"
             :key="field.id"
             @click.stop="selectField(field.id)"
-            
             draggable="true"
             @dragstart="onDragStart(index, $event)"
             @dragover="onDragOver(index, $event)"
             @dragleave="onDragLeave"
             @drop="onDrop(index)"
             @dragend="onDragEnd"
-            
             class="p-4 border rounded-xl relative cursor-pointer transition-all duration-200"
-           :class="[
+            :class="[
               formFieldSetting.selectedFieldId === field.id
-                ? 'border-l-[3px] border-teal-700 border-t-slate-200 border-r-slate-200 border-b-slate-200 bg-slate-50 shadow-sm rounded-l-none'
+                ? 'border-l-[3px] border-teal-600 border-t-slate-200 border-r-slate-200 border-b-slate-200 bg-slate-50 shadow-sm rounded-l-none'
                 : 'border-slate-100 hover:border-slate-200 hover:bg-teal-100/10',
-              
-              /* Indicator line for the landing spot */
               dragOverIndex === index ? 'border-t-2 border-t-teal-600 scale-[0.98]' : '',
-              
-              /* Makes the card you are dragging look like a darker, semi-transparent dashed placeholder */
-              draggedIndex === index ? 'bg-slate-100 opacity-40 border-dashed border-slate-300' : ''
-            ]"
-          >
+              draggedIndex === index
+                ? 'bg-teal-50/40 opacity-75 border-2 border-dashed border-teal-500 shadow-inner'
+                : '',
+            ]">
             <div
               v-if="formFieldSetting.selectedFieldId === field.id"
               class="flex items-center justify-end gap-1.5 mb-1">
-             <button
+              <button
                 type="button"
-                @mousedown="isDraggable = true; selectField(field.id)" 
+                @mousedown="
+                  isDraggable = true;
+                  selectField(field.id);
+                "
                 @mouseup="isDraggable = false"
                 @mouseleave="isDraggable = false"
-                class="drag-handle w-7 h-7 rounded bg-teal-100 hover:bg-teal-200 flex items-center justify-center transition-colors text-amber-400 cursor-move"
-                title="Drag to reorder"
-              >
-                <img 
-                  v-svg-inline 
-                  src="@/assets/icons/form-settings/drag-drop.svg" 
-                  class="w-4 h-4 text-teal-600 pointer-events-none" 
-                  draggable="false" 
-                />
+                class="drag-handle w-7 h-7 rounded bg-teal-100 hover:bg-teal-200 flex items-center justify-center transition-colors text-amber-400"
+                :class="isDraggable ? 'cursor-grabbing' : 'cursor-grab'"
+                title="Drag to reorder">
+                <img
+                  v-svg-inline
+                  src="@/assets/icons/form-settings/drag-drop.svg"
+                  class="w-4 h-4 text-teal-600 pointer-events-none"
+                  draggable="false" />
               </button>
 
               <button
@@ -120,7 +119,7 @@
                 :required="field.required"
                 :label="field.label"
                 :placeholder="field.placeholder"
-                :rows="3"
+                :rows="field.rows"
                 textareaClass="h-auto"
                 class="pointer-events-none" />
             </div>
@@ -130,7 +129,8 @@
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
               <SelectField
-                :modelValue="field.placeholder || (field.type === 'multiselect' ? 'Select options...' : 'Select...')"
+                :modelValue="field.placeholder || ' '"
+                :options="{ [field.placeholder || ' ']: field.placeholder || ' ' }"
                 class="pointer-events-none" />
             </div>
 
@@ -172,20 +172,32 @@
               <label class="block text-sm font-semibold text-slate-700">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
-              <input
-                disabled
-                type="date"
-                class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
+              <div class="relative w-full">
+                <input
+                  disabled
+                  type="date"
+                  class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
+                <span
+                  class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10">
+                  {{ field.placeholder }}
+                </span>
+              </div>
             </div>
 
             <div class="space-y-1.5" v-else-if="field.type === 'timepicker'">
               <label class="block text-sm font-semibold text-slate-700">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
-              <input
-                disabled
-                type="time"
-                class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
+              <div class="relative w-full">
+                <input
+                  disabled
+                  type="time"
+                  class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
+                <span
+                  class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10">
+                  {{ field.placeholder || "Select Time" }}
+                </span>
+              </div>
             </div>
 
             <div class="space-y-1.5" v-else-if="field.type === 'fileupload'">
@@ -195,7 +207,7 @@
               <div
                 class="border-2 border-dashed border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center bg-slate-50/50">
                 <img v-svg-inline src="@/assets/icons/FormFields/Upload.svg" class="w-4 h-4 text-slate-600" />
-                <span class="text-xs text-slate-500">Click or Drag files to upload</span>
+                <span class="text-xs text-slate-500">{{ field.placeholder }}</span>
               </div>
             </div>
 
@@ -214,45 +226,168 @@
             disabled
             type="button"
             v-if="formFieldSetting.fields.length > 0"
-            class="w-full py-3 bg-teal-700 text-white font-semibold text-sm rounded-xl flex items-center justify-center">
+            class="w-full py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold text-sm rounded-xl flex items-center justify-center shadow-lg shadow-teal-100/30 hover:shadow-xl hover:shadow-teal-200/20">
             Submit
           </button>
         </form>
       </div>
     </section>
 
-    <!-- <section class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-      <h3 class="font-semibold text-slate-800 text-sm mb-4 tracking-tight">Field Settings</h3>
-
-      <div class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wider">Field Label</label>
-          <input type="text" value="Text Input" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500" />
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wider">Placeholder</label>
-          <input type="text" value="Enter text" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500" />
-        </div>
-
-        <div class="flex items-center justify-between pt-3 border-t border-slate-100">
-          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Required Field</span>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" class="sr-only peer" />
-            <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-teal-600"></div>
-          </label>
-        </div>
-
-        <button class="w-full py-2 bg-red-50 hover:bg-red-100 text-red-600 font-semibold rounded-lg text-xs transition-colors mt-6">
-          Delete Field
-        </button>
+    <section
+      class="settings-panel lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm h-full flex flex-col overflow-hidden lg:sticky lg:top-[80px] max-h-[calc(100vh-160px)]">
+      <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
+        <h3 class="font-semibold text-slate-800 text-md">Field Settings</h3>
       </div>
-    </section> -->
+
+      <div class="px-5 overflow-y-auto flex-1 scrollbar-thin">
+        <div v-if="selectedField" class="space-y-4 mt-5">
+          <div>
+            <InputField type="text" v-model="selectedField.label" label="Field Label" focusColor="teal" />
+          </div>
+          <div v-if="!['hidden', 'checkboxes', 'radio'].includes(selectedField.type)">
+            <InputField type="text" v-model="selectedField.placeholder" label="Placeholder" focusColor="teal" />
+          </div>
+          <div v-if="selectedField.type === 'textarea'">
+            <InputField type="number" v-model.number="selectedField.rows" label="Rows" focusColor="teal" :min="1" />
+          </div>
+
+          <div>
+            <RadioTypeSelector
+              v-model="selectedField.labelPlacement"
+              label="Label Placement"
+              name="labelPlacement"
+              :columns="3"
+              :options="[
+                { label: 'Right', value: 'right' },
+                { label: 'Left', value: 'left' },
+                { label: 'Center', value: 'center' },
+              ]" />
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Required</label>
+            <div class="flex">
+              <CustomDefaultRadio
+                id="required-yes"
+                name="required"
+                :value="true"
+                label="Yes"
+                v-model="selectedField.required" />
+              <CustomDefaultRadio
+                id="required-no"
+                name="required"
+                :value="false"
+                label="No"
+                v-model="selectedField.required" />
+            </div>
+          </div>
+
+          <div v-if="selectedField.required">
+            <InputField
+              type="text"
+              v-model="selectedField.requiredMessage"
+              label="Required message"
+              focusColor="teal" />
+          </div>
+
+          <template v-if="selectedField.type === 'email'">
+            <div class="space-y-1.5">
+              <label class="block text-sm font-semibold text-gray-700 mb-1">Validate Email</label>
+              <div class="flex">
+                <CustomDefaultRadio
+                  id="validate-email-yes"
+                  name="validateEmail"
+                  :value="true"
+                  label="Yes"
+                  v-model="selectedField.validateEmail"
+                />
+                <CustomDefaultRadio
+                  id="validate-email-no"
+                  name="validateEmail"
+                  :value="false"
+                  label="No"
+                  v-model="selectedField.validateEmail"
+                />
+              </div>
+            </div>
+
+            <!-- Email Validation Error Message -->
+            <div v-if="selectedField.validateEmail">
+              <InputField 
+                type="text" 
+                v-model="selectedField.emailErrorMessage" 
+                label="Error message"
+                focusColor="teal"
+              />
+            </div>
+          </template>
+
+          <!-- Validation Settings for Phone Number -->
+          <template v-if="selectedField.type === 'phone'">
+            <div class="space-y-1.5 border-t border-slate-100 pt-3">
+              <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider"
+                >Validate Phone Number</label
+              >
+              <div class="flex items-center gap-4">
+                <label class="flex items-center gap-1.5 text-sm text-slate-700 cursor-pointer">
+                  <input
+                    type="radio"
+                    :value="true"
+                    v-model="selectedField.validatePhone"
+                    class="w-4 h-4 accent-teal-600 focus:ring-teal-500" />
+                  Yes
+                </label>
+                <label class="flex items-center gap-1.5 text-sm text-slate-700 cursor-pointer">
+                  <input
+                    type="radio"
+                    :value="false"
+                    v-model="selectedField.validatePhone"
+                    class="w-4 h-4 accent-teal-600 focus:ring-teal-500" />
+                  No
+                </label>
+              </div>
+            </div>
+
+            <!-- Phone Validation Error Message -->
+            <div v-if="selectedField.validatePhone">
+              <label class="block text-xs font-semibold text-slate-500 mb-1.5 uppercase tracking-wider"
+                >Error message</label
+              >
+              <input
+                type="text"
+                v-model="selectedField.phoneErrorMessage"
+                class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors" />
+            </div>
+          </template>
+        </div>
+
+        <div v-else class="flex flex-col items-center justify-center text-center py-16">
+          <div class="w-14 h-14 rounded-full bg-slate-100/80 flex items-center justify-center mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="w-6 h-6 text-slate-500">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 3.5l7.5 4.3v8.6L12 20.7l-7.5-4.3V7.8L12 3.5z" />
+              <circle cx="12" cy="12" r="2.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <p class="text-sm text-slate-500 font-medium max-w-[240px] leading-relaxed">
+            Select a field to configure its settings
+          </p>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from "vue";
+  import { ref, watch, computed } from "vue";
 
   import TextIcon from "@/assets/icons/FormFields/TextIcon.svg";
   import NameIcon from "@/assets/icons/auth/username.svg";
@@ -296,15 +431,18 @@
     { type: "hidden", label: "Hidden Field", icon: HiddenIcon },
   ];
 
-  const selectField = (id: string) => {
+  const selectedField = computed(() => {
+    return formFieldSetting.value.fields.find((f) => f.id === formFieldSetting.value.selectedFieldId) || null;
+  });
+
+  const selectField = (id: string | null) => {
     formFieldSetting.value.selectedFieldId = id;
   };
 
   const removeField = (id: string) => {
     formFieldSetting.value.fields = formFieldSetting.value.fields.filter((f) => f.id !== id);
     if (formFieldSetting.value.selectedFieldId === id) {
-      formFieldSetting.value.selectedFieldId =
-        formFieldSetting.value.fields.length > 0 ? formFieldSetting.value.fields[0].id : null;
+      formFieldSetting.value.selectedFieldId = null;
     }
   };
 
@@ -313,6 +451,26 @@
     let label = "";
     let placeholder = "";
     let options: string[] | undefined = undefined;
+
+    // Define field default settings
+    let labelPlacement = "default";
+    let requiredMessage = "This field is required";
+    let rows: number | undefined = undefined;
+    let validateEmail: number | undefined = undefined;
+    let emailErrorMessage: string | undefined = undefined;
+    let validatePhone: number | undefined = undefined;
+    let phoneErrorMessage: string | undefined = undefined;
+
+    if (type === "textarea") {
+      rows = 3;
+    } else if (type === "email") {
+      validateEmail = 1;
+      emailErrorMessage = "This field must contain a valid email";
+    } else if (type === "phone") {
+      validatePhone = 1;
+      phoneErrorMessage = "This field must contain a valid phone number";
+    }
+
     switch (type) {
       case "text":
         label = "Text Input";
@@ -353,7 +511,7 @@
         break;
       case "datepicker":
         label = "Date Picker";
-        placeholder = "Select Date";
+        placeholder = "dd-mm-yyyy";
         break;
       case "timepicker":
         label = "Time Picker";
@@ -361,6 +519,7 @@
         break;
       case "fileupload":
         label = "File Upload";
+        placeholder = "Click or Drag files to upload";
         break;
       case "url":
         label = "URL";
@@ -372,6 +531,7 @@
         break;
       case "multiselect":
         label = "Multiselect Options";
+        placeholder = "Select options...";
         options = ["Option A", "Option B", "Option C"];
         break;
       case "hidden":
@@ -380,6 +540,7 @@
       default:
         label = "New Field";
     }
+
     const newField: FormFieldType = {
       id,
       type,
@@ -387,6 +548,13 @@
       placeholder,
       required: false,
       options,
+      labelPlacement: labelPlacement as any,
+      requiredMessage,
+      rows,
+      validateEmail,
+      emailErrorMessage,
+      validatePhone,
+      phoneErrorMessage,
     };
     formFieldSetting.value.fields.push(newField);
   };
@@ -395,49 +563,52 @@
     const index = formFieldSetting.value.fields.findIndex((f) => f.id === id);
     if (index !== -1) {
       const fieldToCopy = formFieldSetting.value.fields[index];
+
+      // Safely clone the reactive proxy object using JSON
+      const copiedField = JSON.parse(JSON.stringify(fieldToCopy));
+
       const newField: FormFieldType = {
-        ...structuredClone(fieldToCopy),
-        id: Date.now().toString(), 
-        label: `${fieldToCopy.label} (Copy)`,
+        ...copiedField,
+        id: Date.now().toString(),
+        label: `${copiedField.label} (Copy)`,
       };
 
       formFieldSetting.value.fields.splice(index + 1, 0, newField);
-      formFieldSetting.value.selectedFieldId = newField.id; 
+      formFieldSetting.value.selectedFieldId = newField.id;
     }
   };
 
-     // Changed draggedIndex to a reactive ref
-  const draggedIndex = ref<number | null>(null); 
+  const draggedIndex = ref<number | null>(null);
   const dragOverIndex = ref<number | null>(null);
-  const isDraggable = ref(false); // Controls when the card is allowed to be dragged
-  
-    const onDragStart = (index: number, event: DragEvent) => {
+  const isDraggable = ref(false);
+
+  const onDragStart = (index: number, event: DragEvent) => {
     draggedIndex.value = index;
-    
+
     const cardElement = event.currentTarget as HTMLElement;
     if (cardElement) {
-      // 1. Temporarily add the visible style class before the browser takes the drag snapshot
-      cardElement.classList.add('drag-snapshot-dark');
-      
+      cardElement.classList.add("drag-snapshot-dark");
+
       if (event.dataTransfer) {
         event.dataTransfer.effectAllowed = "move";
         event.dataTransfer.setData("text/plain", index.toString());
-        
+
         const rect = cardElement.getBoundingClientRect();
-        event.dataTransfer.setDragImage(cardElement, rect.width / 2, rect.height / 2);
+        const xOffset = event.clientX - rect.left;
+        const yOffset = event.clientY - rect.top;
+        event.dataTransfer.setDragImage(cardElement, xOffset, yOffset);
       }
-      
-      // 2. Remove the class in the next event loop tick so the card instantly returns to normal on the screen
+
       setTimeout(() => {
-        cardElement.classList.remove('drag-snapshot-dark');
+        cardElement.classList.remove("drag-snapshot-dark");
       }, 0);
     }
   };
 
- const onDragOver = (index: number, event: DragEvent) => {
+  const onDragOver = (index: number, event: DragEvent) => {
     event.preventDefault();
-    if (draggedIndex.value !== null && draggedIndex.value !== index) { // Changed to single .value
-      dragOverIndex.value = index; 
+    if (draggedIndex.value !== null && draggedIndex.value !== index) {
+      dragOverIndex.value = index;
     }
   };
 
@@ -445,17 +616,17 @@
     dragOverIndex.value = null;
   };
 
-     const onDrop = (targetIndex: number) => {
+  const onDrop = (targetIndex: number) => {
     dragOverIndex.value = null;
-    isDraggable.value = false; // Reset drag state
-    
+    isDraggable.value = false;
+
     if (draggedIndex.value !== null && draggedIndex.value !== targetIndex) {
       const fields = [...formFieldSetting.value.fields];
       const draggedField = fields[draggedIndex.value];
-      
+
       fields.splice(draggedIndex.value, 1);
       fields.splice(targetIndex, 0, draggedField);
-      
+
       formFieldSetting.value.fields = fields;
     }
     draggedIndex.value = null;
@@ -464,8 +635,9 @@
   const onDragEnd = () => {
     draggedIndex.value = null;
     dragOverIndex.value = null;
-    isDraggable.value = false; // Reset drag state
+    isDraggable.value = false;
   };
+
   watch(
     formFieldSetting,
     (newVal) => {
@@ -476,27 +648,33 @@
 </script>
 
 <style scoped>
-/* Custom styling captured in the browser drag snapshot to make it highly visible */
-.drag-snapshot-dark {
-  background-color: #f1f5f9 !important; /* Solid light-grey card background */
-  color: #0f172a !important;             /* Dark text color */
-  border-color: #475569 !important;      /* Darker slate border */
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important; /* Prominent shadow */
-}
+  .drag-snapshot-dark {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-color: #475569 !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  }
 
-/* Make inputs inside the dragged card solid and visible */
-.drag-snapshot-dark input,
-.drag-snapshot-dark textarea,
-.drag-snapshot-dark select {
-  background-color: #e2e8f0 !important; /* Solid background for inputs */
-  color: #0f172a !important;             /* Dark text inside inputs */
-  border-color: #cbd5e1 !important;
-}
+  .drag-snapshot-dark input,
+  .drag-snapshot-dark textarea,
+  .drag-snapshot-dark select {
+    background-color: #e2e8f0 !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+  }
 
-/* Force placeholders inside the dragged card to be dark and readable */
-.drag-snapshot-dark input::placeholder,
-.drag-snapshot-dark textarea::placeholder {
-  color: #334155 !important;            /* Dark grey placeholder text */
-  opacity: 1 !important;
-}
+  .drag-snapshot-dark input::placeholder,
+  .drag-snapshot-dark textarea::placeholder {
+    color: #334155 !important;
+    opacity: 1 !important;
+  }
+
+  input[type="date"]::-webkit-datetime-edit,
+  input[type="time"]::-webkit-datetime-edit {
+    color: transparent !important;
+  }
+
+  .settings-panel :deep(.discount-type-radio-toggle label) {
+    padding-left: 0 !important;
+  }
 </style>

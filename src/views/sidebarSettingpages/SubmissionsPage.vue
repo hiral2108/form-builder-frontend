@@ -52,7 +52,7 @@
       <!-- Apply Button -->
       <button 
         type="button" 
-        class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-[38px] text-white bg-teal-600 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm h-[38px]" 
+        class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-[38px] text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-800 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10 h-[38px]" 
         @click="applyCustomFilter"
       >
         Apply
@@ -146,8 +146,8 @@
                     <button 
                       @click="openDetailsDrawer(submission)" 
                       class="w-9 h-9 bg-teal-50 text-teal-600 hover:bg-teal-100 hover:text-teal-700 transition-colors rounded-xl flex items-center justify-center cursor-pointer"
-                    >
-                      <i class="ri-eye-line text-lg"></i>
+                    > 
+                      <img v-svg-inline src="@/assets/icons/submission-page/eye-line.svg" class="w-5 h-5"/>
                     </button>
                     <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 text-xs font-semibold text-white bg-slate-900 rounded-lg opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md z-10">
                       View
@@ -161,7 +161,7 @@
                       @click="openDeleteModal(submission.id)"
                       class="w-9 h-9 bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 transition-colors rounded-xl flex items-center justify-center cursor-pointer"
                     >
-                      <i class="ri-delete-bin-line text-lg"></i>
+                      <img v-svg-inline src="@/assets/icons/form-list/delete.svg" class="w-5 h-5"/>
                     </button>
                     <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 text-xs font-semibold text-white bg-slate-900 rounded-lg opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md z-10">
                       Delete
@@ -179,7 +179,7 @@
       <div v-if="filteredSubmissions.length > 0 && !isLoading" class="border-t border-solid border-slate-100 p-4 flex items-center gap-2.5 flex-wrap">
         <button
           @click="downloadCSV"
-          class="text-sm py-2 px-4 rounded-lg text-white bg-teal-600 hover:bg-teal-700 transition-colors cursor-pointer font-semibold shadow-sm animate-none"
+          class="text-sm py-2 px-4 rounded-lg text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-800 transition-colors cursor-pointer font-semibold shadow-sm shadow-teal-600/10 animate-none"
         >
           Download CSV
         </button>
@@ -210,7 +210,7 @@
         <div class="flex items-center justify-between p-5 border-b border-slate-200">
           <h3 class="text-lg font-semibold text-slate-800">Submission Detail</h3>
           <button @click="closeDetailsDrawer" class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer">
-            <i class="ri-close-line text-lg"></i>
+            <img v-svg-inline src="@/assets/icons/submission-page/close-line.svg" class="w-6 h-6"/>
           </button>
         </div>
         
@@ -218,8 +218,8 @@
         <div class="p-5 space-y-4">
           <!-- Submission Sub-Header -->
           <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
-            <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-              <i class="ri-file-list-3-line text-teal-700"></i>
+            <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-700">
+              <img v-svg-inline src="@/assets/icons/settingpage/file-list-3-line.svg" class="w-6 h-6"/>
             </div>
             <div>
               <p class="text-sm font-semibold text-slate-800">sub-{{ selectedSubmission.id }}</p>

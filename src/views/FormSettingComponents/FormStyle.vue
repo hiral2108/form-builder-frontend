@@ -1,113 +1,141 @@
 <template>
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full items-start">
-    <!-- Styling sidebar -->
-    <section class="lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
-      <h3 class="font-bold text-slate-800 text-base mb-4 tracking-tight">Form Styling</h3>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+    <!-- Left Panel: Customization Settings (Col-span-6) -->
+    <section class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4 max-h-[calc(100vh-160px)] overflow-y-auto scrollbar-thin">
+      
+      <!-- Form Information Card -->
+      <div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3">
+        <h4 class="text-sm font-semibold text-slate-800 mb-2">Form Information</h4>
+        <!-- Global InputField Component -->
+        <InputField
+          v-model="formTitle"
+          label="Form Title"
+          type="text"
+          focusColor="teal"
+          placeholder="Enter form title..."
+        />
+        <!-- Global TextareaField Component -->
+        <TextareaField
+          ref="textareaRef"
+          v-model="formDescription"
+          label="Form Description"
+          :rows="2"
+          textareaClass="!h-20 resize-none"
+          placeholder="Enter form description..."
+        />
+      </div>
 
-      <!-- Theme presets -->
-      <div class="space-y-2">
-        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Theme Color</label>
-        <div class="flex gap-2.5">
-          <button
-            v-for="color in themeColors"
-            :key="color.value"
-            class="w-8 h-8 rounded-full border-2 transition-all cursor-pointer flex items-center justify-center text-white"
-            :style="{ backgroundColor: color.value }"
-            :class="
-              color.value === '#0f766e'
-                ? 'border-slate-800 scale-110 shadow-sm'
-                : 'border-transparent hover:scale-105'
-            ">
-            <i v-if="color.value === '#0f766e'" class="ri-check-line text-xs font-bold"></i>
-          </button>
+      <!-- Collapsible Label Style Card -->
+      <div class="border border-slate-200 rounded-lg overflow-hidden bg-white">
+        <button 
+          @click="isLabelStyleOpen = !isLabelStyleOpen"
+          type="button"
+          class="w-full flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 text-sm font-medium text-slate-700 cursor-pointer transition-colors"
+        >
+          <span>Label Style</span>
+        <span 
+          class="inline-flex items-center justify-center transition-transform duration-200"
+          :class="{ 'rotate-180': isLabelStyleOpen }"
+        >
+          <img 
+            v-svg-inline 
+            src="@/assets/icons/form-settings/arrow-down-s-line.svg" 
+            alt="Toggle Arrow" 
+            class="w-5 h-5 text-slate-400"
+          />
+        </span>
+        </button>
+
+        <div v-show="isLabelStyleOpen" class="p-4 space-y-3 bg-white">
+          <!-- Text Color -->
+        <div class="flex items-center gap-2">
+          <label class="text-xs text-slate-600 w-28 flex-shrink-0">Text Color</label>
+          <!-- Custom Swatch + Chrome Picker -->
+          <InputColorPicker v-model="textColor" />
+          <!-- Synchronized Hex Text Input -->
+          <input 
+            v-model="textColor"
+            class="flex-1 px-2 py-1 rounded border border-slate-200 text-xs text-slate-700 font-mono focus:outline-none focus:ring-1 focus:ring-teal-700/20 focus:border-teal-700" 
+            type="text" 
+          />
+        </div>
+
+          <!-- Font Size -->
+          <div class="flex items-center gap-2">
+            <label class="text-xs text-slate-600 w-28 flex-shrink-0">Font Size</label>
+            <select 
+              v-model="fontSize"
+              class="flex-1 px-2 py-1.5 rounded border border-slate-200 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-teal-700/20 focus:border-teal-700 cursor-pointer"
+            >
+              <option value="12px">12px</option>
+              <option value="13px">13px</option>
+              <option value="14px">14px</option>
+              <option value="15px">15px</option>
+              <option value="16px">16px</option>
+              <option value="18px">18px</option>
+            </select>
+          </div>
+
+          <!-- Font Weight -->
+          <div class="flex items-center gap-2">
+            <label class="text-xs text-slate-600 w-28 flex-shrink-0">Font Weight</label>
+            <select 
+              v-model="fontWeight"
+              class="flex-1 px-2 py-1.5 rounded border border-slate-200 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-teal-700/20 focus:border-teal-700 cursor-pointer"
+            >
+              <option value="400">400</option>
+              <option value="500">500</option>
+              <option value="600">600</option>
+              <option value="700">700</option>
+            </select>
+          </div>
         </div>
       </div>
 
-      <!-- Border style -->
-      <div class="space-y-2">
-        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Border Roundness</label>
-        <div class="grid grid-cols-3 gap-2">
-          <button
-            v-for="round in roundingOptions"
-            :key="round.value"
-            class="py-2 px-3 border text-xs font-medium rounded-lg transition-all cursor-pointer"
-            :class="
-              round.value === 'rounded-lg'
-                ? 'border-teal-600 bg-teal-50/10 text-teal-700'
-                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
-            ">
-            {{ round.label }}
-          </button>
-        </div>
-      </div>
-
-      <!-- Padding density -->
-      <div class="space-y-2">
-        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Form Padding</label>
-        <div class="grid grid-cols-3 gap-2">
-          <button
-            v-for="pad in paddingOptions"
-            :key="pad.value"
-            class="py-2 px-3 border text-xs font-medium rounded-lg transition-all cursor-pointer"
-            :class="
-              pad.value === 'p-8'
-                ? 'border-teal-600 bg-teal-50/10 text-teal-700'
-                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
-            ">
-            {{ pad.label }}
-          </button>
-        </div>
-      </div>
     </section>
 
-    <!-- Large form preview panel -->
-    <section
-      class="lg:col-span-8 bg-white border border-slate-200 rounded-2xl shadow-sm p-12 flex justify-center bg-slate-50/50">
-      <div class="w-full max-w-lg bg-white border border-slate-200 shadow-xl rounded-xl p-8">
-        <div class="mb-6">
-          <h2 class="text-xl font-bold text-slate-800">Customized Form View</h2>
-          <p class="text-slate-500 text-xs mt-1">This layout demonstrates styling application</p>
-        </div>
-        <div class="space-y-4">
-          <div class="space-y-1">
-            <span class="text-xs font-semibold text-slate-700">Sample Text Field</span>
-            <input
-              disabled
-              type="text"
-              placeholder="Theme color preview"
-              class="w-full px-4 py-2 border border-slate-200 text-sm rounded-lg" />
-          </div>
-          <button
-            disabled
-            type="button"
-            class="w-full py-3 bg-teal-700 text-white font-semibold text-sm rounded-xl">
-            Submit Button
-          </button>
-        </div>
+    <!-- Right Panel: Live Form Preview Box (Col-span-6) -->
+    <section class="lg:col-span-6 bg-slate-100/50 border border-slate-200/60 rounded-2xl p-8 flex flex-col items-center justify-center min-h-[400px]">
+      <div class="w-full max-w-md bg-white border border-slate-200 rounded-2xl p-8 shadow-sm text-center min-h-[300px] flex items-center justify-center text-slate-400 text-xs">
+        Right Panel 
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-  const themeColors = [
-    { value: "#0f766e" }, // Teal
-    { value: "#2563eb" }, // Blue
-    { value: "#4f46e5" }, // Indigo
-    { value: "#7c3aed" }, // Purple
-    { value: "#ea580c" }, // Orange
-    { value: "#1e293b" }, // Dark slate
-  ];
+import { ref, watch } from "vue";
 
-  const roundingOptions = [
-    { label: "Sharp", value: "rounded-none" },
-    { label: "Medium", value: "rounded-lg" },
-    { label: "Large", value: "rounded-2xl" },
-  ];
+// Declare props to receive the active state from the parent
+const props = defineProps({
+  active: Boolean
+});
 
-  const paddingOptions = [
-    { label: "Compact", value: "p-4" },
-    { label: "Standard", value: "p-8" },
-    { label: "Spacious", value: "p-12" },
-  ];
+// Reactive form info bindings
+const formTitle = ref("Untitled Form");
+const formDescription = ref("");
+
+// Collapsible state
+const isLabelStyleOpen = ref(true);
+
+// Custom styles states
+const textColor = ref("#1e293b");
+const fontSize = ref("12px");
+const fontWeight = ref("500");
+
+// Ref for the TextareaField component
+const textareaRef = ref<any>(null);
+
+// Watch the active prop and trigger focus when the step becomes active
+watch(
+  () => props.active,
+  (isActive) => {
+    if (isActive) {
+      setTimeout(() => {
+        textareaRef.value?.focus();
+      }, 150); // 150ms delay allows v-show to display the element before focusing
+    }
+  },
+  { immediate: true }
+);
 </script>

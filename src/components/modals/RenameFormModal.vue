@@ -19,6 +19,7 @@
   >
     <div>
       <InputField
+        ref="inputRef"
         label="Form Name"
         type="text"
         v-model="renameFormTitle"
@@ -49,6 +50,7 @@ const props = defineProps({
 const emit = defineEmits(['closeModal', 'confirmRename']);
 const isLoading = ref(false)
 const renameFormTitle = ref<string>('')
+const inputRef = ref<any>(null)
 const toast = useToast()
 
 watch(
@@ -56,6 +58,17 @@ watch(
   (val) => {
     if (val !== undefined) {
       renameFormTitle.value = val ?? ''
+    }
+  }
+)
+
+watch(
+  () => props.isShowModal,
+  (newVal) => {
+    if (newVal) {
+      setTimeout(() => {
+        inputRef.value?.focus();
+      }, 50);
     }
   }
 )

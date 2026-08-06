@@ -19,6 +19,7 @@
   >
     <div>
       <InputField
+        ref="inputRef"
         label="Form Name"
         type="text"
         v-model="formTitle"
@@ -49,6 +50,7 @@ const props = defineProps({
 const emit = defineEmits(['closeModal']);
 const isLoading = ref(false);
 const formTitle = ref("");
+const inputRef = ref<any>(null);
 const router = useRouter()
 const toast = useToast()
 
@@ -61,6 +63,18 @@ watch(() => props.isShowModal, (newVal) => {
   if (newVal) {
     formTitle.value = "";
     $v.value.$reset();
+  }
+});
+
+watch(() => props.isShowModal, (newVal) => {
+  if (newVal) {
+    formTitle.value = "";
+    $v.value.$reset();
+    
+    // Auto-focus when opened
+    setTimeout(() => {
+      inputRef.value?.focus();
+    }, 50);
   }
 });
 

@@ -12,16 +12,16 @@
 
     <label
       :for="id"
-      class="flex items-center gap-2.5 cursor-pointer rounded-md px-3 py-0.5 transition-all"
+      class="flex items-center gap-2 cursor-pointer rounded-md px-3 py-0.5 transition-all"
     >
       <!-- Radio Circle -->
       <span
         class="w-4 h-4 rounded-full border-2 flex items-center justify-center"
-         :class="isChecked ? 'border-blue-500 bg-white' : 'border-gray-300'"
+         :class="isChecked ? 'border-teal-500 bg-white' : 'border-gray-300'"
       >
       <span
         class="w-1.5 h-1.5 rounded-full"
-        :class="isChecked ? 'bg-blue-500' : 'bg-gray-300'"
+        :class="isChecked ? 'bg-teal-500' : 'bg-gray-300'"
       ></span>
       </span>
 

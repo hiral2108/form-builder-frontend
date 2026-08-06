@@ -7,6 +7,13 @@ export interface FormFieldType {
   placeholder: string;
   required: boolean;
   options?: string[];
+  labelPlacement?: "default" | "right" | "left" | "center";
+  requiredMessage?: string;
+  validateEmail?: number;
+  emailErrorMessage?: string;
+  validatePhone?: number;
+  phoneErrorMessage?: string;
+  rows?: number;
 }
 
 export interface FormFieldSettingType {
@@ -17,12 +24,8 @@ export interface FormFieldSettingType {
 export const useFormFieldSettingStore = defineStore("formFieldSetting", {
   state: () => ({
     formFieldSetting: {
-      fields: [
-        { id: "1", type: "text", label: "Text Input", placeholder: "Enter text", required: false },
-        { id: "2", type: "email", label: "Email", placeholder: "Email Address", required: true },
-        { id: "3", type: "textarea", label: "Textarea", placeholder: "Enter description...", required: false },
-      ],
-      selectedFieldId: "1",
+      fields: [],
+      selectedFieldId: null,
     } as FormFieldSettingType,
   }),
 });

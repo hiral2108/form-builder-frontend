@@ -42,7 +42,7 @@
         </div>
         <button 
           type="button" 
-          class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-[38px] text-white bg-teal-600 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm" 
+          class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-[38px] text-white bg-teal-600 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10" 
           @click="applyCustomFilter"
         >
           Apply

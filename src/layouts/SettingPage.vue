@@ -119,6 +119,7 @@ import submissionNav from "@/assets/icons/settingpage/task-line.svg";
 
 const route = useRoute();
 const isCollapsed = ref(false);
+const userCollapsedChoice = ref(false);
 const isMobile = ref(false);
 const isMobileSidebarOpen = ref(false);
 
@@ -128,6 +129,7 @@ const activeLink = ref(String(route.name || ""));
 
 const collapseMenu = () => {
   isCollapsed.value = !isCollapsed.value;
+  userCollapsedChoice.value = isCollapsed.value; // Remember user's choice
 };
 
 const handleResize = () => {
@@ -183,7 +185,8 @@ watch(
       isCollapsed.value = true;
       activeLink.value = "FormsPage"; // Keeps the "Forms" sidebar item active on settings page
     } else {
-      isCollapsed.value = false;
+      // Restore their last manual toggle choice when navigating other pages
+      isCollapsed.value = userCollapsedChoice.value;
       activeLink.value = String(newName || "");
     }
   },

@@ -84,24 +84,24 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5 w-full max-w-3xl mb-10 animate-fade-in-up" style="animation-delay: 0.3s;">
         <!-- Card 1 -->
         <div class="bg-white rounded-xl border border-slate-200/70 p-5 hover:-translate-y-1 hover:shadow-md transition-all duration-300 cursor-default group">
-          <div class="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center mb-3.5 group-hover:scale-110 transition-transform duration-300">
-            <i class="ri-layout-4-line text-lg text-teal-700"></i>
+          <div class="w-10 h-10 rounded-lg bg-teal-100 flex items-center justify-center mb-3.5 group-hover:scale-110 transition-transform duration-300 text-teal-700">
+            <img v-svg-inline src="@/assets/icons/form-list/layout-4-line.svg" class="w-6 h-6"/>
           </div>
           <h4 class="text-sm font-semibold text-slate-800 mb-1">Custom Fields</h4>
           <p class="text-xs text-slate-500 leading-relaxed">20+ field types from text inputs to file uploads and signature capture.</p>
         </div>
         <!-- Card 2 -->
         <div class="bg-white rounded-xl border border-slate-200/70 p-5 hover:-translate-y-1 hover:shadow-md transition-all duration-300 cursor-default group">
-          <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center mb-3.5 group-hover:scale-110 transition-transform duration-300">
-            <i class="ri-bar-chart-2-line text-lg text-emerald-600"></i>
+          <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center mb-3.5 group-hover:scale-110 transition-transform duration-300 text-emerald-600">
+            <img v-svg-inline src="@/assets/icons/form-list/bar-chart-2-line.svg" class="w-6 h-6"/>
           </div>
           <h4 class="text-sm font-semibold text-slate-800 mb-1">Analytics Tracking</h4>
           <p class="text-xs text-slate-500 leading-relaxed">Track views, submissions, and conversion rates with real-time dashboards.</p>
         </div>
         <!-- Card 3 -->
         <div class="bg-white rounded-xl border border-slate-200/70 p-5 hover:-translate-y-1 hover:shadow-md transition-all duration-300 cursor-default group">
-          <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center mb-3.5 group-hover:scale-110 transition-transform duration-300">
-            <i class="ri-paint-brush-line text-lg text-amber-600"></i>
+          <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center mb-3.5 group-hover:scale-110 transition-transform duration-300 text-amber-600">
+            <img v-svg-inline src="@/assets/icons/form-list/paint-brush-line.svg" class="w-6 h-6"/>
           </div>
           <h4 class="text-sm font-semibold text-slate-800 mb-1">Style Customization</h4>
           <p class="text-xs text-slate-500 leading-relaxed">Full control over colors, fonts, spacing, and layout to match your brand.</p>
@@ -111,7 +111,8 @@
       <!-- Buttons Container (With Create Trigger) -->
       <div class="flex flex-col items-center gap-3 animate-fade-in-up" style="animation-delay: 0.4s;">
         <button @click="showCreateFormModal = true" class="group relative px-7 py-3 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 whitespace-nowrap cursor-pointer hover:scale-[1.03] shadow-sm shadow-teal-600/10 animate-pulse-glow">
-          <i class="ri-add-line text-base"></i>Create Your First Form
+          <img v-svg-inline src="@/assets/icons/dashboardpage/add-line.svg" class="w-5 h-5"/>
+          Create Your First Form
         </button>
       </div>
     </div>
@@ -236,7 +237,7 @@
                     </button>
                     
                     <div class="relative group/tooltip">
-                      <button class="text-slate-400 hover:text-slate-600 transition-opacity cursor-pointer text-sm flex items-center">
+                      <button @click="openRenameModal(form)" class="text-slate-400 hover:text-slate-600 transition-opacity cursor-pointer text-sm flex items-center">
                         <img v-svg-inline src="@/assets/icons/form-list/rename.svg" class="w-5 h-5"/>
                       </button>
                       <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 px-3 py-1.5 text-xs font-semibold text-white bg-slate-900 rounded-lg opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md z-10">
@@ -270,9 +271,16 @@
                 <td class="px-5 py-3.5">
                   <div class="flex items-center justify-center gap-2.5">
                     <div class="relative group/tooltip">
-                      <button @click="openRenameModal(form)" class="w-9 h-9 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 transition-colors cursor-pointer text-lg">
-                        <img v-svg-inline src="@/assets/icons/form-list/edit.svg" class="w-5 h-5"/>
-                      </button>
+                      <router-link
+                        :to="{ name: 'FormSettingsPage', params: { uniqueId: form.id } }"
+                        class="w-9 h-9 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 transition-colors cursor-pointer text-lg"
+                      >
+                        <img 
+                          v-svg-inline 
+                          src="@/assets/icons/form-list/edit.svg" 
+                          class="w-5 h-5 transition-transform hover:scale-110"
+                        />
+                      </router-link>
                       <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 px-3 py-1.5 text-xs font-semibold text-white bg-slate-900 rounded-lg opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md z-10">
                         Edit
                         <span class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></span>

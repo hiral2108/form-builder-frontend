@@ -19,6 +19,7 @@
   >
     <div>
       <InputField
+        ref="inputRef"
         label="Form Name"
         type="text"
         v-model="cloneFormTitle"
@@ -49,13 +50,14 @@ const props = defineProps({
 const emit = defineEmits(['closeModal', 'confirmClone']);
 const isLoading = ref(false)
 const cloneFormTitle = ref<string>('')
+const inputRef = ref<any>(null)
 const toast = useToast()
 
 watch(
   () => props.formTitle,
   (val) => {
     if (val !== undefined) {
-      cloneFormTitle.value = val ? `${val} (Copy)` : ''
+      cloneFormTitle.value = val ? `${val} #2` : ''
     }
   }
 )
@@ -91,4 +93,15 @@ const cloneForm = async () => {
 const closeModalWidget = () => {
   emit('closeModal');
 }
+
+watch(
+  () => props.isShowModal,
+  (newVal) => {
+    if (newVal) {
+      setTimeout(() => {
+        inputRef.value?.focus();
+      }, 50);
+    }
+  }
+)
 </script>

@@ -18,6 +18,7 @@ import SelectField from "@/components/global/fields/SelectField.vue";
 import CustomDefaultRadio from "@/components/global/fields/CustomDefaultRadio.vue";
 import RadioTypeSelector from "@/components/global/fields/RadioTypeSelector.vue";
 import InputColorPicker from "@/components/global/fields/InputColorPicker.vue";
+import InputFieldWithBadge from '@/components/global/fields/InputFieldWithBadge.vue';
 
 import VueSvgInlinePlugin from "@/utils/vue-svg-inline-vite.ts";
 
@@ -50,5 +51,6 @@ app.component("SelectField", SelectField);
 app.component("CustomDefaultRadio", CustomDefaultRadio);
 app.component("RadioTypeSelector", RadioTypeSelector);
 app.component("InputColorPicker", InputColorPicker);
+app.component('InputFieldWithBadge', InputFieldWithBadge);
 
 app.mount("#app");

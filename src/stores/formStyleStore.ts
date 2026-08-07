@@ -110,7 +110,7 @@ export const useFormStyleSettingStore = defineStore("formStyleSetting", {
     formStyleSetting: {
       // Form Info
       formInfo: {
-        formTitle: "Untitled Form",
+        formTitle: "",
         formDescription: "",
       },
 
@@ -118,13 +118,13 @@ export const useFormStyleSettingStore = defineStore("formStyleSetting", {
       labelStyle: {
         showLabel: "show",
         textColor: "#1e293b",
-        fontSize: 12,
-        fontWeight: "500",
+        fontSize: 14,
+        fontWeight: "medium",
       },
 
       // Input Style
       inputStyle: {
-        inputWidth: "100%",
+        inputWidth: "default",
         inputSize: "default",
         inputBgColor: "#ffffff",
         inputTextColor: "#1e293b",

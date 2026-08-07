@@ -46,8 +46,8 @@
             class="flex items-center justify-center w-full rounded-md py-1.5 px-2.5 cursor-pointer transition text-gray-700 hover:bg-white h-full whitespace-nowrap text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             :class="{
               'opacity-50 cursor-not-allowed': option.disabled,
-            }">
-            {{ option.label }}
+            }"
+            v-html="option.label">
           </label>
         </div>
       </div>

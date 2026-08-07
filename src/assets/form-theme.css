@@ -1,0 +1,104 @@
+:root {
+  --form-bg-color: #FFFFFF;
+
+  --label-color: #1E293B;
+  --label-font-size: 12px;
+  --label-font-weight: 500;
+
+  --input-width: 100%;
+  --input-bg-color: #FFFFFF;
+  --input-text-color: #1E293B;
+  --input-border-color: #CCCCCC;
+  --input-border-width: 1px;
+  --input-border-radius: 4px;
+  --input-border-style: solid;
+  --input-font-size: 14px;
+  --input-font-weight: 400;
+  --input-box-shadow: none;
+  --input-padding-top: 10px;
+  --input-padding-right: 10px;
+  --input-padding-bottom: 10px;
+  --input-padding-left: 10px;
+  --input-margin-top: 0px;
+  --input-margin-right: 0px;
+  --input-margin-bottom: 0px;
+  --input-margin-left: 0px;
+  --input-placeholder-color: #5F6368;
+
+  --button-bg-color: #0D9488;
+  --button-text-color: #FFFFFF;
+  --button-border-color: #CBD5E1;
+  --button-border-width: 0px;
+  --button-border-radius: 8px;
+  --button-border-style: none;
+  --button-font-size: 14px;
+  --button-font-weight: 500;
+  --button-box-shadow: none;
+  --button-padding-top: 10px;
+  --button-padding-right: 20px;
+  --button-padding-bottom: 10px;
+  --button-padding-left: 20px;
+  --button-margin-top: 10px;
+  --button-margin-right: 0px;
+  --button-margin-bottom: 10px;
+  --button-margin-left: 0px;
+}
+
+/* ===== Actual style rules (never change these again) ===== */
+/* Every rule below is scoped under .gform-wrapper so it ONLY affects
+   the live preview — never the settings panel, which reuses the same
+   InputField / TextareaField / SelectField components. */
+
+.gform-wrapper {
+  background-color: var(--form-bg-color);
+}
+
+.gform-wrapper .gform-label,
+.gform-wrapper .input-field label,
+.gform-wrapper .textarea-field label,
+.gform-wrapper .select-field label,
+.gform-wrapper .discount-type-radio-toggle label span,
+.gform-wrapper .custom-default-checkbox label span {
+  color: var(--label-color) !important;
+  font-size: var(--label-font-size) !important;
+  font-weight: var(--label-font-weight) !important;
+}
+
+.gform-wrapper .gform-input,
+.gform-wrapper .input-field input,
+.gform-wrapper .textarea-field textarea,
+.gform-wrapper .custom-select-box {
+  width: var(--input-width) !important;
+  height: var(--input-height) !important;
+  background-color: var(--input-bg-color) !important;
+  color: var(--input-text-color) !important;
+  border-color: var(--input-border-color) !important;
+  border-width: var(--input-border-width) !important;
+  border-radius: var(--input-border-radius) !important;
+  border-style: var(--input-border-style) !important;
+  font-size: var(--input-font-size) !important;
+  font-weight: var(--input-font-weight) !important;
+  box-shadow: var(--input-box-shadow) !important;
+  padding: var(--input-padding-top) var(--input-padding-right) var(--input-padding-bottom) var(--input-padding-left) !important;
+  margin: var(--input-margin-top) var(--input-margin-right) var(--input-margin-bottom) var(--input-margin-left) !important;
+}
+
+.gform-wrapper .gform-input::placeholder,
+.gform-wrapper .input-field input::placeholder,
+.gform-wrapper .textarea-field textarea::placeholder {
+  color: var(--input-placeholder-color) !important;
+}
+
+.gform-wrapper .gform-submit-btn {
+  background-color: var(--button-bg-color) !important;
+  color: var(--button-text-color) !important;
+  border-color: var(--button-border-color) !important;
+  border-width: var(--button-border-width) !important;
+  border-radius: var(--button-border-radius) !important;
+  border-style: var(--button-border-style) !important;
+  font-size: var(--button-font-size) !important;
+  font-weight: var(--button-font-weight) !important;
+  box-shadow: var(--button-box-shadow) !important;
+  padding: var(--button-padding-top) var(--button-padding-right) var(--button-padding-bottom) var(--button-padding-left) !important;
+  margin: var(--button-margin-top) var(--button-margin-right) var(--button-margin-bottom) var(--button-margin-left) !important;
+}

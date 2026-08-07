@@ -102,7 +102,7 @@
               :class="
                 currentStep === step.number
                   ? 'bg-teal-600 text-white font-bold shadow-sm'
-                  : 'bg-slate-100 text-slate-500 font-semibold'
+                  : 'bg-slate-200 text-slate-600 font-semibold'
               ">
               {{ step.number }}
             </span>

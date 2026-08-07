@@ -1,17 +1,21 @@
 import { ref, reactive } from "vue";
 import { storeToRefs } from "pinia";
 import { useFormFieldSettingStore } from "@/stores/formFieldStore";
+import { useFormStyleSettingStore } from "@/stores/formStyleStore"
 
 const isWidgetDataLoading = ref(true);
 const validationErrors = reactive<Record<string, string>>({});
 
 export function formSetting() {
   const FormFieldSettingStore = useFormFieldSettingStore();
+  const FormStyleSettingStore = useFormStyleSettingStore();
 
   const { formFieldSetting } = storeToRefs(FormFieldSettingStore);
+  const { formStyleSetting } = storeToRefs(FormStyleSettingStore);
 
   const resetFormStores = () => {
     FormFieldSettingStore.$reset();
+    FormStyleSettingStore.$reset();
   };
 
   //   const isEmpty = (val: any): boolean => {
@@ -35,6 +39,7 @@ export function formSetting() {
   return {
     isWidgetDataLoading,
     formFieldSetting,
+    formStyleSetting,
     clearValidation,
     resetFormStores,
     validationErrors,

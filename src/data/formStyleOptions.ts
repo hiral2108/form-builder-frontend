@@ -1,12 +1,12 @@
 export const fontWeightOptions = {
-  "300": "Light",
-  "400": "Regular",
-  "500": "Medium",
-  "700": "Bold"
+  "light": "Light",
+  "regular": "Regular",
+  "medium": "Medium",
+  "bold": "Bold"
 };
 
 export const fieldWidthOptions = {
-  "100%": "100% Default",
+  "default": "100% Default",
   "tiny": "Tiny",
   "small": "Small",
   "medium": "Medium",

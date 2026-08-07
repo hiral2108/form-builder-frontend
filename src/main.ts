@@ -6,6 +6,7 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import "remixicon/fonts/remixicon.css";
 import "@/assets/tailwind.css";
+import "@/assets/form-theme.css";
 
 import InputFieldWithIcon from "@/components/global/fields/InputFieldWithIcon.vue";
 import CheckboxToggle from "@/components/global/fields/CheckboxToggle.vue";

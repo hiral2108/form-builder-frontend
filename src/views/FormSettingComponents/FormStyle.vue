@@ -49,7 +49,7 @@
               :options="displayOptions"
               :columns="2"
               name="display-selector"
-            />
+            /> 
           </div>
           
           <!-- Text Color -->
@@ -850,11 +850,11 @@
       </div>
     </section>
 
-    <!-- Right Panel: Live Form Preview Box (Col-span-6) -->
-    <section class="lg:col-span-6 bg-slate-100/50 border border-slate-200/60 rounded-2xl p-8 flex flex-col items-center justify-center min-h-[400px]">
-      <div class="w-full max-w-md bg-white border border-slate-200 rounded-2xl p-8 shadow-sm text-center min-h-[300px] flex items-center justify-center text-slate-400 text-xs">
-        Right Panel 
-      </div>
+    <!-- Right Panel -->
+    <section class="lg:col-span-6 bg-slate-100/50 border border-slate-200/60 rounded-2xl p-8 flex flex-col items-center min-h-[400px]">
+      <PreviewTemplate class="w-full">
+        <FormPreview />
+      </PreviewTemplate>
     </section>
   </div>
 </template>
@@ -863,6 +863,8 @@
 import { ref, watch } from "vue";
 import { formSetting } from "@/composable/useFormSettings";
 import { useFormStyleSettingStore } from "@/stores/formStyleStore";
+import PreviewTemplate from "@/views/FormSettingComponents/PreviewTemplate.vue";
+import FormPreview from "@/views/FormSettingComponents/FormPreview.vue";
 
 import {
   displayOptions,

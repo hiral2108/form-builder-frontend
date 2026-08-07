@@ -8,7 +8,7 @@
       {{ label }}
     </label>
 
-    <div :class="['flex items-center h-[34px] gap-1 bg-white rounded-lg px-2.5 py-1.5 border border-gray-300 outline-none transition-all duration-200 focus-within:border-transparent focus-within:ring-2 focus-within:ring-teal-500',widthClass, classes]">
+    <div :class="['flex items-center h-[38px] gap-1 bg-white rounded-xl px-4 py-2 border border-gray-300 outline-none transition-all duration-200 focus-within:border-transparent focus-within:ring-2 focus-within:ring-teal-500',widthClass, classes]">
       <input
         ref="inputRef"
         :id="id"

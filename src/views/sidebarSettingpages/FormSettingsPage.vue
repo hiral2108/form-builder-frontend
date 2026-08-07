@@ -113,10 +113,10 @@
     </div>
 
    <main class="flex-1 pt-6 max-w-7xl mx-auto w-full min-h-0 overflow-hidden">
-      <FormFields v-show="currentStep === 1" />
-      <FormStyle v-show="currentStep === 2" />
-      <DisplayRules v-show="currentStep === 3" />
-      <MessageAndNotification v-show="currentStep === 4" />
+      <FormFields v-if="currentStep === 1" />
+      <FormStyle v-if="currentStep === 2" />
+      <DisplayRules v-if="currentStep === 3" />
+      <MessageAndNotification v-if="currentStep === 4" />
     </main>
   </div>
 </template>

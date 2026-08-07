@@ -21,11 +21,21 @@ export interface FormFieldType {
   rows?: number;
   timeFormat?: "12h" | "24h";
   showPasswordIcon?: number;
+  defaultValue?: string;
+  containerClass?: string;
+  fieldClass?: string;
+  helpMessage?: string;
+  maxLength?: number;
 }
 
 export interface FormFieldSettingType {
   fields: FormFieldType[];
   selectedFieldId: string | null;
+  submitButtonText?: string;
+  submitButtonSize?: "sm" | "md" | "lg";
+  submitButtonPlacement?: "left" | "center" | "right";
+  submitButtonContainerClass?: string;
+  submitButtonElementClass?: string;
 }
 
 export const useFormFieldSettingStore = defineStore("formFieldSetting", {
@@ -33,6 +43,11 @@ export const useFormFieldSettingStore = defineStore("formFieldSetting", {
     formFieldSetting: {
       fields: [],
       selectedFieldId: null,
+      submitButtonText: "Submit",
+      submitButtonSize: "lg",
+      submitButtonPlacement: "center",
+      submitButtonContainerClass: "",
+      submitButtonElementClass: "",
     } as FormFieldSettingType,
   }),
 });

@@ -18,7 +18,7 @@
       :placeholder="placeholder"
       class="block w-full bg-transparent border placeholder-gray-400
             py-1 px-3 text-[#2c3338]
-            border-gray-200 focus:border-transparent
+            border-gray-300 focus:border-transparent
             rounded-xl text-sm
             outline-none focus:outline-none
             focus:ring-2 focus:ring-teal-500"

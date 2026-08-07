@@ -1,9 +1,34 @@
 <template>
   <div class="input-field">
     <div class="input-wrapper">
-      <label v-if="label" :for="getFieldID" :class="labelClass" class="block text-sm font-semibold text-gray-700 mb-1"
-        >{{ label }} <span v-if="required" class="text-red-500">*</span></label
-      >
+      <label v-if="label" :for="getFieldID" :class="labelClass" class="block text-sm font-semibold text-gray-700 mb-1">
+        <span class="inline-flex items-center gap-1.5">
+          <span>{{ label }} <span v-if="required" class="text-red-500">*</span></span>
+          <span
+            v-if="helpMessage"
+            ref="tooltipTrigger"
+            class="relative flex items-center justify-center cursor-pointer pointer-events-auto"
+            @mouseenter="openTooltip"
+            @mouseleave="closeTooltip">
+            <img v-svg-inline src="@/assets/icons/form-settings/info.svg" class="w-3.5 h-3.5 text-slate-400" />
+          </span>
+        </span>
+      </label>
+
+      <Teleport to="body">
+        <div
+          v-if="helpMessage && showTooltip"
+          class="fixed max-w-40 w-max bg-slate-900 text-white text-xs font-medium px-3 py-2 rounded-lg shadow-xl pointer-events-none text-center leading-relaxed whitespace-normal break-words z-[9999]"
+          :style="{
+            top: tooltipPosition.top + 'px',
+            left: tooltipPosition.left + 'px',
+            transform: 'translate(-50%, -100%)',
+          }">
+          {{ helpMessage }}
+          <span
+            class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></span>
+        </div>
+      </Teleport>
       <div class="relative">
         <input
           :disabled="disable"
@@ -26,7 +51,7 @@
             classes,
           ]"
           ref="inputField"
-          class="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 bg-white"
+          class="w-full px-4 py-2 border border-gray-300 rounded-xl text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 bg-white"
           :placeholder="placeholder"
           @input="onChange"
           @blur="onBlur"
@@ -47,6 +72,28 @@
   import { computed, ref } from "vue";
   import { isRTL } from "@/utils";
   import { v4 as uuidv4 } from "uuid";
+
+  const tooltipTrigger = ref<HTMLElement | null>(null);
+  const showTooltip = ref(false);
+  const tooltipPosition = ref({ top: 0, left: 0 });
+
+  const updateTooltipPosition = () => {
+    if (!tooltipTrigger.value) return;
+    const rect = tooltipTrigger.value.getBoundingClientRect();
+    tooltipPosition.value = {
+      top: rect.top + window.scrollY - 8,
+      left: rect.left + rect.width / 2 + window.scrollX,
+    };
+  };
+
+  const openTooltip = () => {
+    updateTooltipPosition();
+    showTooltip.value = true;
+  };
+
+  const closeTooltip = () => {
+    showTooltip.value = false;
+  };
 
   const emit = defineEmits(["update:modelValue", "input", "blur", "togglePassword", "focusin", "keydown", "focusout"]);
 
@@ -70,6 +117,7 @@
       vModel?: string | any;
       focusColor?: "blue" | "teal" | "emerald" | "red"; // Added prop type
       required?: boolean;
+      helpMessage?: string;
     }>(),
     {
       type: "text",

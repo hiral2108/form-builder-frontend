@@ -24,6 +24,8 @@ export function useFormFieldsBuilder() {
   const FormFieldSettingStore = useFormFieldSettingStore();
   const { formFieldSetting } = formSetting();
 
+  const isAdvanceSettingsOpen = ref(false);
+
   const fieldLibrary = [
     { type: "text", label: "Text Input", icon: TextIcon },
     { type: "name", label: "Name", icon: NameIcon },
@@ -51,11 +53,33 @@ export function useFormFieldsBuilder() {
     formFieldSetting.value.selectedFieldId = id;
   };
 
+  const toggleAdvanceSettings = () => {
+    isAdvanceSettingsOpen.value = !isAdvanceSettingsOpen.value;
+  };
+
   const removeField = (id: string) => {
     formFieldSetting.value.fields = formFieldSetting.value.fields.filter((f) => f.id !== id);
     if (formFieldSetting.value.selectedFieldId === id) {
       formFieldSetting.value.selectedFieldId = null;
     }
+  };
+
+  const isDeleteModalOpen = ref(false);
+  const fieldToDeleteId = ref<string | null>(null);
+  const fieldToDeleteLabel = ref("");
+
+  const triggerDeleteConfirm = (id: string, label: string) => {
+    fieldToDeleteId.value = id;
+    fieldToDeleteLabel.value = label;
+    isDeleteModalOpen.value = true;
+  };
+
+  const confirmDelete = () => {
+    if (fieldToDeleteId.value) {
+      removeField(fieldToDeleteId.value);
+    }
+    isDeleteModalOpen.value = false;
+    fieldToDeleteId.value = null;
   };
 
   const addField = (type: string) => {
@@ -104,7 +128,7 @@ export function useFormFieldsBuilder() {
         placeholder = "Enter text";
         break;
       case "name":
-        label = "Full Name";
+        label = "Name";
         placeholder = "Enter full name";
         break;
       case "email":
@@ -222,6 +246,50 @@ export function useFormFieldsBuilder() {
     }
   };
 
+  const addOption = (field: FormFieldType | null) => {
+    if (!field) return;
+    if (!field.options) field.options = [];
+    let maxNum = 0;
+    field.options.forEach((opt) => {
+      const match = opt.match(/Option\s+(\d+)/i);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (num > maxNum) {
+          maxNum = num;
+        }
+      }
+    });
+    const nextNum = maxNum > 0 ? maxNum + 1 : field.options.length + 1;
+    field.options.push(`Option ${nextNum}`);
+  };
+
+  const updateOption = (field: FormFieldType | null, index: number, value: string) => {
+    if (!field || !field.options) return;
+    const updated = [...field.options];
+    updated[index] = value;
+    field.options = updated;
+  };
+
+  const removeOption = (field: FormFieldType | null, index: number) => {
+    if (!field || !field.options) return;
+    const updated = [...field.options];
+    updated.splice(index, 1);
+    field.options = updated;
+  };
+
+  const typeableFieldTypes = ["text", "name", "email", "number", "phone", "url", "password", "textarea"];
+
+  const canHaveDefaultValue = (field: FormFieldType | null) => {
+    if (!field) return false;
+    return typeableFieldTypes.includes(field.type) || field.type === "hidden";
+  };
+
+  const canHaveMaxLength = (field: FormFieldType | null) => {
+    if (!field) return false;
+    return typeableFieldTypes.includes(field.type);
+  };
+
+  //------------------------------------------------------drag & drop for fields----------------------
   const draggedIndex = ref<number | null>(null);
   const dragOverIndex = ref<number | null>(null);
   const isDraggable = ref(false);
@@ -282,6 +350,88 @@ export function useFormFieldsBuilder() {
     isDraggable.value = false;
   };
 
+  //-------------------------------------------------- drag & drop for options ----------------------------------
+
+  const draggedOptionIndex = ref<number | null>(null);
+  const dragOverOptionIndex = ref<number | null>(null);
+  const isOptionDraggable = ref(false);
+
+  const onOptionDragStart = (index: number, event: DragEvent) => {
+    draggedOptionIndex.value = index;
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", index.toString());
+    }
+  };
+
+  const onOptionDragOver = (index: number, event: DragEvent) => {
+    event.preventDefault();
+    if (draggedOptionIndex.value !== null && draggedOptionIndex.value !== index) {
+      dragOverOptionIndex.value = index;
+    }
+  };
+
+  const onOptionDragLeave = () => {
+    dragOverOptionIndex.value = null;
+  };
+
+  const onOptionDrop = (field: FormFieldType | null, targetIndex: number) => {
+    dragOverOptionIndex.value = null;
+    isOptionDraggable.value = false;
+    if (!field || !field.options) return;
+
+    if (draggedOptionIndex.value !== null && draggedOptionIndex.value !== targetIndex) {
+      const options = [...field.options];
+      const draggedOption = options[draggedOptionIndex.value];
+
+      options.splice(draggedOptionIndex.value, 1);
+      options.splice(targetIndex, 0, draggedOption);
+
+      field.options = options;
+    }
+    draggedOptionIndex.value = null;
+  };
+
+  const onOptionDragEnd = () => {
+    draggedOptionIndex.value = null;
+    dragOverOptionIndex.value = null;
+    isOptionDraggable.value = false;
+  };
+
+  //-----------------------------------------------------------------------------style-------------------------------------------------
+
+  // Dynamic classes for the Submit Button container (alignment & selection styling)
+  const submitButtonContainerClass = computed(() => {
+    const isSelected = formFieldSetting.value.selectedFieldId === "submit-button";
+    const placement = formFieldSetting.value.submitButtonPlacement || "center";
+
+    const baseClasses = "p-1.5 rounded-2xl border border-dashed transition-all duration-200 cursor-pointer flex";
+
+    const selectionClass = isSelected
+      ? "border-teal-600 bg-slate-50 shadow-sm"
+      : "border-transparent hover:border-teal-500 hover:bg-teal-100/5";
+
+    const alignmentClass =
+      placement === "left" ? "justify-start" : placement === "right" ? "justify-end" : "justify-center";
+
+    return `${baseClasses} ${selectionClass} ${alignmentClass}`;
+  });
+
+  // Dynamic classes for the Submit Button itself (sizes)
+  const submitButtonClass = computed(() => {
+    const size = formFieldSetting.value.submitButtonSize || "lg";
+    const baseClasses =
+      "bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-xl flex items-center justify-center shadow-lg shadow-teal-100/30 pointer-events-none transition-all";
+
+    if (size === "sm") {
+      return `${baseClasses} px-10 py-2.5 text-sm`;
+    }
+    if (size === "md") {
+      return `${baseClasses} w-1/2 py-3 text-sm`;
+    }
+    return `${baseClasses} w-full py-3 text-sm`;
+  });
+
   watch(
     formFieldSetting,
     (newVal) => {
@@ -290,16 +440,26 @@ export function useFormFieldsBuilder() {
     { deep: true, immediate: true }
   );
 
+  watch(selectedField, () => {
+    isAdvanceSettingsOpen.value = false;
+  });
+
   return {
     fieldLibrary,
     FormFieldSettingStore,
     formFieldSetting,
     selectedField,
     selectField,
-    removeField,
+    isDeleteModalOpen,
+    fieldToDeleteLabel,
+    triggerDeleteConfirm,
+    confirmDelete,
     addField,
     labelPositionClass,
     duplicateField,
+    addOption,
+    updateOption,
+    removeOption,
     draggedIndex,
     dragOverIndex,
     isDraggable,
@@ -308,5 +468,19 @@ export function useFormFieldsBuilder() {
     onDragLeave,
     onDrop,
     onDragEnd,
+    draggedOptionIndex,
+    dragOverOptionIndex,
+    isOptionDraggable,
+    onOptionDragStart,
+    onOptionDragOver,
+    onOptionDragLeave,
+    onOptionDrop,
+    onOptionDragEnd,
+    submitButtonContainerClass,
+    submitButtonClass,
+    isAdvanceSettingsOpen,
+    toggleAdvanceSettings,
+    canHaveDefaultValue,
+    canHaveMaxLength,
   };
 }

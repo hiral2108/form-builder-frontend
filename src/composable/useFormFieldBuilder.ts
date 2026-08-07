@@ -22,7 +22,7 @@ import { useFormFieldSettingStore, type FormFieldType } from "@/stores/formField
 
 export function useFormFieldsBuilder() {
   const FormFieldSettingStore = useFormFieldSettingStore();
-  const { formFieldSetting } = formSetting();
+  const { formFieldSetting, formStyleSetting } = formSetting();
 
   const isAdvanceSettingsOpen = ref(false);
 
@@ -432,6 +432,16 @@ export function useFormFieldsBuilder() {
     return `${baseClasses} w-full py-3 text-sm`;
   });
 
+  const labelStyleObject = computed(() => {
+    const style = formStyleSetting.value.labelStyle;
+    return {
+      display: style.showLabel === "hide" ? "none" : "",
+      color: style.textColor,
+      fontSize: style.fontSize + "px",
+      fontWeight: style.fontWeight,
+    };
+  });
+
   watch(
     formFieldSetting,
     (newVal) => {
@@ -482,5 +492,6 @@ export function useFormFieldsBuilder() {
     toggleAdvanceSettings,
     canHaveDefaultValue,
     canHaveMaxLength,
+    labelStyleObject,
   };
 }

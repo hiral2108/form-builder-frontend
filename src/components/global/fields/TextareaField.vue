@@ -6,6 +6,7 @@
       :for="id"
       class="block text-sm font-semibold text-gray-700 mb-1"
       :class="labelClass"
+      :style="labelStyle"
     >
       {{ label }} <span v-if="required" class="text-red-500">*</span>
     </label>
@@ -74,7 +75,11 @@ defineProps({
   required: {
     type: Boolean,
     default: false
-  }
+  },
+  labelStyle: {
+  type: Object,
+  default: () => ({})
+}
 })
 
 const emit = defineEmits<{

@@ -114,6 +114,7 @@
                   :required="field.required"
                   :label="field.label"
                   :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
+                  :label-style="labelStyleObject"
                   :type="field.type === 'name' ? 'text' : field.type"
                   :placeholder="field.placeholder"
                   :modelValue="field.defaultValue"
@@ -138,6 +139,7 @@
                     :required="field.required"
                     :label="field.firstNameLabel"
                     :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
+                    :label-style="labelStyleObject"
                     type="text"
                     :placeholder="field.firstNamePlaceholder"
                     :modelValue="field.defaultValue"
@@ -148,6 +150,7 @@
                     :required="field.required"
                     :label="field.lastNameLabel"
                     :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
+                    :label-style="labelStyleObject"
                     type="text"
                     :placeholder="field.lastNamePlaceholder"
                     :modelValue="field.defaultValue"
@@ -161,6 +164,7 @@
                   :required="field.required"
                   :label="field.label"
                   :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
+                   :label-style="labelStyleObject"
                   type="text"
                   :placeholder="field.placeholder"
                   :modelValue="field.defaultValue"
@@ -174,6 +178,7 @@
                 :required="field.required"
                 :label="field.label"
                 :label-class="labelPositionClass(field.labelPlacement) + ' block w-full'"
+                :label-style="labelStyleObject"
                 :placeholder="field.placeholder"
                 :model-value="field.defaultValue"
                 :rows="field.rows"
@@ -184,7 +189,8 @@
             <div class="space-y-1.5" v-else-if="['dropdown', 'multiselect'].includes(field.type)">
               <label
                 class="block text-sm font-semibold text-gray-700 pointer-events-none select-none"
-                :class="labelPositionClass(field.labelPlacement)">
+                :class="labelPositionClass(field.labelPlacement)"
+                :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
               <SelectField
@@ -198,7 +204,8 @@
             <div class="space-y-1.5" v-else-if="field.type === 'radio'">
               <label
                 class="block text-sm font-semibold text-slate-700 pointer-events-none select-none"
-                :class="labelPositionClass(field.labelPlacement)">
+                :class="labelPositionClass(field.labelPlacement)"
+                :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
               <div class="flex flex-col gap-1">
@@ -217,7 +224,8 @@
             <div class="space-y-1.5" v-else-if="field.type === 'checkboxes'">
               <label
                 class="block text-sm font-semibold text-slate-700 pointer-events-none select-none"
-                :class="labelPositionClass(field.labelPlacement)">
+                :class="labelPositionClass(field.labelPlacement)"
+                :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
 
@@ -235,7 +243,8 @@
             <div class="space-y-1.5" v-else-if="field.type === 'datepicker'">
               <label
                 class="block text-sm font-semibold text-slate-700"
-                :class="labelPositionClass(field.labelPlacement)">
+                :class="labelPositionClass(field.labelPlacement)"
+                :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
               <div class="relative w-full">
@@ -258,7 +267,8 @@
             <div class="space-y-1.5" v-else-if="field.type === 'timepicker'">
               <label
                 class="block text-sm font-semibold text-slate-700"
-                :class="labelPositionClass(field.labelPlacement)">
+                :class="labelPositionClass(field.labelPlacement)"
+                :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
               <div class="relative w-full">
@@ -281,7 +291,8 @@
             <div class="space-y-1.5" v-else-if="field.type === 'fileupload'">
               <label
                 class="block text-sm font-semibold text-slate-700"
-                :class="labelPositionClass(field.labelPlacement)">
+                :class="labelPositionClass(field.labelPlacement)"
+                :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
               <div
@@ -750,6 +761,7 @@
     toggleAdvanceSettings,
     canHaveDefaultValue,
     canHaveMaxLength,
+    labelStyleObject
   } = useFormFieldsBuilder();
 </script>
 

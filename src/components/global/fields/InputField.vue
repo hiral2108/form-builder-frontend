@@ -1,7 +1,7 @@
 <template>
   <div class="input-field">
     <div class="input-wrapper">
-      <label v-if="label" :for="getFieldID" :class="labelClass" class="block text-sm font-semibold text-gray-700 mb-1">
+      <label v-if="label" :for="getFieldID" :class="labelClass" :style="labelStyle" class="block text-sm font-semibold text-gray-700 mb-1">
         <span class="inline-flex items-center gap-1.5">
           <span>{{ label }} <span v-if="required" class="text-red-500">*</span></span>
           <span
@@ -118,6 +118,7 @@
       focusColor?: "blue" | "teal" | "emerald" | "red"; // Added prop type
       required?: boolean;
       helpMessage?: string;
+      labelStyle?: Record<string, string>;
     }>(),
     {
       type: "text",

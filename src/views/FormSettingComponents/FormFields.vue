@@ -36,7 +36,7 @@
       </div>
 
       <div class="p-5 overflow-y-auto flex-1 scrollbar-thin">
-        <form @submit.prevent class="space-y-5">
+        <form @submit.prevent :style="cssVars" class="space-y-5 gform-wrapper">
           <div
             v-if="formFieldSetting.fields.length === 0"
             class="text-center py-16 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50 text-slate-400 flex flex-col items-center">
@@ -251,7 +251,7 @@
                 <input
                   disabled
                   type="date"
-                  class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
+                  class="gform-input w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
                 <span
                   class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10">
                   {{ field.placeholder }}
@@ -275,7 +275,7 @@
                 <input
                   disabled
                   type="time"
-                  class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
+                  class="gform-input w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
                 <span
                   class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10">
                   {{ field.placeholder || "Select Time" }}
@@ -296,7 +296,7 @@
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
               <div
-                class="border-2 border-dashed border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center bg-slate-50/50">
+                class="gform-input border-2 border-dashed border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center bg-slate-50/50">
                 <img v-svg-inline src="@/assets/icons/FormFields/Upload.svg" class="w-4 h-4 text-slate-600" />
                 <span class="text-xs text-slate-500">{{ field.placeholder }}</span>
               </div>
@@ -320,7 +320,7 @@
             @click.stop="selectField('submit-button')"
             :class="submitButtonContainerClass"
             title="Click to edit button settings">
-            <button disabled type="button" :class="submitButtonClass">
+            <button disabled type="button" :class="[submitButtonClass, 'gform-submit-btn']">
               {{ formFieldSetting.submitButtonText || "Submit" }}
             </button>
           </div>
@@ -761,7 +761,8 @@
     toggleAdvanceSettings,
     canHaveDefaultValue,
     canHaveMaxLength,
-    labelStyleObject
+    labelStyleObject,
+    cssVars
   } = useFormFieldsBuilder();
 </script>
 
@@ -773,5 +774,9 @@
 
   .settings-panel :deep(.discount-type-radio-toggle label) {
     padding-left: 0 !important;
+  }
+
+   .gform-wrapper {
+    background-color: transparent !important;
   }
 </style>

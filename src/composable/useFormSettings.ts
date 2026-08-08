@@ -1,7 +1,8 @@
 import { ref, reactive } from "vue";
 import { storeToRefs } from "pinia";
 import { useFormFieldSettingStore } from "@/stores/formFieldStore";
-import { useFormStyleSettingStore } from "@/stores/formStyleStore"
+import { useFormStyleSettingStore } from "@/stores/formStyleStore";
+import { useDisplayRuleSettingStore } from "@/stores/DisplayRuleStore";
 
 const isWidgetDataLoading = ref(true);
 const validationErrors = reactive<Record<string, string>>({});
@@ -9,13 +10,16 @@ const validationErrors = reactive<Record<string, string>>({});
 export function formSetting() {
   const FormFieldSettingStore = useFormFieldSettingStore();
   const FormStyleSettingStore = useFormStyleSettingStore();
+  const DisplayRuleSettingStore = useDisplayRuleSettingStore();
 
   const { formFieldSetting } = storeToRefs(FormFieldSettingStore);
   const { formStyleSetting } = storeToRefs(FormStyleSettingStore);
+  const { displayRuleSetting } = storeToRefs(DisplayRuleSettingStore);
 
   const resetFormStores = () => {
     FormFieldSettingStore.$reset();
     FormStyleSettingStore.$reset();
+    DisplayRuleSettingStore.$reset();
   };
 
   //   const isEmpty = (val: any): boolean => {
@@ -43,5 +47,6 @@ export function formSetting() {
     clearValidation,
     resetFormStores,
     validationErrors,
+    displayRuleSetting,
   };
 }

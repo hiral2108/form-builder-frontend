@@ -1,5 +1,12 @@
 <template>
   <div class="relative" ref="root">
+     <label
+      v-if="label"
+      :for="id"
+      class="block text-sm font-semibold text-slate-800 mb-1"
+      :class="labelClass">
+      {{ label }}
+    </label>
     <!-- Color Swatch Button -->
     <button
       type="button"
@@ -11,7 +18,7 @@
     ></button>
 
     <!-- Chrome Color Picker Popup (Positioned absolutely) -->
-    <div v-if="showPicker" class="absolute top-10 left-0 z-[9999]">
+    <div v-if="showPicker" class="absolute top-full mt-1.5 left-0 z-[9999]">
       <Chrome
         :modelValue="chromeModel"
         @update:modelValue="onChromeUpdate"
@@ -30,6 +37,8 @@ type RGBA = { r: number; g: number; b: number; a: number };
 const props = withDefaults(defineProps<{
   modelValue?: string | null | RGBA;
   id?: string;
+  label?: string;
+    labelClass?: string;
 }>(), {
   modelValue: "#ffffff",
   id: undefined,

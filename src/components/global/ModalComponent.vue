@@ -1,7 +1,7 @@
 <template>
-  <div class="qdp-modal" :class="{hidden: !isShowModal}" @keydown.esc="closeModalWidget">
-    <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 z-[11111] qdp-modal-overlay" @click="onBackDropClick">
-      <div class="bg-white rounded-2xl shadow-2xl w-full mx-4 transform transition-all qdp-modal-content" :class="modalClasses || 'max-w-md'" @click.stop>
+  <div class="form-modal" :class="{hidden: !isShowModal}" @keydown.esc="closeModalWidget">
+    <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 z-[11111] form-modal-overlay" @click="onBackDropClick">
+      <div class="bg-white rounded-2xl shadow-2xl w-full mx-4 transform transition-all form-modal-content" :class="modalClasses || 'max-w-md'" @click.stop>
         <div class="px-6 py-5 border-b border-slate-100">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl flex items-center justify-center" :class="[headerIconClasses || 'bg-teal-50 text-teal-600']" v-if="headerIcon">

@@ -850,49 +850,12 @@
       </div>
     </section>
 
-    <!-- Right Panel: desktop only -->
-    <section class="hidden lg:flex lg:col-span-6 bg-slate-100/50 border border-slate-200/60 rounded-2xl p-8 flex-col items-center min-h-[400px]">
-      <PreviewTemplate class="w-full">
+    <!-- Right Panel (Visible on desktop, collapsed to invisible on mobile) -->
+    <section class="lg:col-span-6 w-full flex flex-col items-center bg-transparent border-none lg:bg-slate-100/50 lg:border lg:border-slate-200/60 rounded-2xl p-0 lg:p-8 min-h-0 lg:min-h-[400px]">
+      <PreviewTemplate>
         <FormPreview />
       </PreviewTemplate>
     </section>
-
-    <!-- Floating Preview Button: mobile/tablet only -->
-    <button
-      type="button"
-      @click="isPreviewOpen = true"
-      class="lg:hidden fixed right-4 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full bg-teal-600 hover:bg-teal-700 text-white shadow-lg flex items-center justify-center transition-colors"
-      aria-label="Show Preview"
-    >
-      <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 3C17.3924 3 21.8785 6.87976 22.8189 12C21.8785 17.1202 17.3924 21 12 21C6.60761 21 2.12148 17.1202 1.18109 12C2.12148 6.87976 6.60761 3 12 3ZM12 19C16.2359 19 19.8603 16.052 20.7777 12C19.8603 7.94803 16.2359 5 12 5C7.76412 5 4.13973 7.94803 3.22225 12C4.13973 16.052 7.76412 19 12 19ZM12 16.5C9.51472 16.5 7.5 14.4853 7.5 12C7.5 9.51472 9.51472 7.5 12 7.5C14.4853 7.5 16.5 9.51472 16.5 12C16.5 14.4853 14.4853 16.5 12 16.5ZM12 14.5C13.3807 14.5 14.5 13.3807 14.5 12C14.5 10.6193 13.3807 9.5 12 9.5C10.6193 9.5 9.5 10.6193 9.5 12C9.5 13.3807 10.6193 14.5 12 14.5Z"></path>
-      </svg>
-    </button>
-
-    <!-- Preview Modal: mobile/tablet only -->
-    <Teleport to="body">
-      <div
-        v-if="isPreviewOpen"
-        class="lg:hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/50"
-        @click.self="isPreviewOpen = false"
-      >
-        <div class="bg-white w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl max-h-[92vh] overflow-y-auto p-5 relative">
-          <button
-            type="button"
-            @click="isPreviewOpen = false"
-            class="absolute right-4 top-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 z-10"
-            aria-label="Close Preview"
-          >
-            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 10.5858L16.9497 5.63604L18.364 7.05025L13.4142 12L18.364 16.9497L16.9497 18.364L12 13.4142L7.05025 18.364L5.63604 16.9497L10.5858 12L5.63604 7.05025L7.05025 5.63604L12 10.5858Z"></path>
-            </svg>
-          </button>
-          <PreviewTemplate class="w-full">
-            <FormPreview />
-          </PreviewTemplate>
-        </div>
-      </div>
-    </Teleport>
   </div>
 </template>
 

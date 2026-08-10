@@ -1,14 +1,14 @@
 <template>
   <div class="w-full flex flex-col items-center">
-    <!-- Live Preview Header Title (Above the frame) -->
-    <div class="w-full max-w-lg pb-3 text-left flex-shrink-0">
+    <!-- Live Preview Header Title (Visible only on desktop) -->
+    <div class="w-full max-w-lg pb-3 text-left flex-shrink-0 hidden lg:block">
       <h3 class="text-xl font-bold text-slate-800 my-0">Live Preview</h3>
     </div>
 
-    <!-- Mockup Browser Window Frame -->
+    <!-- Mockup Browser Window Frame (Visible only on desktop) -->
     <div 
       :class="[
-        'mx-auto bg-slate-100/40 rounded-2xl border border-slate-200 relative w-full overflow-hidden transition-all duration-300 flex flex-col',
+        'mx-auto bg-slate-100/40 rounded-2xl border border-slate-200 relative w-full overflow-hidden transition-all duration-300 flex flex-col hidden lg:flex',
         activeDevice === 'mobile' ? 'max-w-[320px] h-[500px]' : 'w-full max-w-lg h-[500px]'
       ]"
     >
@@ -25,8 +25,8 @@
       </div>
     </div>
 
-    <!-- Device Toggles (Centered below/after the preview frame using RadioTypeSelector) -->
-    <div class="mt-4 flex justify-center">
+    <!-- Device Toggles (Visible only on desktop) -->
+    <div class="mt-4 flex justify-center hidden lg:flex">
       <RadioTypeSelector
         v-model="activeDevice"
         :options="deviceOptions"
@@ -34,6 +34,43 @@
         name="preview-device-selector"
       />
     </div>
+
+    <!-- Floating Action Button for Mobile/Tablet Preview (Visible only on mobile/tablet) -->
+    <div class="sticky-preview-button hidden max-[1024px]:block" @click="showPreviewModal = true">
+      <button type="button" class="preview-btn">Preview</button>
+    </div>
+
+    <!-- Preview Modal for Mobile/Tablet View -->
+    <ModalComponent
+      :isShowModal="showPreviewModal"
+      :closeModal="true"
+      headerTitle="Live Preview"
+      :isLoading="false"
+      :isShowLoader="false"
+      :showActionButtons="false"
+      :backdropClickClose="true"
+      :modalClasses="'max-w-xl'"
+      @closeModal="showPreviewModal = false"
+    >
+      <div class="flex flex-col items-center justify-center p-4 bg-slate-50/50 rounded-b-xl overflow-y-auto max-h-[80vh] scrollbar-thin">
+        
+        <!-- Inside the modal, we show the Mockup Browser Window Frame for mobile -->
+        <div class="mx-auto bg-slate-100/40 rounded-2xl border border-slate-200 relative w-full overflow-hidden transition-all duration-300 flex flex-col max-w-[320px] h-[500px]">
+          <!-- Mockup Dots Header -->
+          <div class="bg-slate-200/60 h-8 flex items-center px-4 gap-1.5 rounded-t-2xl flex-shrink-0">
+            <div class="w-2 h-2 bg-red-400/90 rounded-full"></div>
+            <div class="w-2 h-2 bg-yellow-400/90 rounded-full"></div>
+            <div class="w-2 h-2 bg-green-400/90 rounded-full"></div>
+          </div>
+          
+          <!-- Preview Frame Viewport -->
+          <div class="flex-1 overflow-y-auto p-4 scrollbar-thin bg-slate-50/10">
+            <slot />
+          </div>
+        </div>
+
+      </div>
+    </ModalComponent>
   </div>
 </template>
 
@@ -42,6 +79,7 @@ import { ref } from "vue";
 
 // Tracks active device: 'desktop' or 'mobile'
 const activeDevice = ref("desktop");
+const showPreviewModal = ref(false);
 
 const deviceOptions = [
   { 
@@ -59,5 +97,44 @@ const deviceOptions = [
 /* Target the checked state of RadioTypeSelector's label and color it Teal */
 :deep(.custom-radio-group input[type="radio"]:checked + label) {
   color: #0d9488 !important; /* Teal theme color */
+}
+
+/* Rotated Sticky Button on the Right Center */
+.sticky-preview-button {
+  position: fixed;
+  right: -24px;
+  top: calc(50% - 45px);
+  transform: rotate(270deg) translateX(-50%);
+  z-index: 1000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.sticky-preview-button .preview-btn {
+  background-color: #0d9488;
+  background-image: linear-gradient(45deg, #14b8a6, #0d9488);
+  border: none;
+  border-radius: 6px 6px 0 0;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.15),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  outline: 0;
+  padding: 10px 15px;
+  transition: all 0.2s ease;
+  -webkit-font-smoothing: antialiased;
+  transform: translateZ(0);
+  letter-spacing: 0.01em;
+}
+
+.sticky-preview-button .preview-btn:hover {
+  background-color: #0f766e;
+  background-image: linear-gradient(45deg, #0d9488, #0f766e);
 }
 </style>

@@ -180,7 +180,7 @@
                 class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none gform-input" 
               />
               <span
-                class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10"
+                class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10 gform-placeholder"
               >
                 {{ field.placeholder }}
               </span>
@@ -208,7 +208,7 @@
                 class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none gform-input" 
               />
               <span
-                class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10"
+                class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10 gform-placeholder"
               >
                 {{ field.placeholder || "Select Time" }}
               </span>
@@ -233,7 +233,7 @@
               class="border-2 border-dashed border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center bg-slate-50/50 gform-input"
             >
               <img v-svg-inline src="@/assets/icons/FormFields/Upload.svg" class="w-4 h-4 text-slate-600 mb-1" />
-              <span class="text-xs text-slate-500">{{ field.placeholder }}</span>
+              <span class="text-xs text-slate-500 gform-placeholder">{{ field.placeholder }}</span>
             </div>
           </div>
 
@@ -321,6 +321,11 @@ const formDescStyle = computed(() => {
 </script>
 
 <style scoped>
+input[type="date"]::-webkit-datetime-edit,
+input[type="time"]::-webkit-datetime-edit {
+  color: transparent !important;
+}
+
 /* Scoped overrides to target height for select boxes and textareas inside Listbox components */
 :deep(.custom-select-box) {
   display: flex !important;

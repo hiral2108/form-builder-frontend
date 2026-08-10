@@ -1,14 +1,14 @@
 :root {
-  --form-bg-color: #FFFFFF;
+  --form-bg-color: #ffffff;
 
-  --label-color: #1E293B;
+  --label-color: #1e293b;
   --label-font-size: 12px;
   --label-font-weight: 500;
 
   --input-width: 100%;
-  --input-bg-color: #FFFFFF;
-  --input-text-color: #1E293B;
-  --input-border-color: #CCCCCC;
+  --input-bg-color: #ffffff;
+  --input-text-color: #1e293b;
+  --input-border-color: #cccccc;
   --input-border-width: 1px;
   --input-border-radius: 4px;
   --input-border-style: solid;
@@ -23,11 +23,11 @@
   --input-margin-right: 0px;
   --input-margin-bottom: 0px;
   --input-margin-left: 0px;
-  --input-placeholder-color: #5F6368;
+  --input-placeholder-color: #5f6368;
 
-  --button-bg-color: #0D9488;
-  --button-text-color: #FFFFFF;
-  --button-border-color: #CBD5E1;
+  --button-bg-color: #0d9488;
+  --button-text-color: #ffffff;
+  --button-border-color: #cbd5e1;
   --button-border-width: 0px;
   --button-border-radius: 8px;
   --button-border-style: none;
@@ -56,9 +56,7 @@
 .gform-wrapper .gform-label,
 .gform-wrapper .input-field label,
 .gform-wrapper .textarea-field label,
-.gform-wrapper .select-field label,
-.gform-wrapper .discount-type-radio-toggle label span,
-.gform-wrapper .custom-default-checkbox label span {
+.gform-wrapper .select-field label {
   color: var(--label-color) !important;
   font-size: var(--label-font-size) !important;
   font-weight: var(--label-font-weight) !important;
@@ -85,7 +83,9 @@
 
 .gform-wrapper .gform-input::placeholder,
 .gform-wrapper .input-field input::placeholder,
-.gform-wrapper .textarea-field textarea::placeholder {
+.gform-wrapper .textarea-field textarea::placeholder,
+.gform-wrapper .gform-placeholder,
+.gform-wrapper .custom-select-box {
   color: var(--input-placeholder-color) !important;
 }
 
@@ -101,4 +101,17 @@
   box-shadow: var(--button-box-shadow) !important;
   padding: var(--button-padding-top) var(--button-padding-right) var(--button-padding-bottom) var(--button-padding-left) !important;
   margin: var(--button-margin-top) var(--button-margin-right) var(--button-margin-bottom) var(--button-margin-left) !important;
+}
+
+.gform-cta-widget {
+  background-color: var(--widget-bg-color) !important;
+  width: var(--widget-button-size) !important;
+  height: var(--widget-button-size) !important;
+}
+.gform-cta-widget .icon {
+  color: var(--widget-icon-color) !important;
+}
+.gform-cta-tooltip {
+  background-color: var(--widget-tooltip-bg-color) !important;
+  color: var(--widget-tooltip-text-color) !important;
 }

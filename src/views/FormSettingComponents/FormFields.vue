@@ -1,7 +1,7 @@
 <template>
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[calc(100vh-210px)] lg:max-h-[calc(100vh-210px)]">
     <section
-      class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm lg:sticky lg:top-[80px] lg:max-h-[calc(100vh-160px)] h-[420px] lg:h-auto flex flex-col overflow-hidden">
+       class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm h-[420px] lg:h-full lg:max-h-[calc(100vh-210px)] flex flex-col overflow-hidden">
       <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
         <h3 data-v-971cfb3b="" class="font-semibold text-slate-800 text-md">Field Library</h3>
       </div>
@@ -27,7 +27,7 @@
     </section>
 
     <section
-      class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl shadow-sm h-[600px] lg:h-full flex flex-col overflow-hidden">
+      class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl shadow-sm h-[600px] lg:h-full lg:max-h-[calc(100vh-210px)] flex flex-col overflow-hidden">
       <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
         <h3 class="font-semibold text-slate-800 text-md">Form Preview</h3>
         <span v-if="formFieldSetting.fields.length > 0" class="text-xs text-teal-600 font-medium"
@@ -49,6 +49,7 @@
           <div
             v-for="(field, index) in formFieldSetting.fields"
             :key="field.id"
+            :id="'field-' + field.id"
             @click.stop="selectField(field.id)"
             :draggable="isDraggable"
             @dragstart="onDragStart(index, $event)"
@@ -188,7 +189,7 @@
 
             <div class="space-y-1.5" v-else-if="['dropdown', 'multiselect'].includes(field.type)">
               <label
-                class="block text-sm font-semibold text-gray-700 pointer-events-none select-none"
+                class="block text-sm font-semibold text-gray-700 pointer-events-none select-none gform-label" 
                 :class="labelPositionClass(field.labelPlacement)"
                 :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
@@ -203,7 +204,7 @@
 
             <div class="space-y-1.5" v-else-if="field.type === 'radio'">
               <label
-                class="block text-sm font-semibold text-slate-700 pointer-events-none select-none"
+                class="block text-sm font-semibold text-slate-700 pointer-events-none select-none gform-label"
                 :class="labelPositionClass(field.labelPlacement)"
                 :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
@@ -223,7 +224,7 @@
 
             <div class="space-y-1.5" v-else-if="field.type === 'checkboxes'">
               <label
-                class="block text-sm font-semibold text-slate-700 pointer-events-none select-none"
+                class="block text-sm font-semibold text-slate-700 pointer-events-none select-none gform-label"
                 :class="labelPositionClass(field.labelPlacement)"
                 :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
@@ -242,7 +243,7 @@
 
             <div class="space-y-1.5" v-else-if="field.type === 'datepicker'">
               <label
-                class="block text-sm font-semibold text-slate-700"
+                class="block text-sm font-semibold text-slate-700 gform-label"
                 :class="labelPositionClass(field.labelPlacement)"
                 :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
@@ -253,7 +254,7 @@
                   type="date"
                   class="gform-input w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
                 <span
-                  class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10">
+                  class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10 gform-placeholder">
                   {{ field.placeholder }}
                 </span>
                 <img
@@ -266,7 +267,7 @@
 
             <div class="space-y-1.5" v-else-if="field.type === 'timepicker'">
               <label
-                class="block text-sm font-semibold text-slate-700"
+                class="block text-sm font-semibold text-slate-700 gform-label"
                 :class="labelPositionClass(field.labelPlacement)"
                 :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
@@ -277,7 +278,7 @@
                   type="time"
                   class="gform-input w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
                 <span
-                  class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10">
+                  class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10 gform-placeholder">
                   {{ field.placeholder || "Select Time" }}
                 </span>
                 <img
@@ -290,7 +291,7 @@
 
             <div class="space-y-1.5" v-else-if="field.type === 'fileupload'">
               <label
-                class="block text-sm font-semibold text-slate-700"
+                class="block text-sm font-semibold text-slate-700 gform-label"
                 :class="labelPositionClass(field.labelPlacement)"
                 :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
@@ -298,7 +299,7 @@
               <div
                 class="gform-input border-2 border-dashed border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center bg-slate-50/50">
                 <img v-svg-inline src="@/assets/icons/FormFields/Upload.svg" class="w-4 h-4 text-slate-600" />
-                <span class="text-xs text-slate-500">{{ field.placeholder }}</span>
+                <span class="text-xs text-slate-500 gform-placeholder">{{ field.placeholder }}</span>
               </div>
             </div>
 
@@ -329,7 +330,7 @@
     </section>
 
     <section
-      class="settings-panel lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm h-[420px] lg:h-auto flex flex-col overflow-hidden lg:sticky lg:top-[80px] lg:max-h-[calc(100vh-160px)]">
+      class="settings-panel lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm h-[420px] lg:h-auto flex flex-col overflow-hidden lg:sticky lg:top-[80px] lg:max-h-[calc(100vh-210px)]">
       <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
         <h3 class="font-semibold text-slate-800 text-md">Field Settings</h3>
       </div>

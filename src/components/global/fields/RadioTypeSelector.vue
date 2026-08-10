@@ -28,7 +28,7 @@
       </div>
     </Teleport>
 
-    <div class="bg-[#f0f0f1] rounded-md p-1 w-full sm:w-fit">
+    <div class="bg-[#f0f0f1] rounded-md p-1 w-max">
       <div class="grid gap-2" :style="{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }">
         <div v-for="option in options" :key="option.value" class="custom-radio-group">
           <input

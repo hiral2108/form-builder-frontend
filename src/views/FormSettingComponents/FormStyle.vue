@@ -851,7 +851,7 @@
     </section>
 
     <!-- Right Panel -->
-    <section class="lg:col-span-6 w-full flex flex-col items-center bg-transparent border-none lg:bg-slate-100/50 lg:border lg:border-slate-200/60 rounded-2xl p-0 lg:p-8 min-h-0 lg:min-h-[400px] lg:sticky lg:top-24">
+    <section class="lg:col-span-6 w-full flex flex-col items-center bg-transparent border-none lg:bg-slate-100/50 lg:border lg:border-slate-200/60 rounded-2xl p-0 lg:p-5 min-h-0 lg:min-h-[400px] lg:sticky lg:top-24">
       <PreviewTemplate>
         <FormPreview />
       </PreviewTemplate>

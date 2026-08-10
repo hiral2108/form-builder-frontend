@@ -19,10 +19,12 @@ import HiddenIcon from "@/assets/icons/FormFields/EyesOff.svg";
 
 import { formSetting } from "@/composable/useFormSettings";
 import { useFormFieldSettingStore, type FormFieldType } from "@/stores/formFieldStore";
+import { useFormStyle } from "@/composable/useFormStyle";
 
 export function useFormFieldsBuilder() {
   const FormFieldSettingStore = useFormFieldSettingStore();
   const { formFieldSetting, formStyleSetting } = formSetting();
+  const { cssVars } = useFormStyle();
 
   const isAdvanceSettingsOpen = ref(false);
 
@@ -34,8 +36,8 @@ export function useFormFieldsBuilder() {
     { type: "phone", label: "Phone Number", icon: PhoneIcon },
     { type: "textarea", label: "Textarea", icon: TextAreaIcon },
     { type: "dropdown", label: "Dropdown", icon: DropDownIcon },
-    { type: "radio", label: "Radio Buttons", icon: RadionButtonIcon },
-    { type: "checkboxes", label: "Checkboxes", icon: CheckBoxIcon },
+    { type: "radio", label: "Radio Button", icon: RadionButtonIcon },
+    { type: "checkboxes", label: "Checkbox", icon: CheckBoxIcon },
     { type: "datepicker", label: "Date Picker", icon: DatePickerIcon },
     { type: "timepicker", label: "Time Picker", icon: TimePickerIcon },
     { type: "fileupload", label: "File Upload", icon: FileUploadIcon },
@@ -436,9 +438,6 @@ export function useFormFieldsBuilder() {
     const style = formStyleSetting.value.labelStyle;
     return {
       display: style.showLabel === "hide" ? "none" : "",
-      color: style.textColor,
-      fontSize: style.fontSize + "px",
-      fontWeight: style.fontWeight,
     };
   });
 
@@ -493,5 +492,6 @@ export function useFormFieldsBuilder() {
     canHaveDefaultValue,
     canHaveMaxLength,
     labelStyleObject,
+    cssVars,
   };
 }

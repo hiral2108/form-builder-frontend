@@ -72,29 +72,29 @@
 
         <!-- Floating Sidebar Collapse Toggle Button (Sticks on the border) -->
         <template v-if="route.name !== 'FormSettingsPage'">
-        <template v-if="!isCollapsed">
-          <button
-            @click="collapseMenu"
-            :class="{ hidden: isCollapsed || isMobile }"
-            class="hidden lg:flex absolute right-[-18px] bottom-20 w-8.5 h-8.5 bg-white border border-slate-200 rounded-full items-center justify-center text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-sm cursor-pointer z-50 transition-all duration-300 hover:scale-105">
-            <img
-              v-svg-inline
-              src="@/assets/icons/settingpage/arrow-left-s-line.svg"
-              alt="Hide Icon"
-              class="h-5 w-5 text-slate-600" />
-          </button>
-        </template>
-        <template v-else>
-          <button
-            @click="collapseMenu"
-            class="hidden lg:flex absolute right-[-18px] bottom-20 w-8.5 h-8.5 bg-white border border-slate-200 rounded-full items-center justify-center text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-sm cursor-pointer z-50 transition-all duration-300 hover:scale-105">
-            <img
-              v-svg-inline
-              src="@/assets/icons/settingpage/arrow-right-s-line.svg"
-              alt="Show Icon"
-              class="h-5 w-5 text-slate-600" />
-          </button>
-        </template>
+          <template v-if="!isCollapsed">
+            <button
+              @click="collapseMenu"
+              :class="{ hidden: isCollapsed || isMobile }"
+              class="hidden lg:flex absolute right-[-18px] bottom-20 w-8.5 h-8.5 bg-white border border-slate-200 rounded-full items-center justify-center text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-sm cursor-pointer z-50 transition-all duration-300 hover:scale-105">
+              <img
+                v-svg-inline
+                src="@/assets/icons/settingpage/arrow-left-s-line.svg"
+                alt="Hide Icon"
+                class="h-5 w-5 text-slate-600" />
+            </button>
+          </template>
+          <template v-else>
+            <button
+              @click="collapseMenu"
+              class="hidden lg:flex absolute right-[-18px] bottom-20 w-8.5 h-8.5 bg-white border border-slate-200 rounded-full items-center justify-center text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-sm cursor-pointer z-50 transition-all duration-300 hover:scale-105">
+              <img
+                v-svg-inline
+                src="@/assets/icons/settingpage/arrow-right-s-line.svg"
+                alt="Show Icon"
+                class="h-5 w-5 text-slate-600" />
+            </button>
+          </template>
         </template>
       </aside>
 
@@ -111,7 +111,8 @@
         <!-- Curved Content Container -->
         <div class="flex-1 pt-0 pr-4 pb-2 pl-0 bg-white relative">
           <div
-            class="w-full bg-slate-50 border border-slate-200/50 rounded-[20px] relative p-5 min-h-[calc(100vh-80px)]">
+            class="w-full bg-slate-50 border border-slate-200/50 rounded-[20px] relative p-5"
+            :class="route.name === 'FormSettingsPage' ? '' : 'min-h-[calc(100vh-80px)]'">
             <router-view v-slot="{ Component }">
               <component :is="Component" :is-collapsible="isCollapsed" />
             </router-view>
@@ -145,16 +146,16 @@
     userCollapsedChoice.value = isCollapsed.value; // Remember user's choice
   };
 
-const handleResize = () => {
-  isMobile.value = window.innerWidth < 1024;
-  if (route.name === "FormSettingsPage") {
-    isCollapsed.value = true; 
-  } else if (isMobile.value) {
-    isCollapsed.value = false;
-  } else {
-    isCollapsed.value = userCollapsedChoice.value;
-  }
-};
+  const handleResize = () => {
+    isMobile.value = window.innerWidth < 1024;
+    if (route.name === "FormSettingsPage") {
+      isCollapsed.value = true;
+    } else if (isMobile.value) {
+      isCollapsed.value = false;
+    } else {
+      isCollapsed.value = userCollapsedChoice.value;
+    }
+  };
   const navItems = [
     {
       label: "Dashboard",

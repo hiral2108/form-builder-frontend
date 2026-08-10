@@ -1,12 +1,11 @@
 import { computed } from "vue";
 import { formSetting } from "@/composable/useFormSettings";
 
-// Translate dropdown VALUES (from formStyleOptions.ts) → real CSS values
 const fontWeightMap: Record<string, string> = {
   light: "300",
   regular: "400",
   medium: "500",
-  bold: "700", // "Bold" also maps to 700 (adjust to 800/900 if you want it heavier than Medium)
+  bold: "700",
 };
 
 const fieldWidthMap: Record<string, string> = {
@@ -20,7 +19,16 @@ const fieldWidthMap: Record<string, string> = {
 const fieldSizeMap: Record<string, string> = {
   small: "29px",
   large: "46px",
-  // "default" has no entry on purpose — handled below with "auto"
+};
+
+const ctaButtonSizeMap: Record<string, string> = {
+  "45": "45px",
+  "54": "54px",
+  "63": "63px",
+  "72": "72px",
+  "81": "81px",
+  "91": "91px",
+  "100": "100px",
 };
 
 // Helper function to convert HEX color & opacity % to rgba CSS string
@@ -36,13 +44,14 @@ const hexToRgba = (hex: string, opacity: number) => {
 };
 
 export function useFormStyle() {
-  const { formStyleSetting } = formSetting();
+  const { formStyleSetting, displayRuleSetting } = formSetting();
 
   const cssVars = computed(() => {
     const fs = formStyleSetting.value.formStyle;
     const label = formStyleSetting.value.labelStyle;
     const input = formStyleSetting.value.inputStyle;
     const btn = formStyleSetting.value.buttonStyle;
+    const display = displayRuleSetting.value;
 
     const inputShadow = `${input.inputBoxShadowX ?? 0}px ${input.inputBoxShadowY ?? 0}px ${input.inputBoxShadowBlur ?? 0}px ${hexToRgba(input.inputBoxShadowColor, input.inputBoxShadowOpacity)}`;
     const btnShadow = `${btn.btnBoxShadowX ?? 0}px ${btn.btnBoxShadowY ?? 0}px ${btn.btnBoxShadowBlur ?? 0}px ${hexToRgba(btn.btnBoxShadowColor, btn.btnBoxShadowOpacity)}`;
@@ -95,6 +104,16 @@ export function useFormStyle() {
       "--button-margin-right": `${btn.btnMarginRight ?? 0}px`,
       "--button-margin-bottom": `${btn.btnMarginBottom ?? 10}px`,
       "--button-margin-left": `${btn.btnMarginLeft ?? 0}px`,
+
+      "--widget-bg-color": display.cta_bg_color || "#0D9488",
+      "--widget-text-color": display.cta_text_color || "#FFFFFF",
+      "--widget-tooltip-bg-color": display.tooltip_bg_color || "#0D9488",
+      "--widget-tooltip-text-color": display.tooltip_text_color || "#FFFFFF",
+      "--widget-button-size":
+        display.cta_icon_size === "custom"
+          ? `${display.cta_custom_size ?? 54}px`
+          : ctaButtonSizeMap[display.cta_icon_size] || "54px",
+      "--widget-position": display.cta_icon_position === "left" ? "left" : "right",
     };
   });
 

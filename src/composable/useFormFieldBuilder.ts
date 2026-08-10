@@ -1,4 +1,4 @@
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, nextTick } from "vue";
 
 import TextIcon from "@/assets/icons/FormFields/TextIcon.svg";
 import NameIcon from "@/assets/icons/auth/username.svg";
@@ -217,6 +217,13 @@ export function useFormFieldsBuilder() {
       showPasswordIcon,
     };
     formFieldSetting.value.fields.push(newField);
+    formFieldSetting.value.selectedFieldId = id;
+    nextTick(() => {
+      const el = document.getElementById(`field-${id}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    });
   };
 
   const labelPositionClass = (placement?: string) => {
@@ -245,6 +252,12 @@ export function useFormFieldsBuilder() {
 
       formFieldSetting.value.fields.splice(index + 1, 0, newField);
       formFieldSetting.value.selectedFieldId = newField.id;
+      nextTick(() => {
+        const el = document.getElementById(`field-${newField.id}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
     }
   };
 

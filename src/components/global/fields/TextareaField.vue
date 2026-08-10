@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="textarea-field">
     <!-- Label -->
     <label
       v-if="label"

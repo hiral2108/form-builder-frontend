@@ -1,7 +1,7 @@
 <template>
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full items-start">
     <div
-      class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-4 max-h-[calc(100vh-160px)] overflow-y-auto scrollbar-thin">
+      class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-4">
       <div class="bg-white mb-5">
         <label class="block text-sm font-semibold text-slate-800 mb-2">Form Type</label>
         <div class="flex gap-4">
@@ -141,7 +141,7 @@
     </div>
 
     <section
-      class="lg:col-span-6 bg-slate-100/50 border border-slate-200/60 rounded-2xl p-6 flex flex-col items-center justify-center max-h-[calc(100vh-160px)] overflow-y-auto scrollbar-thin">
+      class="lg:col-span-6 bg-slate-100/50 border border-slate-200/60 rounded-2xl p-6 flex flex-col items-center justify-center lg:sticky lg:top-24">
       <PreviewTemplate class="w-full my-auto">
         <FormPreview />
       </PreviewTemplate>

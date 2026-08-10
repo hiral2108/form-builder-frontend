@@ -5,6 +5,8 @@
       <h3 class="text-xl font-bold text-slate-800 my-0">Live Preview</h3>
     </div>
 
+    
+
     <!-- Mockup Browser Window Frame (Visible only on desktop) -->
     <div 
       :class="[
@@ -18,14 +20,14 @@
         <div class="w-2 h-2 bg-yellow-400/90 rounded-full"></div>
         <div class="w-2 h-2 bg-green-400/90 rounded-full"></div>
       </div>
-      
+
       <!-- Preview Frame Viewport -->
       <div class="flex-1 overflow-y-auto p-4 scrollbar-thin bg-slate-50/10">
         <slot />
       </div>
     </div>
 
-    <!-- Device Toggles (Visible only on desktop) -->
+    <!-- Device Toggles (Visible only on desktop, ABOVE the frame like the reference) -->
     <div class="mt-4 flex justify-center hidden lg:flex">
       <RadioTypeSelector
         v-model="activeDevice"
@@ -35,7 +37,7 @@
       />
     </div>
 
-    <!-- Floating Action Button for Mobile/Tablet Preview (Visible only on mobile/tablet) -->
+    <!-- Floating Action Button for Mobile/Tablet Preview -->
     <div class="sticky-preview-button hidden max-[1024px]:block" @click="showPreviewModal = true">
       <button type="button" class="preview-btn">Preview</button>
     </div>
@@ -50,22 +52,44 @@
       :showActionButtons="false"
       :backdropClickClose="true"
       :modalClasses="'max-w-xl'"
+      actionButtonTypeOneText="Cancel"
       @closeModal="showPreviewModal = false"
+      @ButtonOneAction="showPreviewModal = false"
     >
-      <div class="flex flex-col items-center justify-center p-4 bg-slate-50/50 rounded-b-xl overflow-y-auto max-h-[80vh] scrollbar-thin">
-        
-        <!-- Inside the modal, we show the Mockup Browser Window Frame for mobile -->
-        <div class="mx-auto bg-slate-100/40 rounded-2xl border border-slate-200 relative w-full overflow-hidden transition-all duration-300 flex flex-col max-w-[320px] h-[500px]">
-          <!-- Mockup Dots Header -->
-          <div class="bg-slate-200/60 h-8 flex items-center px-4 gap-1.5 rounded-t-2xl flex-shrink-0">
-            <div class="w-2 h-2 bg-red-400/90 rounded-full"></div>
-            <div class="w-2 h-2 bg-yellow-400/90 rounded-full"></div>
-            <div class="w-2 h-2 bg-green-400/90 rounded-full"></div>
-          </div>
-          
-          <!-- Preview Frame Viewport -->
-          <div class="flex-1 overflow-y-auto p-4 scrollbar-thin bg-slate-50/10">
-            <slot />
+      <div class="flex flex-col items-center max-h-[80vh] scrollbar-thin">
+
+        <!-- Device Toggles INSIDE the modal, matching the reference layout -->
+        <div class="w-full flex justify-center mb-4 flex-shrink-0">
+          <RadioTypeSelector
+            v-model="activeDevice"
+            :options="deviceOptions"
+            :columns="2"
+            name="preview-device-selector-modal"
+          />
+        </div>
+
+        <!-- Fixed-size stage: NEVER changes size when activeDevice toggles.
+             The frame inside it changes, but this box stays constant so the
+             surrounding modal card never resizes. -->
+        <div class="w-full max-w-[500px] h-[450px] flex items-center justify-center flex-shrink-0">
+          <!-- Mockup Browser Window Frame, size now driven by the SAME activeDevice -->
+          <div
+            :class="[
+              'mx-auto bg-slate-100/40 rounded-2xl border border-slate-200 relative overflow-hidden transition-all duration-300 flex flex-col h-full',
+              activeDevice === 'mobile' ? 'w-[320px]' : 'w-full'
+            ]"
+          >
+            <!-- Mockup Dots Header -->
+            <div class="bg-slate-200/60 h-8 flex items-center px-4 gap-1.5 rounded-t-2xl flex-shrink-0">
+              <div class="w-2 h-2 bg-red-400/90 rounded-full"></div>
+              <div class="w-2 h-2 bg-yellow-400/90 rounded-full"></div>
+              <div class="w-2 h-2 bg-green-400/90 rounded-full"></div>
+            </div>
+
+            <!-- Preview Frame Viewport -->
+            <div class="flex-1 overflow-y-auto p-4 scrollbar-thin bg-slate-50/10">
+              <slot />
+            </div>
           </div>
         </div>
 
@@ -77,7 +101,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-// Tracks active device: 'desktop' or 'mobile'
+// Shared across BOTH the desktop frame and the modal frame,
+// so switching device type behaves identically in either place.
 const activeDevice = ref("desktop");
 const showPreviewModal = ref(false);
 

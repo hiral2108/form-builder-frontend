@@ -1,7 +1,7 @@
 <template>
   <div class="qdp-modal" :class="{hidden: !isShowModal}" @keydown.esc="closeModalWidget">
     <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 z-[11111] qdp-modal-overlay" @click="onBackDropClick">
-      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 transform transition-all qdp-modal-content" @click.stop>
+      <div class="bg-white rounded-2xl shadow-2xl w-full mx-4 transform transition-all qdp-modal-content" :class="modalClasses || 'max-w-md'" @click.stop>
         <div class="px-6 py-5 border-b border-slate-100">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl flex items-center justify-center" :class="[headerIconClasses || 'bg-teal-50 text-teal-600']" v-if="headerIcon">
@@ -16,7 +16,7 @@
         <div class="px-6 py-6">
           <slot />
         </div>
-        <div class="px-6 py-4 bg-slate-50/50 rounded-b-2xl flex items-center justify-end gap-3 border-t border-slate-100/50">
+        <div v-if="actionButtonTypeOneText || actionButtonTypeTwoText" class="px-6 py-4 bg-slate-50/50 rounded-b-2xl flex items-center justify-end gap-3 border-t border-slate-100/50">
           <button type="button"
                   v-if="actionButtonTypeOneText"
                   class="px-4 py-2 text-slate-600 hover:text-slate-800 font-semibold text-sm transition-colors whitespace-nowrap cursor-pointer border border-solid border-slate-200 rounded-lg bg-white modal-close-button hover:bg-slate-50"
@@ -52,10 +52,12 @@ const props = withDefaults(
     headerSubTitle?: string
     isLoading?: boolean
     isShowLoader?: boolean
+    isShowActionButtons?: boolean
     actionButtonTypeOneText?: string
     actionButtonTypeTwoText?: string
     actionButtonTypeTwoClasses?: string
     backdropClickClose?: boolean
+    modalClasses?: string
   }>(),
   {
     isShowModal: false,
@@ -68,7 +70,8 @@ const props = withDefaults(
     actionButtonTypeTwoText: '',
     actionButtonTypeTwoClasses: '',
     backdropClickClose: true,
-    closeModal: true
+    closeModal: true,
+    modalClasses: ''
   }
 )
 

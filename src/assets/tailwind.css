@@ -172,3 +172,204 @@ a:focus-visible {
 .el-date-table td.today.end-date .el-date-table-cell__text {
   color: #ffffff !important;
 }
+
+
+/* ==========================================================================
+   Element Plus Date Picker Responsiveness
+   ========================================================================== */
+
+@media screen and (max-width: 660px) {
+  /* Fix the input wrapper to be fluid */
+  .filter-date-range-picker.calender-input,
+  .filter-date-range-picker.calender-input .el-date-editor.el-input,
+  .filter-date-range-picker.calender-input .el-date-editor--datetimerange,
+  .filter-date-range-picker.calender-input .el-date-editor.el-input__wrapper {
+    width: 100% !important;
+    min-width: unset !important;
+    max-width: 100% !important;
+  }
+
+  /* Fix the popper/calendar dropdown width */
+  .filter-date-range-popper.el-picker__popper,
+  .filter-date-range-popper .el-date-range-picker {
+    width: calc(100vw - 32px) !important;
+    min-width: unset !important;
+  }
+
+  /* Stack calendar panels vertically when space is not found */
+  .filter-date-range-popper .el-date-range-picker .el-picker-panel__body {
+    min-width: unset !important;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+  }
+
+  .filter-date-range-popper .el-date-range-picker__content {
+    width: 100% !important;
+    float: none !important;
+    padding: 8px !important;
+    box-sizing: border-box !important;
+  }
+
+  .filter-date-range-popper .el-date-range-picker__content.is-left {
+    border-right: none !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  .filter-date-range-popper .el-date-table {
+    width: 100% !important;
+  }
+
+  .filter-date-range-popper .el-date-table td {
+    padding: 2px 0 !important;
+  }
+
+  .filter-date-range-popper .el-date-table th {
+    padding: 2px 0 !important;
+    font-size: 11px !important;
+  }
+
+  .filter-date-range-popper .el-date-table td .el-date-table-cell__text {
+    width: 24px !important;
+    height: 24px !important;
+    line-height: 24px !important;
+    font-size: 11px !important;
+  }
+
+  .filter-date-range-popper .el-date-range-picker__header {
+    font-size: 13px !important;
+  }
+
+  /* Reduce calendar width */
+  .filter-date-range-popper.el-picker__popper,
+  .filter-date-range-popper .el-date-range-picker {
+    width: calc(100vw - 120px) !important;
+  }
+
+  /* Remove gap between calendar popper and input field */
+  .filter-date-range-popper.el-picker__popper {
+    margin-top: 4px !important;
+  }
+
+  .calender-input {
+    width: 100% !important;
+  }
+}
+
+@media screen and (min-width: 600px) and (max-width: 665px) {
+  .filter-date-range-popper.el-picker__popper,
+  .filter-date-range-popper .el-date-range-picker {
+    left: 80px !important;
+    right: 8px !important;
+    width: calc(100vw - 100px) !important;
+    max-width: calc(100vw - 100px) !important;
+    min-width: unset !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .filter-date-range-popper .el-date-range-picker .el-picker-panel__body {
+    min-width: unset !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .filter-date-range-popper .el-date-range-picker__content {
+    width: 50% !important;
+    float: none !important;
+    padding: 8px 6px !important;
+    box-sizing: border-box !important;
+    min-width: unset !important;
+  }
+
+  /* Add divider between the two month panels */
+  .filter-date-range-popper .el-date-range-picker__content.is-left {
+    border-right: 1px solid #E5E7EB !important;
+    border-bottom: none !important;
+  }
+
+  .filter-date-range-popper .el-date-table {
+    width: 100% !important;
+  }
+
+  .filter-date-range-popper .el-date-table td,
+  .filter-date-range-popper .el-date-table th {
+    padding: 3px 0 !important;
+    font-size: 11px !important;
+  }
+
+  .filter-date-range-popper .el-date-table td .el-date-table-cell__text {
+    width: 22px !important;
+    height: 22px !important;
+    line-height: 22px !important;
+    font-size: 11px !important;
+  }
+
+  .filter-date-range-popper .el-date-range-picker__header {
+    font-size: 12px !important;
+    padding: 6px 0 !important;
+  }
+}
+
+@media screen and (min-width: 665px) and (max-width: 800px) {
+  .filter-date-range-popper.el-picker__popper,
+  .filter-date-range-popper .el-date-range-picker {
+    left: 80px !important;
+    right: 8px !important;
+    width: calc(100vw - 102px) !important;
+    max-width: calc(100vw - 102px) !important;
+    min-width: unset !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .filter-date-range-popper .el-date-range-picker .el-picker-panel__body {
+    min-width: unset !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .filter-date-range-popper .el-date-range-picker__content {
+    width: 50% !important;
+    float: none !important;
+    padding: 8px 6px !important;
+    box-sizing: border-box !important;
+    min-width: unset !important;
+    overflow: hidden !important;
+  }
+
+  /* Keep the divider line */
+  .filter-date-range-popper .el-date-range-picker__content.is-left {
+    border-right: 1px solid #E5E7EB !important;
+    border-bottom: none !important;
+  }
+
+  .filter-date-range-popper .el-date-table {
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+
+  .filter-date-range-popper .el-date-table td,
+  .filter-date-range-popper .el-date-table th {
+    padding: 3px 0 !important;
+    font-size: 12px !important;
+  }
+
+  .filter-date-range-popper .el-date-table td .el-date-table-cell__text {
+    width: 24px !important;
+    height: 24px !important;
+    line-height: 24px !important;
+    font-size: 12px !important;
+  }
+
+  .filter-date-range-popper .el-date-range-picker__header {
+    font-size: 13px !important;
+  }
+}

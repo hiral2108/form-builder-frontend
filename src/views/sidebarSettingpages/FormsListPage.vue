@@ -15,7 +15,7 @@
         <!-- Central Form Preview Card -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-44 md:w-48 bg-white rounded-xl shadow-md border border-slate-200/70 p-4 -rotate-1 z-10">
           <div class="flex items-center gap-1.5 mb-3.5">
-            <div class="w-2 h-2 rounded-full bg-rose-400/70"></div>
+            <div class="w-2 h-2 rounded-full bg-red-400/70"></div>
             <div class="w-2 h-2 rounded-full bg-amber-400/70"></div>
             <div class="w-2 h-2 rounded-full bg-emerald-400/70"></div>
           </div>
@@ -298,7 +298,7 @@
                     </div>
 
                     <div class="relative group/tooltip">
-                      <button @click="openDeleteModal(form)" class="w-9 h-9 flex items-center justify-center rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 transition-colors cursor-pointer text-lg">
+                      <button @click="openDeleteModal(form)" class="w-9 h-9 flex items-center justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 transition-colors cursor-pointer text-lg">
                         <img v-svg-inline src="@/assets/icons/form-list/delete.svg" class="w-5 h-5"/>
                       </button>
                       <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 px-3 py-1.5 text-xs font-semibold text-white bg-slate-900 rounded-lg opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-md z-10">

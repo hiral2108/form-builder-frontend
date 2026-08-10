@@ -1,7 +1,7 @@
 <template>
-  <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+  <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-6 h-full items-start">
     <!-- Left Panel -->
-    <section class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4 max-h-[calc(100vh-160px)] overflow-y-auto scrollbar-thin">
+    <section class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
       <!-- Form Information Card -->
       <div class="bg-white rounded-xl border border-slate-200 p-4 space-y-4">
         <InputField
@@ -850,8 +850,8 @@
       </div>
     </section>
 
-    <!-- Right Panel (Visible on desktop, collapsed to invisible on mobile) -->
-    <section class="lg:col-span-6 w-full flex flex-col items-center bg-transparent border-none lg:bg-slate-100/50 lg:border lg:border-slate-200/60 rounded-2xl p-0 lg:p-8 min-h-0 lg:min-h-[400px]">
+    <!-- Right Panel -->
+    <section class="lg:col-span-6 w-full flex flex-col items-center bg-transparent border-none lg:bg-slate-100/50 lg:border lg:border-slate-200/60 rounded-2xl p-0 lg:p-8 min-h-0 lg:min-h-[400px] lg:sticky lg:top-24">
       <PreviewTemplate>
         <FormPreview />
       </PreviewTemplate>
@@ -884,7 +884,6 @@ const props = defineProps({
 });
 
 const activeSection = ref<string | null>(null);
-const isPreviewOpen = ref(false);
 const toggleSection = (name: string) => {
   activeSection.value = activeSection.value === name ? null : name;
 };

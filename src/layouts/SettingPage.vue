@@ -109,10 +109,9 @@
           :subtitle="pageSubtitle" />
 
         <!-- Curved Content Container -->
-        <div class="flex-1 pt-0 pr-4 pb-2 pl-0 bg-white relative">
+        <div class="flex-1 pt-0 pr-4 pb-2 pl-0 bg-white relative overflow-y-auto">
           <div
-            class="w-full bg-slate-50 border border-slate-200/50 rounded-[20px] relative p-5"
-            :class="route.name === 'FormSettingsPage' ? '' : 'min-h-[calc(100vh-80px)]'">
+            class="w-full bg-slate-50 border border-slate-200/50 rounded-[20px] relative p-5 min-h-[calc(100vh-80px)]">
             <router-view v-slot="{ Component }">
               <component :is="Component" :is-collapsible="isCollapsed" />
             </router-view>

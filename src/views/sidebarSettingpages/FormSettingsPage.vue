@@ -1,5 +1,5 @@
 <template>
-  <div class="h-auto lg:h-[calc(100vh-128px)] bg-slate-50/50 flex flex-col overflow-visible lg:overflow-hidden">
+  <div class="h-auto bg-slate-50/50 flex flex-col overflow-visible">
     <header
       class="fixed top-0 left-0 w-full bg-white z-38 h-18 flex items-center px-4 lg:px-6 transition-all duration-300 ease-in-out"
       :class="isCollapsible ? 'lg:pl-20' : 'lg:pl-60'">
@@ -84,7 +84,7 @@
       </div>
     </header>
 
-    <div class="bg-slate-50 sticky top-[-24px] z-30 transition-all duration-300 ease-in-out">
+    <div class="bg-slate-50 sticky top-0 z-30 transition-all duration-300 ease-in-out">
       <div class="max-w-7xl mx-auto">
         <nav class="flex gap-2 xl:gap-8">
           <button
@@ -112,7 +112,7 @@
       </div>
     </div>
 
-    <main class="flex-1 pt-6 max-w-7xl mx-auto w-full min-h-0 overflow-visible lg:overflow-hidden">
+    <main class="flex-1 pt-6 max-w-7xl mx-auto w-full overflow-visible">
       <FormFields v-if="currentStep === 1" />
       <FormStyle v-if="currentStep === 2" />
       <DisplayRules v-if="currentStep === 3" />

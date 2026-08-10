@@ -1,7 +1,7 @@
 <template>
   <!-- Form Container Box -->
   <div :style="cssVars" class="gform-wrapper w-full h-full overflow-auto border border-slate-200 rounded-xl p-5 transition-all duration-150">
-    <div class="space-y-4">
+    <div v-if="hasContent" class="space-y-4">
       <!-- Form Title (Bound to style) -->
       <h2 
         v-if="formStyleSetting.formInfo.formTitle" 
@@ -261,6 +261,10 @@
         </div>
       </div>
     </div>
+    <div v-else class="flex flex-col items-center justify-center h-full min-h-[240px] text-center text-slate-400 gap-2 py-10">
+      <svg class="w-8 h-8 text-slate-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 22H4C3.44772 22 3 21.5523 3 21V3C3 2.44772 3.44772 2 4 2H20C20.5523 2 21 2.44772 21 3V21C21 21.5523 20.5523 22 20 22ZM19 20V4H5V20H19ZM7 8H17V10H7V8ZM7 12H17V14H7V12ZM7 16H13V18H7V16Z"></path></svg>
+      <p class="text-sm">Add a form title, description, or fields to see your live preview</p>
+    </div>
   </div>
 </template>
 
@@ -271,6 +275,13 @@ import { useFormStyle } from "@/composable/useFormStyle";
 
 const { formFieldSetting, formStyleSetting } = formSetting();
 const { cssVars } = useFormStyle();
+
+const hasContent = computed(() => {
+  const title = formStyleSetting.value?.formInfo?.formTitle;
+  const desc = formStyleSetting.value?.formInfo?.formDescription;
+  const fields = formFieldSetting.value?.fields;
+  return !!title || !!desc || (Array.isArray(fields) && fields.length > 0);
+});
 
 // Form Title Styles computed
 const formTitleStyle = computed(() => {

@@ -419,19 +419,12 @@ export function useFormFieldsBuilder() {
     return `${baseClasses} ${selectionClass} ${alignmentClass}`;
   });
 
-  // Dynamic classes for the Submit Button itself (sizes)
   const submitButtonClass = computed(() => {
     const size = formFieldSetting.value.submitButtonSize || "lg";
-    const baseClasses =
-      "bg-gradient-to-r from-teal-600 to-teal-700 text-white font-semibold rounded-xl flex items-center justify-center shadow-lg shadow-teal-100/30 pointer-events-none transition-all";
-
-    if (size === "sm") {
-      return `${baseClasses} px-10 py-2.5 text-sm`;
-    }
-    if (size === "md") {
-      return `${baseClasses} w-1/2 py-3 text-sm`;
-    }
-    return `${baseClasses} w-full py-3 text-sm`;
+    const baseClasses = "flex items-center justify-center pointer-events-none transition-all";
+    if (size === "sm") return `${baseClasses} px-10`;
+    if (size === "md") return `${baseClasses} w-1/2`;
+    return `${baseClasses} w-full`;
   });
 
   const labelStyleObject = computed(() => {

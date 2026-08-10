@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
     <section
-      class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm lg:sticky lg:top-[80px] max-h-[calc(100vh-160px)] flex flex-col overflow-hidden">
+      class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm lg:sticky lg:top-[80px] lg:max-h-[calc(100vh-160px)] h-[420px] lg:h-auto flex flex-col overflow-hidden">
       <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
         <h3 data-v-971cfb3b="" class="font-semibold text-slate-800 text-md">Field Library</h3>
       </div>
@@ -27,7 +27,7 @@
     </section>
 
     <section
-      class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl shadow-sm h-full flex flex-col overflow-hidden">
+      class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl shadow-sm h-[600px] lg:h-full flex flex-col overflow-hidden">
       <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
         <h3 class="font-semibold text-slate-800 text-md">Form Preview</h3>
         <span v-if="formFieldSetting.fields.length > 0" class="text-xs text-teal-600 font-medium"
@@ -164,7 +164,7 @@
                   :required="field.required"
                   :label="field.label"
                   :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
-                   :label-style="labelStyleObject"
+                  :label-style="labelStyleObject"
                   type="text"
                   :placeholder="field.placeholder"
                   :modelValue="field.defaultValue"
@@ -329,7 +329,7 @@
     </section>
 
     <section
-      class="settings-panel lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm h-full flex flex-col overflow-hidden lg:sticky lg:top-[80px] max-h-[calc(100vh-160px)]">
+      class="settings-panel lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm h-[420px] lg:h-auto flex flex-col overflow-hidden lg:sticky lg:top-[80px] lg:max-h-[calc(100vh-160px)]">
       <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
         <h3 class="font-semibold text-slate-800 text-md">Field Settings</h3>
       </div>
@@ -762,7 +762,7 @@
     canHaveDefaultValue,
     canHaveMaxLength,
     labelStyleObject,
-    cssVars
+    cssVars,
   } = useFormFieldsBuilder();
 </script>
 
@@ -776,7 +776,7 @@
     padding-left: 0 !important;
   }
 
-   .gform-wrapper {
+  .gform-wrapper {
     background-color: transparent !important;
   }
 </style>

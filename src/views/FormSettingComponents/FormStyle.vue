@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+  <div class="relative grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
     <!-- Left Panel -->
     <section class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4 max-h-[calc(100vh-160px)] overflow-y-auto scrollbar-thin">
       <!-- Form Information Card -->
@@ -42,8 +42,8 @@
         </button>
 
         <div v-show="activeSection === 'labelStyle'" class="p-4 space-y-4 bg-white rounded-b-xl">
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Display</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Display</label>
             <RadioTypeSelector
               v-model="formStyleSetting.labelStyle.showLabel"
               :options="displayOptions"
@@ -53,14 +53,14 @@
           </div>
           
           <!-- Text Color -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Text Color</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Text Color</label>
             <InputColorPicker v-model="formStyleSetting.labelStyle.textColor" />
           </div>
 
           <!-- Font Size -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Font Size</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Font Size</label>
             <InputFieldWithBadge
               ref="fontSizeRef"
               v-model="formStyleSetting.labelStyle.fontSize"
@@ -72,8 +72,8 @@
           </div>
 
           <!-- Font Weight -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Font Weight</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Font Weight</label>
             <SelectField 
               v-model="formStyleSetting.labelStyle.fontWeight" 
               :options="fontWeightOptions" 
@@ -103,8 +103,8 @@
         </button>
         <div v-show="activeSection === 'inputStyle'" class="p-4 space-y-4 bg-white rounded-b-xl">
           <!-- Field Width -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Field Width</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Field Width</label>
             <SelectField 
               v-model="formStyleSetting.inputStyle.inputWidth" 
               :options="fieldWidthOptions" 
@@ -112,8 +112,8 @@
             />
           </div>
           <!-- Field Size -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Field Size</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Field Size</label>
             <SelectField 
               v-model="formStyleSetting.inputStyle.inputSize" 
               :options="fieldSizeOptions" 
@@ -121,9 +121,9 @@
             />
           </div>
           <!-- Box Shadow -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Box Shadow</label>
-            <div class="flex-1 flex items-center gap-3 min-w-0">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 sm:w-28 flex-shrink-0">Box Shadow</label>
+            <div class="grid grid-cols-2 sm:flex sm:items-center gap-3 min-w-0 w-full">
               <!-- X Offset -->
               <InputFieldWithBadge
                 v-model="formStyleSetting.inputStyle.inputBoxShadowX"
@@ -167,8 +167,8 @@
             </div>
           </div>
           <!-- Font Size -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Font Size</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Font Size</label>
             <InputFieldWithBadge
               v-model="formStyleSetting.inputStyle.inputFontSize"
               type="number"
@@ -178,8 +178,8 @@
             />
           </div>
           <!-- Font Weight -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Font Weight</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Font Weight</label>
             <SelectField 
               v-model="formStyleSetting.inputStyle.inputFontWeight" 
               :options="fontWeightOptions" 
@@ -187,11 +187,11 @@
             />
           </div>
           <!-- Padding -->
-          <div class="flex items-start gap-2">
-            <label class="text-sm font-semibold text-slate-700 w-28 flex-shrink-0 pt-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-start gap-2">
+            <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Padding <span class="text-[10px]">(PX)</span>
             </label>
-            <div class="grid grid-cols-4 gap-5 flex-1">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
               <InputFieldWithBadge
                 v-model="formStyleSetting.inputStyle.inputPaddingTop"
                 type="number"
@@ -227,11 +227,11 @@
             </div>
           </div>
           <!-- Margin -->
-          <div class="flex items-start gap-2">
-            <label class="text-sm font-semibold text-slate-700 w-28 flex-shrink-0 pt-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-start gap-2">
+            <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Margin <span class="text-[10px]">(PX)</span>
             </label>
-            <div class="grid grid-cols-4 gap-5 flex-1">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
               <InputFieldWithBadge
                 v-model="formStyleSetting.inputStyle.inputMarginTop"
                 type="number"
@@ -267,8 +267,8 @@
             </div>
           </div>
           <!-- Border Style -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Border Style</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Border Style</label>
             <SelectField 
               v-model="formStyleSetting.inputStyle.inputBorderStyle" 
               :options="borderStyleOptions" 
@@ -302,7 +302,7 @@
             </div>
           </div>
           <!-- Row 1: Background Color & Text Color -->
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 min-[480px]:grid-cols-2 gap-4">
             <!-- Background Color -->
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1">Background Color</label>
@@ -319,7 +319,7 @@
             </div>
           </div>
           <!-- Row 2: Border Color & Placeholder Color -->
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 min-[480px]:grid-cols-2 gap-4">
             <!-- Border Color -->
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1">Border Color</label>
@@ -359,9 +359,9 @@
         </button>
         <div v-show="activeSection === 'buttonStyle'" class="p-4 space-y-3 bg-white rounded-b-xl">
           <!-- Box Shadow -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Box Shadow</label>
-            <div class="flex-1 flex items-center gap-3 min-w-0">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 sm:w-28 flex-shrink-0">Box Shadow</label>
+            <div class="grid grid-cols-2 sm:flex sm:items-center gap-3 min-w-0 w-full">
               <InputFieldWithBadge
                 v-model="formStyleSetting.buttonStyle.btnBoxShadowX"
                 type="number"
@@ -400,8 +400,8 @@
             </div>
           </div>
           <!-- Font Size -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Font Size</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Font Size</label>
             <InputFieldWithBadge
               v-model="formStyleSetting.buttonStyle.btnFontSize"
               type="number"
@@ -411,8 +411,8 @@
             />
           </div>
           <!-- Font Weight -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Font Weight</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Font Weight</label>
             <SelectField 
               v-model="formStyleSetting.buttonStyle.btnFontWeight" 
               :options="fontWeightOptions" 
@@ -420,11 +420,11 @@
             />
           </div>
           <!-- Padding  -->
-          <div class="flex items-start gap-2">
-            <label class="text-sm font-semibold text-slate-700 w-28 flex-shrink-0 pt-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-start gap-2">
+            <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Padding <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-4 gap-5 flex-1">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
               <InputFieldWithBadge
                 v-model="formStyleSetting.buttonStyle.btnPaddingTop"
                 type="number"
@@ -460,11 +460,11 @@
             </div>
           </div>
           <!-- Margin -->
-          <div class="flex items-start gap-2">
-            <label class="text-sm font-semibold text-slate-700 w-28 flex-shrink-0 pt-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-start gap-2">
+            <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Margin <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-4 gap-5 flex-1">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
               <InputFieldWithBadge
                 v-model="formStyleSetting.buttonStyle.btnMarginTop"
                 type="number"
@@ -500,8 +500,8 @@
             </div>
           </div>
           <!-- Border Style -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Border Style</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Border Style</label>
             <SelectField 
               v-model="formStyleSetting.buttonStyle.btnBorderStyle" 
               :options="borderStyleOptions" 
@@ -535,7 +535,7 @@
             </div>
           </div>
           <!-- Button Background Color & Button Text Color -->
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 min-[480px]:grid-cols-2 gap-4">
             <!-- Button Background Color -->
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1">Background Color</label>
@@ -552,7 +552,7 @@
             </div>
           </div>
           <!-- Button Border Color -->
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 min-[480px]:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-1">Border Color</label>
               <div class="flex items-center gap-1.5">
@@ -585,8 +585,8 @@
         </button>
         <div v-show="activeSection === 'formStyle'" class="p-4 space-y-3 bg-white rounded-b-xl">
           <!-- Background Color -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-30 flex-shrink-0">Background Color</label>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full sm:w-28 sm:flex-shrink-0">Background Color</label>
             <InputColorPicker v-model="formStyleSetting.formStyle.formBgColor" />
           </div>
         </div>
@@ -613,16 +613,16 @@
         </button>
         <div v-show="activeSection === 'formTitleStyle'" class="p-4 space-y-3 bg-white rounded-b-xl">
           <!-- Text Color -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Text Color</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Text Color</label>
             <InputColorPicker v-model="formStyleSetting.formTitleStyle.formTitleTextColor" />
           </div>
           <!-- Padding -->
-          <div class="flex items-start gap-2">
-            <label class="text-sm font-semibold text-slate-700 w-28 flex-shrink-0 pt-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-start gap-2">
+            <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Padding <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-4 gap-5 flex-1">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
               <InputFieldWithBadge
                 v-model="formStyleSetting.formTitleStyle.formTitlePaddingTop"
                 type="number"
@@ -658,11 +658,11 @@
             </div>
           </div>
           <!-- Margin -->
-          <div class="flex items-start gap-2">
-            <label class="text-sm font-semibold text-slate-700 w-28 flex-shrink-0 pt-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-start gap-2">
+            <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Margin <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-4 gap-5 flex-1">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
               <InputFieldWithBadge
                 v-model="formStyleSetting.formTitleStyle.formTitleMarginTop"
                 type="number"
@@ -698,8 +698,8 @@
             </div>
           </div>
           <!-- Font Size -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Font Size</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Font Size</label>
             <InputFieldWithBadge
               v-model="formStyleSetting.formTitleStyle.formTitleFontSize"
               type="number"
@@ -709,8 +709,8 @@
             />
           </div>
           <!-- Alignment -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Alignment</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Alignment</label>
             <RadioTypeSelector
               v-model="formStyleSetting.formTitleStyle.formTitleAlign"
               :options="alignOptions"
@@ -741,16 +741,16 @@
         </button>
         <div v-show="activeSection === 'formDescStyle'" class="p-4 space-y-3 bg-white rounded-b-xl">
           <!-- Text Color -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Text Color</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Text Color</label>
             <InputColorPicker v-model="formStyleSetting.formDescStyle.formDescTextColor" />
           </div>
           <!-- Padding -->
-          <div class="flex items-start gap-2">
-            <label class="text-sm font-semibold text-slate-700 w-28 flex-shrink-0 pt-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-start gap-2">
+            <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Padding <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-4 gap-5 flex-1">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
               <InputFieldWithBadge
                 v-model="formStyleSetting.formDescStyle.formDescPaddingTop"
                 type="number"
@@ -786,11 +786,11 @@
             </div>
           </div>
           <!-- Margin -->
-          <div class="flex items-start gap-2">
-            <label class="text-sm font-semibold text-slate-700 w-28 flex-shrink-0 pt-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-start gap-2">
+            <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Margin <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-4 gap-5 flex-1">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
               <InputFieldWithBadge
                 v-model="formStyleSetting.formDescStyle.formDescMarginTop"
                 type="number"
@@ -826,8 +826,8 @@
             </div>
           </div>
           <!-- Font Size -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Font Size</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Font Size</label>
             <InputFieldWithBadge
               v-model="formStyleSetting.formDescStyle.formDescFontSize"
               type="number"
@@ -837,8 +837,8 @@
             />
           </div>
           <!-- Alignment -->
-          <div class="flex items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-28 flex-shrink-0">Alignment</label>
+          <div class="flex flex-wrap items-center gap-2">
+            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Alignment</label>
             <RadioTypeSelector
               v-model="formStyleSetting.formDescStyle.formDescAlign"
               :options="alignOptions"
@@ -850,12 +850,49 @@
       </div>
     </section>
 
-    <!-- Right Panel -->
-    <section class="lg:col-span-6 bg-slate-100/50 border border-slate-200/60 rounded-2xl p-8 flex flex-col items-center min-h-[400px]">
+    <!-- Right Panel: desktop only -->
+    <section class="hidden lg:flex lg:col-span-6 bg-slate-100/50 border border-slate-200/60 rounded-2xl p-8 flex-col items-center min-h-[400px]">
       <PreviewTemplate class="w-full">
         <FormPreview />
       </PreviewTemplate>
     </section>
+
+    <!-- Floating Preview Button: mobile/tablet only -->
+    <button
+      type="button"
+      @click="isPreviewOpen = true"
+      class="lg:hidden fixed right-4 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full bg-teal-600 hover:bg-teal-700 text-white shadow-lg flex items-center justify-center transition-colors"
+      aria-label="Show Preview"
+    >
+      <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 3C17.3924 3 21.8785 6.87976 22.8189 12C21.8785 17.1202 17.3924 21 12 21C6.60761 21 2.12148 17.1202 1.18109 12C2.12148 6.87976 6.60761 3 12 3ZM12 19C16.2359 19 19.8603 16.052 20.7777 12C19.8603 7.94803 16.2359 5 12 5C7.76412 5 4.13973 7.94803 3.22225 12C4.13973 16.052 7.76412 19 12 19ZM12 16.5C9.51472 16.5 7.5 14.4853 7.5 12C7.5 9.51472 9.51472 7.5 12 7.5C14.4853 7.5 16.5 9.51472 16.5 12C16.5 14.4853 14.4853 16.5 12 16.5ZM12 14.5C13.3807 14.5 14.5 13.3807 14.5 12C14.5 10.6193 13.3807 9.5 12 9.5C10.6193 9.5 9.5 10.6193 9.5 12C9.5 13.3807 10.6193 14.5 12 14.5Z"></path>
+      </svg>
+    </button>
+
+    <!-- Preview Modal: mobile/tablet only -->
+    <Teleport to="body">
+      <div
+        v-if="isPreviewOpen"
+        class="lg:hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/50"
+        @click.self="isPreviewOpen = false"
+      >
+        <div class="bg-white w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl max-h-[92vh] overflow-y-auto p-5 relative">
+          <button
+            type="button"
+            @click="isPreviewOpen = false"
+            class="absolute right-4 top-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 z-10"
+            aria-label="Close Preview"
+          >
+            <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 10.5858L16.9497 5.63604L18.364 7.05025L13.4142 12L18.364 16.9497L16.9497 18.364L12 13.4142L7.05025 18.364L5.63604 16.9497L10.5858 12L5.63604 7.05025L7.05025 5.63604L12 10.5858Z"></path>
+            </svg>
+          </button>
+          <PreviewTemplate class="w-full">
+            <FormPreview />
+          </PreviewTemplate>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -884,6 +921,7 @@ const props = defineProps({
 });
 
 const activeSection = ref<string | null>(null);
+const isPreviewOpen = ref(false);
 const toggleSection = (name: string) => {
   activeSection.value = activeSection.value === name ? null : name;
 };

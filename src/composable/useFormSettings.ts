@@ -3,6 +3,7 @@ import { storeToRefs } from "pinia";
 import { useFormFieldSettingStore } from "@/stores/formFieldStore";
 import { useFormStyleSettingStore } from "@/stores/formStyleStore";
 import { useDisplayRuleSettingStore } from "@/stores/DisplayRuleStore";
+import { useSubmissionSettingStore } from "@/stores/submissionStore";
 
 const isWidgetDataLoading = ref(true);
 const validationErrors = reactive<Record<string, string>>({});
@@ -11,15 +12,18 @@ export function formSetting() {
   const FormFieldSettingStore = useFormFieldSettingStore();
   const FormStyleSettingStore = useFormStyleSettingStore();
   const DisplayRuleSettingStore = useDisplayRuleSettingStore();
+  const SubmissionSettingStore = useSubmissionSettingStore();
 
   const { formFieldSetting } = storeToRefs(FormFieldSettingStore);
   const { formStyleSetting } = storeToRefs(FormStyleSettingStore);
   const { displayRuleSetting } = storeToRefs(DisplayRuleSettingStore);
+  const { submissionSetting } = storeToRefs(SubmissionSettingStore);
 
   const resetFormStores = () => {
     FormFieldSettingStore.$reset();
     FormStyleSettingStore.$reset();
     DisplayRuleSettingStore.$reset();
+    SubmissionSettingStore.$reset();
   };
 
   //   const isEmpty = (val: any): boolean => {
@@ -48,5 +52,6 @@ export function formSetting() {
     resetFormStores,
     validationErrors,
     displayRuleSetting,
+    submissionSetting,
   };
 }

@@ -1,18 +1,20 @@
 <template>
   <!-- Form Container Box -->
-  <div :style="cssVars" class="gform-wrapper border border-slate-200 rounded-xl p-5 transition-all duration-150">
+  <div :style="cssVars" class="gform-wrapper w-full h-full overflow-auto border border-slate-200 rounded-xl p-5 transition-all duration-150">
     <div class="space-y-4">
-      <!-- Form Title -->
+      <!-- Form Title (Bound to style) -->
       <h2 
         v-if="formStyleSetting.formInfo.formTitle" 
+        :style="formTitleStyle"
         class="font-bold break-words leading-tight"
       >
         {{ formStyleSetting.formInfo.formTitle }}
       </h2>
 
-      <!-- Form Description -->
+      <!-- Form Description (Bound to style) -->
       <p 
         v-if="formStyleSetting.formInfo.formDescription" 
+        :style="formDescStyle"
         class="break-words leading-relaxed"
       >
         {{ formStyleSetting.formInfo.formDescription }}
@@ -263,10 +265,54 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { formSetting } from "@/composable/useFormSettings";
 import { useFormStyle } from "@/composable/useFormStyle";
 
 const { formFieldSetting, formStyleSetting } = formSetting();
 const { cssVars } = useFormStyle();
 
+// Form Title Styles computed
+const formTitleStyle = computed(() => {
+  const title = formStyleSetting.value?.formTitleStyle || {};
+  return {
+    color: title.formTitleTextColor || '#1e293b',
+    fontSize: `${title.formTitleFontSize ?? 16}px`,
+    textAlign: (title.formTitleAlign || 'left') as any,
+    paddingTop: `${title.formTitlePaddingTop ?? 0}px`,
+    paddingRight: `${title.formTitlePaddingRight ?? 0}px`,
+    paddingBottom: `${title.formTitlePaddingBottom ?? 0}px`,
+    paddingLeft: `${title.formTitlePaddingLeft ?? 0}px`,
+    marginTop: `${title.formTitleMarginTop ?? 0}px`,
+    marginRight: `${title.formTitleMarginRight ?? 0}px`,
+    marginBottom: `${title.formTitleMarginBottom ?? 10}px`,
+    marginLeft: `${title.formTitleMarginLeft ?? 0}px`,
+  };
+});
+
+// Form Description Styles computed
+const formDescStyle = computed(() => {
+  const desc = formStyleSetting.value?.formDescStyle || {};
+  return {
+    color: desc.formDescTextColor || '#5f6368',
+    fontSize: `${desc.formDescFontSize ?? 14}px`,
+    textAlign: (desc.formDescAlign || 'left') as any,
+    paddingTop: `${desc.formDescPaddingTop ?? 0}px`,
+    paddingRight: `${desc.formDescPaddingRight ?? 0}px`,
+    paddingBottom: `${desc.formDescPaddingBottom ?? 0}px`,
+    paddingLeft: `${desc.formDescPaddingLeft ?? 0}px`,
+    marginTop: `${desc.formDescMarginTop ?? 0}px`,
+    marginRight: `${desc.formDescMarginRight ?? 0}px`,
+    marginBottom: `${desc.formDescMarginBottom ?? 20}px`,
+    marginLeft: `${desc.formDescMarginLeft ?? 0}px`,
+  };
+});
 </script>
+
+<style scoped>
+/* Scoped overrides to target height for select boxes and textareas inside Listbox components */
+:deep(.custom-select-box) {
+  display: flex !important;
+  align-items: center !important;
+}
+</style>

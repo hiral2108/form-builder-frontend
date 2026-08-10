@@ -1,10 +1,5 @@
 <template>
   <div class="w-full">
-    <!-- Submissions Page Header -->
-    <div class="mb-6">
-      <h2 class="text-xl font-bold text-slate-800 tracking-tight">Form Submissions</h2>
-      <p class="text-xs text-slate-400 mt-0.5">Track, export, and manage all your form submissions in one place.</p>
-    </div>
 
     <!-- Filter Inputs -->
     <div class="flex items-center gap-3 flex-wrap mb-6 dashboard-filter">
@@ -159,7 +154,7 @@
                   <div class="relative group/tooltip">
                     <button 
                       @click="openDeleteModal(submission.id)"
-                      class="w-9 h-9 bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 transition-colors rounded-xl flex items-center justify-center cursor-pointer"
+                      class="w-9 h-9 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 transition-colors rounded-xl flex items-center justify-center cursor-pointer"
                     >
                       <img v-svg-inline src="@/assets/icons/form-list/delete.svg" class="w-5 h-5"/>
                     </button>
@@ -186,13 +181,13 @@
         <button
           @click="isDeleteBulkModalOpen = true"
           :disabled="selectedSubmissionIds.length === 0"
-          class="text-sm py-2 px-4 rounded-lg bg-rose-600 text-white hover:bg-rose-700 transition-colors cursor-pointer disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed font-semibold animate-none"
+          class="text-sm py-2 px-4 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors cursor-pointer disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed font-semibold animate-none"
         >
           Remove Selected
         </button>
         <button
           @click="isDeleteAllModalOpen = true"
-          class="text-sm py-2 px-4 rounded-lg text-white bg-rose-600 hover:bg-rose-700 transition-colors cursor-pointer font-semibold animate-none"
+          class="text-sm py-2 px-4 rounded-lg text-white bg-red-600 hover:bg-red-700 transition-colors cursor-pointer font-semibold animate-none"
         >
           Remove All Records
         </button>

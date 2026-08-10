@@ -43,7 +43,7 @@
             src="@/assets/icons/settingpage/notification-3-line.svg"
             class="w-5.5 h-5.5"
           />
-          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500"></span>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500"></span>
         </button>
       </div>
 

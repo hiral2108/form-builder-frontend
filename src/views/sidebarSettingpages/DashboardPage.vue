@@ -1,11 +1,11 @@
 <template>
   <div class="w-full">
     <!-- Welcome Header -->
-    <div class="mb-6 flex items-center justify-between gap-4">
+    <div class="mb-6 flex items-center justify-between gap-4 flex-wrap">
       <h2 class="text-xl font-bold text-slate-800 tracking-tight">Welcome to {{ appName }}</h2>
       <button 
         @click="showCreateFormModal = true"
-        class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10"
+        class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10 max-[380px]:w-full max-[380px]:justify-center"
       >
         <img v-svg-inline src="@/assets/icons/dashboardpage/add-line.svg" class="w-5 h-5"/>
         <span>Create Form</span>
@@ -14,17 +14,16 @@
     <!-- Dashboard Filter Bar -->
     <div class="flex items-end gap-3 flex-wrap mb-6 dashboard-filter">
       <!-- Filter Select with Calendar Icon -->
-      <div class="relative flex-shrink-0 select-box-container">
+      <div class="relative flex-shrink-0 select-box-container w-auto">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
           <path d="M9 1v2h6V1h2v2h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2Zm11 7H4v12h16V8Zm-9 3v4H8v-4h3Zm5 0v4h-3v-4h3Z"></path>
         </svg>
-        <SelectField v-model="selectedFilter" :options="filteredMenu" customClass="pl-10 !w-[200px]" />
+        <SelectField v-model="selectedFilter" :options="filteredMenu" customClass="pl-10 !w-[200px] max-[350px]:!w-full" />
       </div>
 
-      <!-- Custom Element Plus Date Range Picker -->
       <template v-if="selectedFilter === 'custom'">
-        <div class="flex flex-col gap-1.5">
-          <div class="calender-input relative inline-grid w-[280px] filter-date-range-picker">
+        <div class="flex flex-col gap-1.5 w-auto">
+          <div class="calender-input relative inline-grid w-[280px] max-[350px]:w-full filter-date-range-picker">
             <ElDatePicker
               v-model="dateRange"
               type="daterange"
@@ -52,7 +51,7 @@
 
     <!-- Visitors block container -->
     <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 mb-6">
-      <div class="grid grid-cols-1 min-[960px]:grid-cols-3 gap-8 max-[1230px]:gap-4">
+      <div class="grid grid-cols-1 min-[600px]:grid-cols-2 min-[960px]:grid-cols-3 gap-6 max-[1230px]:gap-4">
         
         <!-- Column 1: Visitors This Cycle -->
         <div class="flex items-center gap-4 max-[960px]:border-b max-[960px]:border-slate-200/60 max-[960px]:pb-4">
@@ -72,13 +71,13 @@
         </div>
 
         <!-- Column 2: Next Reset Date -->
-        <div class="flex items-center gap-4 border-l border-r border-slate-200/60 px-8 max-[960px]:border-l-transparent max-[960px]:border-r-transparent max-[960px]:px-0 max-[960px]:border-b max-[960px]:pb-4">
+        <div class="flex items-center gap-4 border-l border-r border-slate-200/60 px-8 min-[960px]:max-[1100px]:px-4 min-[960px]:max-[1100px]:gap-3 max-[960px]:border-l-transparent max-[960px]:border-r-transparent max-[960px]:px-0 max-[960px]:border-b max-[960px]:pb-4 max-[600px]:border-b max-[600px]:pb-4 min-[600px]:max-[960px]:border-b min-[600px]:max-[960px]:pb-4">
           <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center flex-shrink-0">
             <img v-svg-inline src="@/assets/icons/dashboardpage/reset_date.svg" class="w-6 h-6"/>
           </div>
-          <div>
-            <p class="text-sm font-medium text-slate-500 mb-1">Next Reset Date</p>
-            <p class="text-2xl font-bold text-slate-800">{{ formattedResetDate }}</p>
+          <div class="min-w-0">
+            <p class="text-sm font-medium text-slate-500 mb-1 whitespace-nowrap">Next Reset Date</p>
+            <p class="text-2xl font-bold text-slate-800 whitespace-nowrap min-[960px]:max-[1100px]:text-xl">{{ formattedResetDate }}</p>
           </div>
         </div>
 
@@ -135,12 +134,12 @@
 
   </div>
       <!-- Performance Analytics Chart Card -->
-    <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-6 mb-6 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
+    <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-4 sm:p-6 mb-6 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300 overflow-x-auto max-[640px]:hidden">
       <div class="mb-4">
         <h3 class="text-base font-bold text-slate-800 tracking-tight">Performance Analytics</h3>
         <p class="text-xs text-slate-400 mt-0.5">Visual representation of views and form submissions over time.</p>
       </div>
-      <div class="w-full h-70 relative">
+      <div class="w-full min-w-[500px] h-56 sm:h-70 relative">
         <LineChart
           :dateList="dateData"
           :viewData="viewData"
@@ -163,11 +162,10 @@ import "element-plus/dist/index.css";
 const appName = inject("appName");
 const showCreateFormModal = ref(false);
 
-// Stats for the Visitors block (no database/plan checks)
-const visitorRate = ref(35); // 35% circle progress
+const visitorRate = ref(35);
 const formattedUserVisitors = ref("3,500");
 const formattedPlanVisitors = ref("10,000");
-const formattedResetDate = ref("Sep 04, 2026");
+const formattedResetDate = ref("09/09/2026");
 const totalFormsCreated = ref(8);
 const views = ref(24850);
 const clicks = ref(7425);

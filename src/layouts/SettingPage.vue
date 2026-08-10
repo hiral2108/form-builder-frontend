@@ -100,7 +100,7 @@
 
       <!-- Main Panel area (No partition background) -->
       <main
-        class="flex-1 flex flex-col relative h-screen transition-all duration-300 bg-white"
+        class="flex-1 flex flex-col relative h-screen transition-all duration-300 bg-white overflow-x-hidden"
         :class="[isMobile ? 'pl-4' : isCollapsed ? 'pl-20' : 'pl-60']">
         <!-- Header -->
         <Header

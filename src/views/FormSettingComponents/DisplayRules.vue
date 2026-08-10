@@ -1,10 +1,9 @@
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full items-start">
-    <div
-      class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-4">
+    <div class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 space-y-4">
       <div class="bg-white mb-5">
         <label class="block text-sm font-semibold text-slate-800 mb-2">Form Type</label>
-        <div class="flex gap-4">
+        <div class="grid grid-cols-1 min-[480px]:grid-cols-2 gap-4">
           <button
             type="button"
             @click="displayRuleSetting.form_type = 'sticky'"
@@ -91,10 +90,10 @@
           <InputColorPicker v-model="displayRuleSetting.cta_bg_color" label="Background Color" />
           <InputColorPicker v-model="displayRuleSetting.cta_text_color" label="Icon Color" />
         </div>
-        <div class="grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
-            <InputColorPicker v-model="displayRuleSetting.tooltip_bg_color" label="Tooltip Background Color" />
-            <InputColorPicker v-model="displayRuleSetting.tooltip_text_color" label="Tooltip Text Color" />
-          </div>
+        <div v-if="displayRuleSetting.form_type === 'tooltip'" class="grid grid-cols-2 gap-4 max-[450px]:grid-cols-1">
+          <InputColorPicker v-model="displayRuleSetting.tooltip_bg_color" label="Tooltip Background Color" />
+          <InputColorPicker v-model="displayRuleSetting.tooltip_text_color" label="Tooltip Text Color" />
+        </div>
         <div>
           <InputField type="text" v-model="displayRuleSetting.button_text" label="Button Text" focusColor="teal" />
         </div>
@@ -141,9 +140,9 @@
     </div>
 
     <section
-      class="lg:col-span-6 bg-slate-100/50 border border-slate-200/60 rounded-2xl p-6 flex flex-col items-center justify-center lg:sticky lg:top-24">
+      class="lg:col-span-6 w-full flex flex-col items-center bg-transparent border-none p-0 lg:bg-slate-100/50 lg:border lg:border-slate-200/60 rounded-2xl lg:p-6 min-h-0 lg:sticky lg:top-24">
       <PreviewTemplate class="w-full my-auto">
-        <FormPreview />
+        <DisplayRulePreview />
       </PreviewTemplate>
     </section>
   </div>
@@ -152,7 +151,7 @@
 <script setup lang="ts">
   import { watch } from "vue";
   import PreviewTemplate from "@/views/FormSettingComponents/PreviewTemplate.vue";
-  import FormPreview from "@/views/FormSettingComponents/FormPreview.vue";
+  import DisplayRulePreview from "@/views/FormSettingComponents/DisplayRulePreview.vue";
 
   import { formSetting } from "@/composable/useFormSettings";
   import { useDisplayRuleSettingStore } from "@/stores/DisplayRuleStore";

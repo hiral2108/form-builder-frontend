@@ -1,6 +1,6 @@
 <template>
   <div class="relative" ref="root">
-     <label
+    <label
       v-if="label"
       :for="id"
       class="block text-sm font-semibold text-slate-800 mb-1"
@@ -17,18 +17,25 @@
       aria-label="Open color picker"
     ></button>
 
-    <!-- Chrome Color Picker Popup (Positioned absolutely) -->
-    <div v-if="showPicker" class="absolute top-full mt-1.5 left-0 z-[9999]">
-      <Chrome
-        :modelValue="chromeModel"
-        @update:modelValue="onChromeUpdate"
-      />
-    </div>
+    <!-- Chrome Color Picker Popup: teleported to body, fixed-positioned, clamped to viewport -->
+    <Teleport to="body">
+      <div
+        v-if="showPicker"
+        ref="popupEl"
+        class="fixed z-[9999]"
+        :style="{ top: popupTop + 'px', left: popupLeft + 'px' }"
+      >
+        <Chrome
+          :modelValue="chromeModel"
+          @update:modelValue="onChromeUpdate"
+        />
+      </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, watch, computed, onMounted, onBeforeUnmount, nextTick } from "vue";
 import { Chrome } from "@ckpack/vue-color";
 import { v4 as uuidv4 } from "uuid";
 
@@ -38,7 +45,7 @@ const props = withDefaults(defineProps<{
   modelValue?: string | null | RGBA;
   id?: string;
   label?: string;
-    labelClass?: string;
+  labelClass?: string;
 }>(), {
   modelValue: "#ffffff",
   id: undefined,
@@ -49,8 +56,45 @@ const emit = defineEmits<{
 }>();
 
 const root = ref<HTMLElement | null>(null);
+const popupEl = ref<HTMLElement | null>(null);
 const showPicker = ref(false);
+const popupTop = ref(0);
+const popupLeft = ref(0);
 const id = computed(() => props.id ?? `input-color-${uuidv4()}`);
+
+/* ---------- Positioning ---------- */
+function computePopupPosition() {
+  const btn = root.value;
+  if (!btn) return;
+
+  const margin = 8; // minimum gap from screen edge
+  const popupWidth = popupEl.value?.offsetWidth || 225;
+  const popupHeight = popupEl.value?.offsetHeight || 300;
+
+  const rect = btn.getBoundingClientRect();
+  const viewportWidth = document.documentElement.clientWidth;
+  const viewportHeight = document.documentElement.clientHeight;
+
+  // --- Horizontal: prefer aligning left edge with button, clamp both sides ---
+  let left = rect.left;
+  const maxLeft = viewportWidth - popupWidth - margin;
+  if (left > maxLeft) left = maxLeft;
+  if (left < margin) left = margin;
+
+  // --- Vertical: prefer opening below button, flip above if no room, clamp both sides ---
+  let top = rect.bottom + 6;
+  const spaceBelow = viewportHeight - rect.bottom;
+  const spaceAbove = rect.top;
+  if (spaceBelow < popupHeight + margin && spaceAbove > spaceBelow) {
+    top = rect.top - popupHeight - 6;
+  }
+  const maxTop = viewportHeight - popupHeight - margin;
+  if (top > maxTop) top = maxTop;
+  if (top < margin) top = margin;
+
+  popupLeft.value = left;
+  popupTop.value = top;
+}
 
 /* ---------- Parsing & Normalization ---------- */
 function hexToRgba(hex: string): RGBA | null {
@@ -115,7 +159,7 @@ function onChromeUpdate(chromeValue: any) {
   if (chromeValue && typeof chromeValue === "object") {
     const rgba = chromeValue.rgba;
     chromeModel.value = { r: rgba.r, g: rgba.g, b: rgba.b, a: rgba.a };
-    
+
     // Smart emission: if parent binds a string (hex), emit the hex string. Otherwise emit the RGBA object.
     if (typeof props.modelValue === "string") {
       emit("update:modelValue", chromeValue.hex);
@@ -125,22 +169,42 @@ function onChromeUpdate(chromeValue: any) {
   }
 }
 
-function togglePicker(e?: Event) {
+async function togglePicker(e?: Event) {
   e?.preventDefault();
-  showPicker.value = !showPicker.value;
+  const opening = !showPicker.value;
+  showPicker.value = opening;
+
+  if (opening) {
+    // Popup isn't in the DOM until after this tick — measure once it exists
+    await nextTick();
+    computePopupPosition();
+  }
 }
 
 function onDocClick(e: MouseEvent) {
-  const el = root.value;
-  if (el && e.target instanceof Node && !el.contains(e.target)) {
+  const rootEl = root.value;
+  const popup = popupEl.value;
+  const target = e.target as Node;
+  // Click outside both the swatch button AND the teleported popup closes it
+  if (rootEl && !rootEl.contains(target) && (!popup || !popup.contains(target))) {
     showPicker.value = false;
+  }
+}
+
+function onWindowChange() {
+  if (showPicker.value) {
+    computePopupPosition();
   }
 }
 
 onMounted(() => {
   document.addEventListener("click", onDocClick);
+  window.addEventListener("resize", onWindowChange);
+  window.addEventListener("scroll", onWindowChange, true); // capture phase for scroll on any ancestor
 });
 onBeforeUnmount(() => {
   document.removeEventListener("click", onDocClick);
+  window.removeEventListener("resize", onWindowChange);
+  window.removeEventListener("scroll", onWindowChange, true);
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[calc(100vh-210px)] lg:max-h-[calc(100vh-210px)]">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[calc(100vh-210px)] lg:max-h-[calc(100vh-210px)]">
     <section
-       class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm h-[420px] lg:h-full lg:max-h-[calc(100vh-210px)] flex flex-col overflow-hidden">
+      class="lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm h-[420px] lg:h-full lg:max-h-[calc(100vh-210px)] flex flex-col overflow-hidden">
       <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
         <h3 data-v-971cfb3b="" class="font-semibold text-slate-800 text-md">Field Library</h3>
       </div>
@@ -109,7 +109,7 @@
             <div
               class="space-y-1.5"
               v-if="['text', 'email', 'number', 'phone', 'url', 'password'].includes(field.type)">
-              <div class="relative">
+              <div class="relative" style="width: var(--input-width)">
                 <InputField
                   disable
                   :required="field.required"
@@ -121,14 +121,13 @@
                   :modelValue="field.defaultValue"
                   :helpMessage="field.helpMessage"
                   :classes="field.type === 'password' && field.showPasswordIcon == 1 ? 'pr-10' : ''"
-                  class="pointer-events-none" />
-
-                <div
-                  v-if="field.type === 'password' && field.showPasswordIcon == 1"
-                  style="position: absolute; right: 14px; bottom: 11px"
-                  class="pointer-events-none flex items-center justify-center">
-                  <img v-svg-inline src="@/assets/icons/FormFields/EyesOff.svg" class="w-4 h-4 text-slate-400" />
-                </div>
+                  class="pointer-events-none">
+                  <div
+                    v-if="field.type === 'password' && field.showPasswordIcon == 1"
+                    class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
+                    <img v-svg-inline src="@/assets/icons/FormFields/EyesOff.svg" class="w-4 h-4 text-slate-400" />
+                  </div>
+                </InputField>
               </div>
             </div>
 
@@ -189,13 +188,14 @@
 
             <div class="space-y-1.5" v-else-if="['dropdown', 'multiselect'].includes(field.type)">
               <label
-                class="block text-sm font-semibold text-gray-700 pointer-events-none select-none gform-label" 
+                class="block text-sm font-semibold text-gray-700 pointer-events-none select-none gform-label"
                 :class="labelPositionClass(field.labelPlacement)"
                 :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
               <SelectField
-                :modelValue="field.placeholder || ' '"
+                :placeholder="field.placeholder || 'Select an option'"
+                :modelValue="field.placeholder || 'Select an option'"
                 :options="
                   Object.fromEntries([field.placeholder || ' ', ...(field.options || [])].map((opt) => [opt, opt]))
                 "
@@ -248,7 +248,7 @@
                 :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
-              <div class="relative w-full">
+              <div class="relative" style="width: var(--input-width)">
                 <input
                   disabled
                   type="date"
@@ -272,7 +272,7 @@
                 :style="labelStyleObject">
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
-              <div class="relative w-full">
+              <div class="relative" style="width: var(--input-width)">
                 <input
                   disabled
                   type="time"
@@ -297,8 +297,11 @@
                 {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
               </label>
               <div
-                class="gform-input border-2 border-dashed border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center bg-slate-50/50">
-                <img v-svg-inline src="@/assets/icons/FormFields/Upload.svg" class="w-4 h-4 text-slate-600" />
+                class="gform-input border-2 border-dashed border-slate-200 rounded-xl !h-auto !py-5 px-4 flex flex-col items-center justify-center bg-slate-50/50">
+                <img
+                  v-svg-inline
+                  src="@/assets/icons/FormFields/Upload.svg"
+                  class="w-5 h-5 shrink-0 text-slate-600 mb-1.5" />
                 <span class="text-xs text-slate-500 gform-placeholder">{{ field.placeholder }}</span>
               </div>
             </div>
@@ -666,12 +669,13 @@
               </div>
 
               <div v-if="canHaveMaxLength(selectedField)">
-                <InputField
+                <InputFieldWithBadge
                   type="number"
                   v-model.number="selectedField.maxLength"
                   label="Max Text Length"
-                  focusColor="teal"
-                  :min="1" />
+                  width="full"
+              :min="1"
+              badge='<svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 9 12 3 6 9H18ZM18 15 12 21 6 15H18Z" fill="currentColor"></path></svg>'/>
               </div>
 
               <div>

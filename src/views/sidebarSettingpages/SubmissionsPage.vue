@@ -38,7 +38,7 @@
           <input 
             v-model="searchQuery" 
             type="text"
-            class="px-4 py-2 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 h-[38px] w-60"
+            class="px-4 py-2 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 h-[38px] w-60"
             placeholder="Search forms..." 
           />
         </div>

@@ -13,7 +13,7 @@
     <!-- visual track + thumb (Styled in Teal-700 / Slate-200) -->
     <span
       class="w-11 h-6 peer-focus:outline-none rounded-full relative inline-block transition-colors flex-[0_0_44px]"
-      :class="isChecked ? 'bg-teal-700' : 'bg-slate-200'"
+      :class="isChecked ? 'bg-teal-500' : 'bg-slate-200'"
     >
       <span
         class="absolute top-[2px] left-[2px] bg-white border border-gray-300 rounded-full h-5 w-5 transition-transform"

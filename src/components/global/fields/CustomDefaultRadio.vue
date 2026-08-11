@@ -1,14 +1,14 @@
 <template>
   <div class="discount-type-radio-toggle">
     <input
-      type="radio"
-      class="sr-only peer"
-      :id="id"
-      :name="name"
-      :value="value"
-      :checked="modelValue === value"
-      @change="updateValue"
-    />
+  type="radio"
+  class="opacity-0 absolute w-0 h-0 pointer-events-none"
+  :id="id"
+  :name="name"
+  :value="value"
+  :checked="modelValue === value"
+  @change="updateValue"
+/>
 
     <label
       :for="id"

@@ -30,7 +30,7 @@
         />
         <input 
           placeholder="Search..." 
-          class="w-56 pl-9 pr-4 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 placeholder-slate-400 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-700/20 focus:border-teal-700 focus:bg-white" 
+          class="w-56 pl-9 pr-4 py-2 rounded-lg border border-slate-200 text-sm text-slate-700 placeholder-slate-400 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white" 
           type="text"
         />
       </div>

@@ -58,7 +58,9 @@
           @focusin="focusInHandler"
           @keydown="$emit('keydown', $event)"
           @focusout="focusOutHandler" />
+          <slot />
       </div>
+      
       <div v-for="(error, index) in validationMessage" :key="index">
         <span v-if="index == 0" class="text-red-700 text-sm">
           {{ error.$message }}

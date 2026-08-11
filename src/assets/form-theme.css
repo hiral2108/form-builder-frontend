@@ -81,12 +81,16 @@
   margin: var(--input-margin-top) var(--input-margin-right) var(--input-margin-bottom) var(--input-margin-left) !important;
 }
 
+.gform-wrapper .textarea-field textarea {
+  height: auto !important;
+}
 .gform-wrapper .gform-input::placeholder,
 .gform-wrapper .input-field input::placeholder,
 .gform-wrapper .textarea-field textarea::placeholder,
-.gform-wrapper .gform-placeholder,
-.gform-wrapper .custom-select-box {
+.gform-wrapper .gform-placeholder {
   color: var(--input-placeholder-color) !important;
+  font-size: var(--input-font-size) !important;
+  font-weight: var(--input-font-weight) !important;
 }
 
 .gform-wrapper .gform-submit-btn {
@@ -114,4 +118,11 @@
 .gform-cta-tooltip {
   background-color: var(--widget-tooltip-bg-color) !important;
   color: var(--widget-tooltip-text-color) !important;
+}
+
+.gform-wrapper .grid .input-field,
+.gform-wrapper .grid .input-field input {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
 }

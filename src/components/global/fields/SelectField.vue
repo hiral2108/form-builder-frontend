@@ -1,8 +1,15 @@
 <template>
   <Listbox v-model="selectedValue">
     <div class="relative">
-      <ListboxButton class="border border-solid! border-slate-300 bg-white w-full rounded-xl py-2 px-3 gap-1 flex justify-between items-center text-sm custom-select-box cursor-pointer" :class="customClass">
-        {{ selectedTitle }}
+      <ListboxButton class="border border-slate-300 bg-white w-full rounded-xl py-2 px-3 gap-1 flex justify-between items-center text-sm custom-select-box cursor-pointer" :class="customClass">
+        <span
+  class="truncate"
+  :class="isPlaceholder ? 'gform-placeholder' : ''"
+  :style="{
+    color: isPlaceholder ? 'var(--input-placeholder-color)' : 'var(--input-text-color)',
+  }">
+  {{ selectedTitle }}
+</span>
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
         </svg>
@@ -39,12 +46,14 @@ const props = withDefaults(
   defineProps<{
     modelValue?: string;
     options?: Record<string, OptionType>;
-    customClass?: string
+    customClass?: string;
+     placeholder?: string;
   }>(),
   {
     options: () => ({}),
     modelValue: undefined,
-    customClass: ''
+    customClass: '',
+    placeholder: 'Select an option'
   }
 );
 
@@ -53,6 +62,16 @@ const emit = defineEmits(["update:modelValue"]);
 const selectedValue = computed({
   get: () => props.modelValue,
   set: (newValue: string | undefined) => emit("update:modelValue", newValue),
+});
+
+const isPlaceholder = computed(() => {
+  return (
+    !selectedValue.value ||
+    selectedValue.value === "Select an option" ||
+    selectedValue.value === "Select option" ||
+    selectedValue.value === props.placeholder ||
+    selectedValue.value === " "
+  );
 });
 
 const selectedTitle = computed(() => {

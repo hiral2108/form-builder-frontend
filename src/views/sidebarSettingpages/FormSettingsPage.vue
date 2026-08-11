@@ -33,7 +33,7 @@
           <button
             type="button"
             @click="nextStep"
-            :disabled="currentStep === 4"
+            :disabled="currentStep === 5"
             class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 font-medium rounded-lg text-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
             <span class="max-[570px]:hidden font-medium">Next</span>
             <span class="flex items-center justify-center">
@@ -117,6 +117,7 @@
       <FormStyle v-if="currentStep === 2" />
       <DisplayRules v-if="currentStep === 3" />
       <MessageAndNotification v-if="currentStep === 4" />
+      <TriggerAndTargeting v-if="currentStep === 5" />
     </main>
   </div>
 </template>
@@ -127,6 +128,7 @@
   import FormStyle from "@/views/FormSettingComponents/FormStyle.vue";
   import DisplayRules from "@/views/FormSettingComponents/DisplayRules.vue";
   import MessageAndNotification from "@/views/FormSettingComponents/MessageAndNotification.vue";
+  import TriggerAndTargeting from "@/views/FormSettingComponents/TriggerAndTargeting.vue";
 
   defineProps<{
     isCollapsible: boolean;
@@ -146,6 +148,7 @@
     { number: 2, title: "Form Styles" },
     { number: 3, title: "Display Rules" },
     { number: 4, title: "Message & Notifications" },
+    { number: 5, title: "Trigger Settings" },
   ];
 
   // Navigation Steps
@@ -154,6 +157,6 @@
   };
 
   const nextStep = () => {
-    if (currentStep.value < 4) currentStep.value++;
+    if (currentStep.value < 5) currentStep.value++;
   };
 </script>

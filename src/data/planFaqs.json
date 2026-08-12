@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "question": "What happens if I exceed the limits of my current plan?",
+    "answer": "If you exceed your monthly submission limit on the Free plan, your forms will temporarily pause collecting new submissions until the next billing cycle. We'll notify you when you reach 100% of your limit so you have time to upgrade instantly without any downtime."
+  },
+  {
+    "id": 2,
+    "question": "Does FormFlow offer refunds if I'm not satisfied?",
+    "answer": "We offer a 14-day money-back guarantee for all paid plans. If FormFlow doesn't meet your expectations within the first two weeks, contact our support team for a full refund. No questions asked."
+  },
+  {
+    "id": 3,
+    "question": "Can I upgrade or downgrade my FormFlow plan at any time?",
+    "answer": "Absolutely. You can upgrade your plan instantly at any time. When upgrading, we'll prorate the remaining days of your current billing cycle. You can also downgrade, and the change will take effect at the start of your next billing cycle."
+  },
+  {
+    "id": 4,
+    "question": "How does advanced targeting and page rules work in the Pro plan?",
+    "answer": "Advanced Targeting gives you full control over where and when your forms appear. You can show or hide forms on specific URLs, schedule active date & time ranges, and target visitors by country and cart value."
+  }
+]

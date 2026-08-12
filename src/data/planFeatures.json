@@ -1,0 +1,64 @@
+{
+  "PlanFeature": {
+    "free": [
+      {
+        "feature": "1 Active form",
+        "is_pro": false
+      },
+      {
+        "feature": "1,000 Visitors / month",
+        "is_pro": false
+      },
+      {
+        "feature": "50 Submissions / month",
+        "is_pro": false
+      },
+      {
+        "feature": "Customize form styles",
+        "is_pro": false
+      },
+      {
+        "feature": "Up to 10 form fields per form",
+        "is_pro": false
+      },
+      {
+        "feature": "Store & export submissions",
+        "is_pro": true
+      },
+      {
+        "feature": "Email notification services",
+        "is_pro": true
+      }
+    ],
+    "pro": [
+      {
+        "feature": "Unlimited forms",
+        "is_pro": false
+      },
+      {
+        "feature": "Unlimited visitors",
+        "is_pro": false
+      },
+      {
+        "feature": "Unlimited submissions",
+        "is_pro": false
+      },
+      {
+        "feature": "Customize form styles",
+        "is_pro": false
+      },
+      {
+        "feature": "Advanced form fields",
+        "is_pro": false
+      },
+      {
+        "feature": "Store & export submissions",
+        "is_pro": false
+      },
+      {
+        "feature": "Email services integration",
+        "is_pro": false
+      }
+    ]
+  }
+}

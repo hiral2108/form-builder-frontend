@@ -40,10 +40,11 @@ import { computed, ref, watch } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
 import { useToast } from 'vue-toastification'
+import FormService from '@/services/api/form-services'
 
 const props = defineProps({
   isShowModal: Boolean,
-  formId: Number,
+  formId: [Number, String],
   formTitle: String
 });
 
@@ -79,10 +80,19 @@ const cloneForm = async () => {
   }
   isLoading.value = true;
   try {
-    await new Promise((resolve) => setTimeout(resolve, 800)); // Simulated delay
-    toast.success("Form cloned successfully!");
-    emit('confirmClone', props.formId, cloneFormTitle.value);
-    closeModalWidget();
+    // Call clone API on backend
+    const response = await new FormService().cloneWidget({
+      title: cloneFormTitle.value,
+      widget_id: String(props.formId)
+    });
+    
+    if (response.status === 1) {
+      toast.success(response.message || "Form cloned successfully!");
+      emit('confirmClone'); // Notify parent component
+      closeModalWidget();
+    } else {
+      toast.error(response.message || "Failed to clone form");
+    }
   } catch (error) {
     toast.error("Failed to clone form");
   } finally {

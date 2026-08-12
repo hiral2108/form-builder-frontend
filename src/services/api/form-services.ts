@@ -1,5 +1,5 @@
 import { $axios } from "@/plugins/axios";
-import type { NewForm, FormListResponse, WidgetStatusResponse, RenameFormResponse, RemoveFormResponse } from "@/types/form.ts";
+import type { NewForm, FormListResponse, WidgetStatusResponse, RenameFormResponse, RemoveFormResponse, CloneWidgetResponse } from "@/types/form.ts";
 
 export default class FormService {
   createForm(payload: { title: string }): Promise<NewForm> {
@@ -21,5 +21,9 @@ export default class FormService {
 
   removeForm(payload: { widget_id: string }): Promise<RemoveFormResponse> {
     return $axios.post(`remove_widget`, payload);
+  }
+  
+  cloneWidget(payload: { title: string; widget_id: string }): Promise<CloneWidgetResponse> {
+    return $axios.post(`clone_widget`, payload);
   }
 }

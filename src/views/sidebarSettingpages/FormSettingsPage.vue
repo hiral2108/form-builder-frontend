@@ -33,7 +33,7 @@
           <button
             type="button"
             @click="nextStep"
-            :disabled="currentStep === 5"
+            :disabled="currentStep === 5 || isStepDisabled(currentStep + 1)"
             class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 font-medium rounded-lg text-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
             <span class="max-[570px]:hidden font-medium">Next</span>
             <span class="flex items-center justify-center">
@@ -90,20 +90,25 @@
           <button
             v-for="step in steps"
             :key="step.number"
-            @click="currentStep = step.number"
-            class="p-4 border-b-2 font-semibold text-md transition-all cursor-pointer whitespace-nowrap flex items-center gap-2"
-            :class="
-              currentStep === step.number
-                ? 'border-teal-600 text-teal-600'
-                : 'border-transparent text-slate-500 hover:text-slate-700'
-            ">
+            :disabled="isStepDisabled(step.number)"
+            @click="!isStepDisabled(step.number) && (currentStep = step.number)"
+            class="p-3 xl:p-4 border-b-2 font-semibold text-md transition-all whitespace-nowrap flex items-center gap-2"
+            :class="[
+              isStepDisabled(step.number)
+                ? 'border-transparent text-slate-300 opacity-50 cursor-default'
+                : currentStep === step.number
+                  ? 'border-teal-600 text-teal-600 cursor-pointer'
+                  : 'border-transparent text-slate-500 hover:text-slate-700 cursor-pointer',
+            ]">
             <span
               class="w-8 h-8 lg:w-6 lg:h-6 rounded-full flex items-center justify-center text-sm lg:text-xs transition-all duration-150"
-              :class="
-                currentStep === step.number
-                  ? 'bg-teal-600 text-white font-bold shadow-sm'
-                  : 'bg-slate-200 text-slate-600 font-semibold'
-              ">
+              :class="[
+                isStepDisabled(step.number)
+                  ? 'bg-slate-100 text-slate-400'
+                  : currentStep === step.number
+                    ? 'bg-teal-600 text-white font-bold shadow-sm'
+                    : 'bg-slate-200 text-slate-600 font-semibold',
+              ]">
               {{ step.number }}
             </span>
             <span class="hidden lg:inline">{{ step.title }}</span>
@@ -123,12 +128,15 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from "vue";
+  import { ref, computed, watch } from "vue";
   import FormFields from "@/views/FormSettingComponents/FormFields.vue";
   import FormStyle from "@/views/FormSettingComponents/FormStyle.vue";
   import DisplayRules from "@/views/FormSettingComponents/DisplayRules.vue";
   import MessageAndNotification from "@/views/FormSettingComponents/MessageAndNotification.vue";
   import TriggerAndTargeting from "@/views/FormSettingComponents/TriggerAndTargeting.vue";
+  import { formSetting } from "@/composable/useFormSettings";
+
+  const { formFieldSetting } = formSetting();
 
   defineProps<{
     isCollapsible: boolean;
@@ -150,6 +158,21 @@
     { number: 4, title: "Message & Notifications" },
     { number: 5, title: "Trigger Settings" },
   ];
+
+  const hasVisibleFields = computed(() => {
+    const fields = formFieldSetting.value?.fields || [];
+    return fields.some((field: any) => field.type !== "hidden");
+  });
+
+  const isStepDisabled = (stepNumber: number) => {
+    return stepNumber > 1 && !hasVisibleFields.value;
+  };
+  // Auto return to Step 1 if all fields are removed
+  watch(hasVisibleFields, (hasFields) => {
+    if (!hasFields && currentStep.value > 1) {
+      currentStep.value = 1;
+    }
+  });
 
   // Navigation Steps
   const prevStep = () => {

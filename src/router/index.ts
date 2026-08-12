@@ -48,6 +48,12 @@ const routes = [
         // meta: { requireAuth: true},
       },
       {
+        path: "/plan",
+        name: "PlanPage",
+        component: () => import("@/views/sidebarSettingpages/PlanPage.vue"),
+        // meta: { requireAuth: true},
+      },
+      {
         path: "/form-settings/:uniqueId?",
         name: "FormSettingsPage",
         component: () => import("@/views/sidebarSettingpages/FormSettingsPage.vue"),

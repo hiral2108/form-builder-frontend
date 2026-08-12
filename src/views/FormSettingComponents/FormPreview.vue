@@ -2,7 +2,7 @@
   <div
     :style="cssVars"
     class="gform-wrapper w-full h-full overflow-auto border border-slate-200 rounded-xl p-5 transition-colors duration-150">
-    <div v-if="hasContent" class="space-y-4">
+    <div v-if="hasContent" class="space-y-4 w-fit min-w-full">
       <h2
         v-if="formStyleSetting.formInfo.formTitle"
         :style="formTitleStyle"
@@ -55,7 +55,7 @@
 
           <div v-else-if="field.type === 'name'">
             <template v-if="field.nameFormat === 'split'">
-              <div class="grid grid-cols-2 gap-4 w-full">
+              <div class="grid grid-cols-2 gap-4 w-full" style="width: var(--input-width)">
                 <InputField
                   :disable="!interactive"
                   :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"

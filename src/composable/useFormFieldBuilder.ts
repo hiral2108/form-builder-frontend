@@ -420,7 +420,7 @@ export function useFormFieldsBuilder() {
     const isSelected = formFieldSetting.value.selectedFieldId === "submit-button";
     const placement = formFieldSetting.value.submitButtonPlacement || "center";
 
-    const baseClasses = "p-1.5 rounded-2xl border border-dashed transition-all duration-200 cursor-pointer flex";
+    const baseClasses = "w-full p-1.5 rounded-2xl border border-dashed transition-all duration-200 cursor-pointer flex";
 
     const selectionClass = isSelected
       ? "border-teal-600 bg-slate-50 shadow-sm"

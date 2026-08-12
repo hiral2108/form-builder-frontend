@@ -401,12 +401,16 @@
                       </button>
                     </div>
                   </div> -->
-                <div class="grid grid-cols-1 min-[750px]:max-[1024px]:grid-cols-2 min-[1325px]:grid-cols-2 gap-3 w-full min-w-0">
-
+                  <div
+                    class="grid grid-cols-1 min-[750px]:max-[1024px]:grid-cols-2 min-[1325px]:grid-cols-2 gap-3 w-full min-w-0">
                     <!-- 1. Dates Group (Start & End Date in one div) -->
                     <div class="grid grid-cols-1 min-[500px]:grid-cols-2 gap-3">
                       <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_start_date_${key}`">Start Date</label>
+                        <label
+                          class="block text-sm font-medium text-slate-700 mb-2"
+                          :for="`date_rule_start_date_${key}`"
+                          >Start Date</label
+                        >
                         <div class="calender-input relative">
                           <el-date-picker
                             v-model="dateRule.start_date"
@@ -416,15 +420,18 @@
                             :disabled-date="disabledStartDateFactory(key)"
                             @change="onStartDateChange(key, $event)"
                             class="w-full"
-                            clearable
-                          />
-                          <p v-if="validationErrors[`date_rule_start_date_${dateRule.id}`]" class="text-xs text-red-500 mt-1">
+                            clearable />
+                          <p
+                            v-if="validationErrors[`date_rule_start_date_${dateRule.id}`]"
+                            class="text-xs text-red-500 mt-1">
                             {{ validationErrors[`date_rule_start_date_${dateRule.id}`] }}
                           </p>
                         </div>
                       </div>
                       <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_end_date_${key}`">End Date</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_end_date_${key}`"
+                          >End Date</label
+                        >
                         <div class="calender-input relative">
                           <el-date-picker
                             v-model="dateRule.end_date"
@@ -434,9 +441,10 @@
                             :disabled-date="disabledEndDateFactory(key)"
                             @change="onEndDateChange(key, $event)"
                             class="w-full"
-                            clearable
-                          />
-                          <p v-if="validationErrors[`date_rule_end_date_${dateRule.id}`]" class="text-xs text-red-500 mt-1">
+                            clearable />
+                          <p
+                            v-if="validationErrors[`date_rule_end_date_${dateRule.id}`]"
+                            class="text-xs text-red-500 mt-1">
                             {{ validationErrors[`date_rule_end_date_${dateRule.id}`] }}
                           </p>
                         </div>
@@ -447,7 +455,11 @@
                     <div class="flex flex-col min-[500px]:flex-row items-end gap-3 w-full">
                       <!-- Start Time -->
                       <div class="w-full min-[500px]:flex-1">
-                        <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_start_time_${key}`">Start Time</label>
+                        <label
+                          class="block text-sm font-medium text-slate-700 mb-2"
+                          :for="`date_rule_start_time_${key}`"
+                          >Start Time</label
+                        >
                         <div class="relative">
                           <el-time-select
                             v-model="dateRule.start_time"
@@ -459,17 +471,19 @@
                             @change="onDateStartChange(key, $event)"
                             :clearable="false"
                             :editable="false"
-                            class="w-full"
-                          />
-                          <span class="w-[18px] h-[18px] absolute top-1/2 transform -translate-y-1/2 right-1.5 pointer-events-none">
-                            <img v-svg-inline src="@/assets/icons/trigger-targeting/clock.svg" alt="Clock">
+                            class="w-full" />
+                          <span
+                            class="w-[18px] h-[18px] absolute top-1/2 transform -translate-y-1/2 right-1.5 pointer-events-none">
+                            <img v-svg-inline src="@/assets/icons/trigger-targeting/clock.svg" alt="Clock" />
                           </span>
                         </div>
                       </div>
 
                       <!-- End Time -->
                       <div class="w-full min-[500px]:flex-1">
-                        <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_end_time_${key}`">End Time</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_end_time_${key}`"
+                          >End Time</label
+                        >
                         <div class="relative">
                           <el-time-select
                             v-model="dateRule.end_time"
@@ -480,18 +494,21 @@
                             @change="onDateEndChange(key, $event)"
                             :clearable="false"
                             :editable="false"
-                            class="w-full"
-                          />
-                          <span class="w-[18px] h-[18px] absolute top-1/2 transform -translate-y-1/2 right-1.5 pointer-events-none">
-                            <img v-svg-inline src="@/assets/icons/trigger-targeting/clock.svg" alt="Clock">
+                            class="w-full" />
+                          <span
+                            class="w-[18px] h-[18px] absolute top-1/2 transform -translate-y-1/2 right-1.5 pointer-events-none">
+                            <img v-svg-inline src="@/assets/icons/trigger-targeting/clock.svg" alt="Clock" />
                           </span>
                         </div>
                       </div>
 
                       <!-- Delete Button -->
                       <div class="w-full min-[500px]:w-auto flex-shrink-0 flex justify-start">
-                        <button type="button" @click="removeDateRule(dateRule.id)" class="w-[42px] h-[40px] bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors flex items-center justify-center cursor-pointer">
-                          <img v-svg-inline src="@/assets/icons/form-list/delete.svg" alt="" class="text-lg">
+                        <button
+                          type="button"
+                          @click="removeDateRule(dateRule.id)"
+                          class="w-[42px] h-[40px] bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors flex items-center justify-center cursor-pointer">
+                          <img v-svg-inline src="@/assets/icons/form-list/delete.svg" alt="" class="text-lg" />
                         </button>
                       </div>
                     </div>
@@ -568,7 +585,7 @@
                     :trueValue="1"
                     :falseValue="0"
                     :id="`day_time_status_${dayKey}`" />
-                  <div class="w-20 text-sm font-medium text-slate-700">{{ getDayName(dayKey) }}</div>
+                  <div class="w-23 text-sm font-medium text-slate-700">{{ getDayName(dayKey) }}</div>
                 </div>
                 <div
                   v-show="dayRule.status === 1"
@@ -854,6 +871,8 @@
     onDayEndChange,
     isOpen,
     search,
+    dropdownRef,
+    searchInputRef,
     CountryList,
     selectedCountry,
     toggleCountry,
@@ -951,7 +970,7 @@
     -webkit-appearance: none;
     width: 100%;
     height: 6px;
-    background: #ccfbf1; 
+    background: #ccfbf1;
     border-radius: 9999px;
     outline: none;
     cursor: pointer;
@@ -961,7 +980,7 @@
     -webkit-appearance: none;
     width: 14px;
     height: 14px;
-    border: 1px solid #0d9488; 
+    border: 1px solid #0d9488;
     border-radius: 50%;
     cursor: pointer;
     background: radial-gradient(circle, #0d9488 4px, #ffffff 4px);
@@ -994,13 +1013,13 @@
   }
 
   .day-schedule-rules :deep(.el-input__wrapper) {
-    border-radius: 12px !important; 
+    border-radius: 12px !important;
     height: 42px !important;
     box-shadow: 0 0 0 1px #d1d5db inset !important;
     background-color: #ffffff !important;
   }
 
   .day-schedule-rules :deep(.el-input__wrapper:focus-within) {
-    box-shadow: 0 0 0 2px #0d9488 inset !important; 
+    box-shadow: 0 0 0 2px #0d9488 inset !important;
   }
 </style>

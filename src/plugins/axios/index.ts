@@ -13,8 +13,7 @@ export const $axios = axios.create({
 $axios.interceptors.request.use(
   function (config) {
     // Access token
-    const auth = sessionStorage.getItem("authToken");
-
+    const auth = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
     if (auth) {
       config.headers.Authorization = "Bearer " + auth;
     }

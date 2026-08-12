@@ -37,9 +37,22 @@
 
       <div class="p-5 overflow-y-auto flex-1 scrollbar-thin">
         <form @submit.prevent :style="cssVars" class="space-y-5 gform-wrapper w-fit min-w-full">
-          <div
-            v-if="formFieldSetting.fields.length === 0"
-            class="text-center py-16 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50 text-slate-400 flex flex-col items-center">
+          <!-- Loading Form Preview Skeleton -->
+          <template v-if="isLoading">
+            <div v-for="i in 3" :key="i" class="p-4 border border-slate-100 rounded-xl bg-white animate-pulse space-y-2.5">
+              <div class="h-4 w-24 bg-slate-200 rounded"></div>
+              <div class="h-10 w-full bg-slate-100 rounded border border-slate-200/50"></div>
+            </div>
+            <div class="flex justify-end pt-2">
+              <div class="h-10 w-24 bg-slate-200 rounded-lg animate-pulse"></div>
+            </div>
+          </template>
+
+          <!-- Real Loaded Fields State -->
+          <template v-else>
+            <div
+              v-if="formFieldSetting.fields.length === 0"
+              class="text-center py-16 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50 text-slate-400 flex flex-col items-center">
             <img v-svg-inline src="@/assets/icons/dashboardpage/add-circle-line.svg" class="w-10 h-10 text-teal-600" />
             <h4 class="font-semibold text-sm text-slate-700 mb-1">Your Form is Empty</h4>
             <p class="text-xs max-w-[240px]">
@@ -324,11 +337,12 @@
             @click.stop="selectField('submit-button')"
             :class="submitButtonContainerClass"
             title="Click to edit button settings">
-            <button disabled type="button" :class="[submitButtonClass, 'gform-submit-btn']">
-              {{ formFieldSetting.submitButtonText || "Submit" }}
-            </button>
-          </div>
-        </form>
+          <button disabled type="button" :class="[submitButtonClass, 'gform-submit-btn']">
+            {{ formFieldSetting.submitButtonText || "Submit" }}
+          </button>
+        </div>
+        </template>
+      </form>
       </div>
     </section>
 
@@ -338,8 +352,26 @@
         <h3 class="font-semibold text-slate-800 text-md">Field Settings</h3>
       </div>
 
-      <div class="px-5 overflow-y-auto flex-1 scrollbar-thin">
-        <div v-if="formFieldSetting.selectedFieldId === 'submit-button'" class="space-y-4 my-5">
+            <div class="px-5 overflow-y-auto flex-1 scrollbar-thin">
+        <!-- Loading Settings Panel Skeleton -->
+        <div v-if="isLoading" class="space-y-5 my-5 animate-pulse">
+          <div class="space-y-2">
+            <div class="h-4 w-20 bg-slate-200 rounded"></div>
+            <div class="h-10 w-full bg-slate-100 rounded border border-slate-200/50"></div>
+          </div>
+          <div class="space-y-2">
+            <div class="h-4 w-24 bg-slate-200 rounded"></div>
+            <div class="h-10 w-full bg-slate-100 rounded border border-slate-200/50"></div>
+          </div>
+          <div class="space-y-2">
+            <div class="h-4 w-16 bg-slate-200 rounded"></div>
+            <div class="h-10 w-full bg-slate-100 rounded border border-slate-200/50"></div>
+          </div>
+        </div>
+
+        <!-- Real Loaded Field Settings Panel -->
+        <template v-else>
+          <div v-if="formFieldSetting.selectedFieldId === 'submit-button'" class="space-y-4 my-5">
           <div>
             <InputField
               type="text"
@@ -718,12 +750,13 @@
               <circle cx="12" cy="12" r="2.8" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </div>
-          <p class="text-sm text-slate-500 font-medium max-w-[240px] leading-relaxed">
-            Select a field to configure its settings
-          </p>
-        </div>
+        <p class="text-sm text-slate-500 font-medium max-w-[240px] leading-relaxed">
+          Select a field to configure its settings
+        </p>
       </div>
-    </section>
+      </template>
+    </div>
+  </section>
   </div>
   <DeleteFieldConfirmModal
     :isDeleteModalOpen="isDeleteModalOpen"
@@ -735,6 +768,11 @@
 <script setup lang="ts">
   import DeleteFieldConfirmModal from "@/components/modals/DeleteFieldConfirmModal.vue";
   import { useFormFieldsBuilder } from "@/composable/useFormFieldBuilder";
+
+  defineProps<{
+    isLoading?: boolean;
+  }>();
+  
   const {
     fieldLibrary,
     formFieldSetting,

@@ -97,7 +97,16 @@
         <div>
           <InputField type="text" v-model="displayRuleSetting.button_text" label="Button Text" focusColor="teal" />
         </div>
-        <template v-if="displayRuleSetting.form_type === 'tooltip'">
+                <template v-if="displayRuleSetting.form_type === 'tooltip'">
+          <!-- Hidden native file input element -->
+          <input
+            ref="customFileInputRef"
+            type="file"
+            class="sr-only"
+            accept="image/jpg,image/png,image/jpeg,image/webp,image/gif"
+            @change="onCustomIconChange"
+          />
+
           <div>
             <RadioGrid
               v-model="displayRuleSetting.cta_icon"
@@ -106,7 +115,38 @@
               :columns="8"
               renderMode="icon"
               keyField="key"
-              variant="icon" />
+              variant="icon">
+              <template #tile="{ option }">
+                <!-- Custom File Upload Tile -->
+                <div
+                  v-if="option.key === 'upload'"
+                  class="w-full h-full flex items-center justify-center"
+                  @click.stop="openCustomIconPicker"
+                >
+                  <!-- Render uploaded icon centered with padding/border around it -->
+                  <img
+                    v-if="customIconUrl"
+                    :src="customIconUrl"
+                    class="w-full h-8 object-cover rounded"
+                  />
+
+                  <!-- Render default upload icon -->
+                  <span v-else v-html="option.icon" class="flex items-center justify-center"></span>
+
+                  <!-- Remove uploaded custom file (positioned on the outer edge) -->
+                  <span
+                    v-if="customIconUrl"
+                    class="absolute -top-2 -right-2 w-5 h-5 bg-white text-red-600 text-xs p-2.5 rounded-full flex items-center justify-center cursor-pointer shadow-lg"
+                    @click.stop="removeCustomIcon"
+                  >
+                    ✕
+                  </span>
+                </div>
+
+                <!-- Standard default icons -->
+                <span v-else v-html="option.icon"></span>
+              </template>
+            </RadioGrid>
           </div>
           <div>
             <RadioGrid
@@ -149,15 +189,14 @@
 </template>
 
 <script setup lang="ts">
-  import { watch } from "vue";
+  import { ref, watch } from "vue";
+  import { useToast } from "vue-toastification";
   import PreviewTemplate from "@/views/FormSettingComponents/PreviewTemplate.vue";
   import DisplayRulePreview from "@/views/FormSettingComponents/DisplayRulePreview.vue";
 
   import { formSetting } from "@/composable/useFormSettings";
   import { useDisplayRuleSettingStore } from "@/stores/DisplayRuleStore";
-
-  const DisplayRuleSettingStore = useDisplayRuleSettingStore();
-  const { displayRuleSetting } = formSetting();
+  import FormSettingService from "@/services/api/form-setting-services";
 
   import {
     stickyPositionOptions,
@@ -168,6 +207,96 @@
     ctaButtonPositionOption,
     attentionEffect,
   } from "@/data/DisplayRuleOptions";
+
+  const DisplayRuleSettingStore = useDisplayRuleSettingStore();
+  const { displayRuleSetting } = formSetting();
+  const toast = useToast();
+
+  // Custom Icon Upload States
+  const customIconFile = ref<File | null>(null);
+  const customIconUrl = ref<string | null>(null);
+  const customFileInputRef = ref<HTMLInputElement | null>(null);
+
+  const openCustomIconPicker = () => {
+    customFileInputRef.value?.click();
+  };
+
+  // Client-side validations for image files
+  const onCustomIconChange = (event: any) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const allowedExtensions = ["image/jpeg", "image/png", "image/gif", "image/jpg", "image/webp"];
+    const maxSize = 1 * 1024 * 1024; // 1MB
+
+    if (!allowedExtensions.includes(file.type)) {
+      toast.error("Only JPG, JPEG, PNG, WEBP, and GIF files are allowed.");
+      event.target.value = ""; 
+      return;
+    }
+
+    if (file.size > maxSize) {
+      toast.error("File size should not exceed 1MB.");
+      event.target.value = "";
+      return;
+    }
+
+    customIconFile.value = file;
+    customIconUrl.value = URL.createObjectURL(file);
+    
+    // Update local store path configuration temporarily
+    displayRuleSetting.value.custom_cta_file = customIconUrl.value;
+    displayRuleSetting.value.custom_cta_url = customIconUrl.value;
+    
+    uploadImage();
+    
+    event.target.value = "";
+    
+    // Select the custom upload icon in grid
+    displayRuleSetting.value.cta_icon = 'upload';
+  };
+
+  // Upload selected image file to backend
+  const uploadImage = async () => {
+    if (!customIconFile.value) return;
+
+    const formData = new FormData();
+    formData.append("image", customIconFile.value);
+
+    try {
+      const response = await new FormSettingService().uploadImage(formData);
+      if (response.status === 1) {
+        displayRuleSetting.value.custom_cta_file = response.image;
+        displayRuleSetting.value.custom_cta_url = response.fullPath;
+      }
+    } catch (error) {
+      console.error("Failed to upload custom icon:", error);
+      toast.error("Image upload failed");
+    }
+  };
+
+  // Remove icon handler
+  const removeCustomIcon = () => {
+    removeImage();
+    customIconFile.value = null;
+    customIconUrl.value = null;
+    displayRuleSetting.value.custom_cta_file = "";
+    displayRuleSetting.value.custom_cta_url = "";
+  };
+
+  // Call server API to delete the image from server
+  const removeImage = async () => {
+    const imgName = displayRuleSetting.value.custom_cta_file;
+    if (!imgName) return;
+    try {
+      const response = await new FormSettingService().removeUploadedImage({ image_name: imgName });
+      if (response.status === 1) {
+        console.log("Image removed successfully from server");
+      }
+    } catch (error) {
+      console.error("Failed to remove image on server:", error);
+    }
+  };
 
   const formatOptions = (options: Record<string, string>) =>
     Object.entries(options).map(([value, label]) => ({ label, value }));
@@ -187,6 +316,9 @@
     displayRuleSetting,
     (newVal) => {
       Object.assign(DisplayRuleSettingStore.displayRuleSetting, newVal);
+      if (displayRuleSetting.value.custom_cta_url !== "") {
+        customIconUrl.value = displayRuleSetting.value.custom_cta_url;
+      }
     },
     { deep: true, immediate: true }
   );

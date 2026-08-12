@@ -56,6 +56,13 @@
                 d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z" />
             </svg>
 
+            <!-- Render custom image if uploaded and selected (fills the full button circle) -->
+            <img
+              v-if="displayRuleSetting.cta_icon === 'upload' && displayRuleSetting.custom_cta_url"
+              :src="displayRuleSetting.custom_cta_url"
+              class="absolute inset-0 w-full h-full object-cover rounded-full"
+            />
+            <!-- Render default SVG choice -->
             <div
               v-else
               v-html="selectedIconSvg"
@@ -95,6 +102,14 @@
 
   // Compute CTA icon SVG
   const selectedIconSvg = computed(() => {
+    // Fallback to the first icon (chat-lines) if upload is selected but no image is uploaded
+    if (
+      displayRuleSetting.value.cta_icon === "upload" &&
+      !displayRuleSetting.value.custom_cta_url
+    ) {
+      return ctaIcons[0].icon;
+    }
+    
     const iconObj = ctaIcons.find((item) => item.key === displayRuleSetting.value.cta_icon);
     return iconObj ? iconObj.icon : ctaIcons[0].icon;
   });

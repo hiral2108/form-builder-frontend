@@ -14,6 +14,8 @@ export type DisplayRuleSettingType = {
   attention_effect: string;
   tooltip_bg_color: string;
   tooltip_text_color: string;
+  custom_cta_file: string;
+  custom_cta_url: string;
 };
 
 export const useDisplayRuleSettingStore = defineStore("displayRuleSetting", {
@@ -32,6 +34,8 @@ export const useDisplayRuleSettingStore = defineStore("displayRuleSetting", {
       attention_effect: "attention-none",
       tooltip_bg_color: "#14b8a6",
       tooltip_text_color: "#ffffff",
+      custom_cta_file: "",
+      custom_cta_url: "",
     } as DisplayRuleSettingType,
   }),
 });

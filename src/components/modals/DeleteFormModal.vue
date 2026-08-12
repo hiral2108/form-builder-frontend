@@ -27,10 +27,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useToast } from 'vue-toastification'
+import FormService from '@/services/api/form-services'
 
 const props = defineProps({
   isShowModal: Boolean,
-  formId: Number
+  formId: [Number, String]
 });
 
 const emit = defineEmits(['closeModal', 'confirmDelete']);
@@ -40,10 +41,18 @@ const toast = useToast()
 const deleteForm = async () => {
   isLoading.value = true
   try {
-    await new Promise((resolve) => setTimeout(resolve, 800)); // Simulated delay
-    toast.success("Form deleted successfully!");
-    emit('confirmDelete', props.formId);
-    closeModalWidget();
+    // Call backend API to delete widget
+    const response = await new FormService().removeForm({
+      widget_id: String(props.formId)
+    });
+    
+    if (response.status === 1) {
+      toast.success(response.message || "Form deleted successfully!");
+      emit('confirmDelete', props.formId);
+      closeModalWidget();
+    } else {
+      toast.error(response.message || "Failed to delete form");
+    }
   } catch (error) {
     toast.error("Failed to delete form");
   } finally {

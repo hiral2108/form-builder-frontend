@@ -175,18 +175,18 @@
             <img v-svg-inline src="@/assets/icons/dashboardpage/survey-line.svg" class="w-6 h-6"/>
           </div>
           <div>
-            <p class="text-2xl font-bold text-slate-800 tracking-tight">8</p>
+            <p class="text-2xl font-bold text-slate-800 tracking-tight">{{ totalForms }}</p>
             <p class="text-sm font-semibold text-slate-500 tracking-wider">Total Forms</p>
           </div>
         </div>
 
         <div class="bg-white rounded-xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 flex items-center gap-4 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-amber-50 text-amber-600 flex-shrink-0 text-xl">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-rose-50 text-rose-600 flex-shrink-0 text-xl">
             <img v-svg-inline src="@/assets/icons/dashboardpage/checkbox-circle-line.svg" class="w-6 h-6"/>
           </div>
           <div>
-            <p class="text-2xl font-bold text-slate-800 tracking-tight">7,425</p>
-            <p class="text-sm font-semibold text-slate-500 tracking-wider">Total Submissions</p>
+            <p class="text-2xl font-bold text-slate-800 tracking-tight">{{ inactiveForms }}</p>
+            <p class="text-sm font-semibold text-slate-500 tracking-wider">Inactive Forms</p>
           </div>
         </div>
 
@@ -195,7 +195,7 @@
             <img v-svg-inline src="@/assets/icons/settingpage/inbox-archive-line.svg" class="w-6 h-6"/>
           </div>
           <div>
-            <p class="text-2xl font-bold text-slate-800 tracking-tight">6</p>
+            <p class="text-2xl font-bold text-slate-800 tracking-tight">{{ activeForms }}</p>
             <p class="text-sm font-semibold text-slate-500 tracking-wider">Active Forms</p>
           </div>
         </div>
@@ -225,7 +225,7 @@
                       :modelValue="form.status"
                       trueValue="active"
                       falseValue="draft"
-                      @update:modelValue="form.status = String($event)"
+                      @update:modelValue="handleStatusChange(form, String($event))"
                     />
                   </div>
                 </td>
@@ -348,8 +348,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import RenameFormModal from '@/components/modals/RenameFormModal.vue';
+import FormService from '@/services/api/form-services';
 import CloneFormModal from '@/components/modals/CloneFormModal.vue';
 import DeleteFormModal from '@/components/modals/DeleteFormModal.vue';
 import SelectField from "@/components/global/fields/SelectField.vue";
@@ -357,7 +358,6 @@ import CreateFormModal from '@/components/modals/CreateFormModal.vue';
 import CheckboxToggle from '@/components/global/fields/CheckboxToggle.vue';
 import { ElDatePicker } from "element-plus";
 import "element-plus/dist/index.css";
-
 
 // Modal triggers and tracking state
 const showRenameModal = ref(false);
@@ -367,6 +367,11 @@ const selectedForm = ref<any>(null);
 // Filter States
 const selectedFilter = ref("last_7_days");
 const dateRange = ref<[string, string] | null>(null);
+const startDate = ref<string>("");
+const endDate = ref<string>("");
+const currentPage = ref(1);
+const totalPage = ref(1);
+
 const filteredMenu = {
   today: "Today",
   yesterday: "Yesterday",
@@ -376,32 +381,119 @@ const filteredMenu = {
   last_month: "Last month",
   custom: "Custom",
 };
-const applyCustomFilter = () => {
-  if (!dateRange.value) return;
-  
+
+const formsList = ref<any[]>([]);
+const isLoading = ref(true);
+const totalForms = ref(0);
+const activeForms = ref(0);
+const inactiveForms = ref(0);
+
+// Fetch filtered list of forms from the API and map to frontend keys
+const fetchFilteredForms = async (page: number = 1) => {
+  isLoading.value = true;
+  try {
+    const payload = {
+      time: selectedFilter.value,
+      start_date: selectedFilter.value === "custom" ? startDate.value : "",
+      end_date: selectedFilter.value === "custom" ? endDate.value : "",
+    };
+
+    // Ensure dates exist for custom date ranges
+    if (selectedFilter.value === "custom") {
+      if (!startDate.value || !endDate.value) return;
+      payload.start_date = startDate.value;
+      payload.end_date = endDate.value;
+    }
+
+    const response = await new FormService().getFormsFilter(payload, page);
+    
+    let rawList: any[] = [];
+    if (Array.isArray(response.widgetList)) {
+      rawList = response.widgetList;
+      totalPage.value = 1;
+      currentPage.value = 1;
+    } else if (response.widgetList) {
+      rawList = (response.widgetList as any).data || [];
+      totalPage.value = (response.widgetList as any).last_page || 1;
+      currentPage.value = (response.widgetList as any).current_page || 1;
+    }
+
+        // Map backend model properties to the property names expected by the template
+    formsList.value = rawList.map((item: any) => {
+      const views = Number(item.mobile_view || 0) + Number(item.desktop_view || 0);
+      const clicks = Number(item.mobile_click || 0) + Number(item.desktop_click || 0);
+      const clickRate = views > 0 ? ((clicks / views) * 100).toFixed(1) + '%' : '0.0%';
+      const createdDate = item.created_at
+        ? new Date(item.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+        : '';
+
+      return {
+        id: item.unique_id || item.id, // Maps to form.id used in the editor link
+        title: item.title,
+        status: item.widget_status === 1 ? 'active' : 'draft', // Maps to CheckboxToggle values
+        submissions: Number(item.total_submissions || 0),
+        views: views,
+        clicks: clicks,
+        clickRate: clickRate,
+        created: createdDate
+      };
+    });
+
+    // Update counters directly from backend API response keys
+    totalForms.value = response.totalWidget || 0;
+    activeForms.value = response.activeWidget || 0;
+    inactiveForms.value = response.inActiveWidget || 0;
+
+  } catch (error) {
+    console.error("Failed to fetch filtered forms list:", error);
+  } finally {
+    isLoading.value = false;
+  }
 };
+
+// Click handler for Custom date range apply button
+const applyCustomFilter = async () => {
+  if (!dateRange.value) return;
+  startDate.value = dateRange.value[0];
+  endDate.value = dateRange.value[1];
+  await fetchFilteredForms(1);
+};
+
+// Watch for dropdown selection change to load data immediately (except for custom ranges)
+watch(selectedFilter, async (newVal: string) => {
+  if (newVal !== "custom") {
+    await fetchFilteredForms(1);
+  }
+});
+
+onMounted(() => {
+  fetchFilteredForms(1);
+});
 
 const showCreateFormModal = ref(false);
 
-// Appends a new form to the local list dynamically when created
-const handleCreateForm = (newFormTitle: string) => {
-  formsList.value.push({
-    id: Math.max(...formsList.value.map(f => f.id), 0) + 1,
-    title: newFormTitle,
-    status: 'active',
-    submissions: 0,
-    views: 0,
-    clicks: 0,
-    clickRate: '0.0%',
-    created: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-  });
+// Appends a new form dynamically after creating it via API
+const handleCreateForm = async (newFormTitle: string) => {
+  try {
+    const response = await new FormService().createForm({ title: newFormTitle });
+    formsList.value.push({
+      id: Number(response.form_id),
+      title: newFormTitle,
+      status: 'active',
+      submissions: 0,
+      views: 0,
+      clicks: 0,
+      clickRate: '0.0%',
+      created: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+    });
+    // Recalculate stats counters
+    totalForms.value = formsList.value.length;
+    activeForms.value = formsList.value.filter(f => f.status === 'active').length;
+    inactiveForms.value = formsList.value.filter(f => f.status === 'draft').length;
+  } catch (error) {
+    console.error("Failed to create form:", error);
+  }
 };
-
-const formsList = ref([
-  { id: 1, title: 'Contact Us Form', status: 'active', submissions: 847, views: 2500, clicks: 920, clickRate: '36.8%', created: '15 Jan, 2026' },
-  { id: 2, title: 'Newsletter Signup', status: 'active', submissions: 3201, views: 12000, clicks: 3450, clickRate: '28.8%', created: '02 Nov, 2025' },
-  { id: 3, title: 'Job Application', status: 'active', submissions: 156, views: 850, clicks: 180, clickRate: '21.2%', created: '20 Mar, 2026' },
-]);
 
 // Open Modals
 const openRenameModal = (form: any) => {
@@ -443,8 +535,38 @@ const handleClone = (id: number, cloneTitle: string) => {
   }
 };
 
-const handleDelete = (id: number) => {
+// Updates local array and stats count after successful deletion in modal
+const handleDelete = (id: any) => {
   formsList.value = formsList.value.filter(f => f.id !== id);
+  
+  // Update local stats counters
+  totalForms.value = formsList.value.length;
+  activeForms.value = formsList.value.filter(f => f.status === 'active').length;
+  inactiveForms.value = formsList.value.filter(f => f.status === 'draft').length;
+};
+
+// Call the status change API and update metric cards upon success
+const handleStatusChange = async (form: any, newStatus: string) => {
+  const payload = {
+    widget_id: form.id, // item.unique_id was mapped to form.id
+    widget_status: newStatus === 'active' ? 1 : 0
+  };
+  
+  try {
+    const response = await new FormService().changeFormStatus(payload);
+    
+    // Update form status locally and refresh counter stats on success
+    if (response.status === 1) {
+      form.status = newStatus;
+
+      // Dynamically assign metrics from the API response
+      totalForms.value = response.totalWidget ?? response.totalWidget ?? totalForms.value;
+      activeForms.value = response.activeWidget ?? response.activeWidget ?? activeForms.value;
+      inactiveForms.value = response.inActiveWidget ?? response.inActiveWidget ?? inactiveForms.value;
+    }
+  } catch (error) {
+    console.error("Failed to update status on server:", error);
+  }
 };
 </script>
 

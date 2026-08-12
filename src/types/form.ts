@@ -62,8 +62,41 @@ export interface SaveWidgetSettingPayload {
   time_delay_setting: TimeDelaySettingStoreType;
   scroll_based_setting: ScrollBasedSettingStoreType;
   page_rule_setting: PageRuleSettings;
-  date_and_time_setting: DateRuleSettings;
-  day_and_hour_setting: DayHourRuleSettings;
+  date_time_setting: DateRuleSettings;
+  day_hour_setting: DayHourRuleSettings;
   country_rule_setting: CountryRuleSetting;
   widget_id: string;
+}
+
+export interface WidgetDataResponse {
+  data: {
+    form_field_setting: FormFieldSettingType;
+    form_style_setting: FormStyleSettingType;
+    display_rule_setting: DisplayRuleSettingType;
+    submission_setting: SubmissionSettingType;
+    time_delay_setting: TimeDelaySettingStoreType;
+    scroll_based_setting: ScrollBasedSettingStoreType;
+    page_rule_setting: PageRuleSettings;
+    date_time_setting: DateRuleSettings;
+    day_hour_setting: DayHourRuleSettings;
+    country_rule_setting: CountryRuleSetting;
+    widget_id?: string;
+  }
+}
+
+export interface UploadImageResponse {
+  status: number;
+  image: string;
+  fullPath: string;
+  message?: string;
+}
+
+export interface RemoveImageResponse {
+  status: number;
+  message?: string;
+}
+
+export interface CloneWidgetResponse {
+  status: number;
+  message: string;
 }

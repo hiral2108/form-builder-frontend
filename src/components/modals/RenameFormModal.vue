@@ -40,10 +40,11 @@ import { computed, ref, watch } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { helpers, minLength, required } from '@vuelidate/validators'
 import { useToast } from 'vue-toastification'
+import FormService from '@/services/api/form-services'
 
 const props = defineProps({
   isShowModal: Boolean,
-  formId: Number,
+  formId: [Number, String],
   formTitle: String
 });
 
@@ -90,10 +91,19 @@ const renameForm = async () => {
   }
   isLoading.value = true;
   try {
-    await new Promise((resolve) => setTimeout(resolve, 800)); // Simulated delay
-    toast.success("Form renamed successfully!");
-    emit('confirmRename', props.formId, renameFormTitle.value);
-    closeModalWidget();
+    // Call rename API on backend
+    const response = await new FormService().renameFormTitle({
+      title: renameFormTitle.value,
+      widget_id: String(props.formId)
+    });
+    
+    if (response.status === 1) {
+      toast.success(response.message || "Form renamed successfully!");
+      emit('confirmRename', props.formId, renameFormTitle.value);
+      closeModalWidget();
+    } else {
+      toast.error(response.message || "Failed to rename form");
+    }
   } catch (error) {
     toast.error("Failed to rename form");
   } finally {

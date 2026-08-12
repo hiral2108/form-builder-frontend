@@ -42,6 +42,7 @@ import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 import useVuelidate from '@vuelidate/core'
 import { helpers, required, minLength } from '@vuelidate/validators'
+import FormService from '@/services/api/form-services'
 
 const props = defineProps({
   isShowModal: Boolean
@@ -101,17 +102,15 @@ const createWidget = async () => {
 const submitWidget = async () => {
   isLoading.value = true;
   try {
-    // Simulate UI API load delay for 800ms
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    // Call the API service to create a new form in the database
+    const response = await new FormService().createForm({ title: formTitle.value });
     
-    // Generate static mock unique ID
-    const mockId = Math.random().toString(36).substring(2, 9);
-    
-    toast.success("Form created successfully!");
+    // Use the dynamic message returned from the backend API response
+    toast.success(response.message || "Form created successfully!");
     closeModalWidget();
     
-    // Redirect to form settings page
-    router.push(`/form-settings/${mockId}`);
+    // Redirect to the newly created form's settings page using form_id
+    router.push(`/form-settings/${response.form_id}`);
   } catch (error) {
     toast.error("Failed to create form.");
   } finally {

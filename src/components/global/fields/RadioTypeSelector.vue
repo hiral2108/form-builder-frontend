@@ -28,7 +28,7 @@
       </div>
     </Teleport>
 
-    <div class="bg-[#f0f0f1] rounded-md p-1 w-max">
+    <div class="bg-[#f0f0f1] rounded-md p-1" :class="width === 'full' ? 'w-full' : 'w-max'">
       <div class="grid gap-2" :style="{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }">
         <div v-for="option in options" :key="option.value" class="custom-radio-group">
           <input
@@ -116,6 +116,10 @@
       type: String,
       default: "",
     },
+    width: {
+  type: String,
+  default: "max", 
+},
   });
 
   const emit = defineEmits<{

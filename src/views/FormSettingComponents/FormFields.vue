@@ -36,7 +36,7 @@
       </div>
 
       <div class="p-5 overflow-y-auto flex-1 scrollbar-thin">
-        <form @submit.prevent :style="cssVars" class="space-y-5 gform-wrapper">
+        <form @submit.prevent :style="cssVars" class="space-y-5 gform-wrapper w-fit min-w-full">
           <div
             v-if="formFieldSetting.fields.length === 0"
             class="text-center py-16 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50 text-slate-400 flex flex-col items-center">
@@ -133,7 +133,7 @@
 
             <div class="space-y-1.5" v-else-if="field.type === 'name'">
               <template v-if="field.nameFormat === 'split'">
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-3 w-full" style="width: var(--input-width)">
                   <InputField
                     disable
                     :required="field.required"
@@ -355,6 +355,7 @@
               label="Button Size"
               name="submitButtonSize"
               :columns="3"
+               width="full"
               :options="[
                 { label: 'Small', value: 'sm' },
                 { label: 'Medium', value: 'md' },
@@ -368,6 +369,7 @@
               label="Button Alignment"
               name="submitButtonPlacement"
               :columns="3"
+               width="full"
               :options="[
                 { label: 'Left', value: 'left' },
                 { label: 'Center', value: 'center' },
@@ -417,6 +419,7 @@
               label="Name Format"
               helpMessage="Choose whether to collect the full name or separate First and Last Name."
               name="nameFormat"
+               width="full"
               :columns="2"
               :options="[
                 { label: 'Full Name', value: 'single' },
@@ -472,6 +475,7 @@
               v-model="selectedField.labelPlacement"
               label="Label Placement"
               name="labelPlacement"
+               width="full"
               :columns="3"
               :options="[
                 { label: 'Left', value: 'left' },
@@ -485,6 +489,7 @@
               v-model="selectedField.timeFormat"
               label="Time Format"
               name="timeFormat"
+               width="full"
               :columns="2"
               :options="[
                 { label: '12 Hour', value: '12h' },

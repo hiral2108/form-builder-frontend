@@ -101,7 +101,7 @@
       <!-- Main Panel area (No partition background) -->
       <main
         class="flex-1 flex flex-col relative h-screen transition-all duration-300 bg-white overflow-x-hidden"
-        :class="[isMobile ? 'pl-4' : isCollapsed ? 'pl-20' : 'pl-60']">
+        :class="[isMobile ? '' : isCollapsed ? 'pl-20' : 'pl-60']">
         <!-- Header -->
         <Header
           @toggle-mobile-sidebar="isMobileSidebarOpen = !isMobileSidebarOpen"
@@ -109,9 +109,9 @@
           :subtitle="pageSubtitle" />
 
         <!-- Curved Content Container -->
-        <div class="flex-1 pt-0 pr-4 pb-2 pl-0 bg-white relative overflow-y-auto">
+        <div class="flex-1 pt-0 pb-2 px-2 sm:px-4 lg:pl-0 bg-white relative overflow-y-auto">
           <div
-            class="w-full bg-slate-50 border border-slate-200/50 rounded-[20px] relative p-5 min-h-[calc(100vh-80px)]">
+            class="w-full bg-slate-50 border border-slate-200/50 rounded-[20px] relative p-3 lg:p-5 min-h-[calc(100vh-80px)]">
             <router-view v-slot="{ Component }">
               <component :is="Component" :is-collapsible="isCollapsed" />
             </router-view>
@@ -129,6 +129,7 @@
   import dashboardNav from "@/assets/icons/settingpage/dashboard-line.svg";
   import formNav from "@/assets/icons/settingpage/file-list-2-line.svg";
   import submissionNav from "@/assets/icons/settingpage/task-line.svg";
+  import PlanPageIcon from "@/assets/icons/trigger-targeting/crown.svg"
 
   const route = useRoute();
   const isCollapsed = ref(false);
@@ -174,11 +175,18 @@
       path: "/submissions",
       icon: submissionNav,
     },
+    {
+      label: "Change Your Plan",
+      routeName: "PlanPage",
+      path: "/plan",
+      icon: PlanPageIcon,
+    },
   ];
   const pageMeta: Record<string, { title: string; subtitle?: string }> = {
     DashboardPage: { title: "Dashboard", subtitle: "Build, manage, and track all your forms." },
     FormsPage: { title: "Forms", subtitle: "Manage your active and draft forms in one place." },
     SubmissionsPage: { title: "Submissions", subtitle: "Review and analyze form user responses." },
+    PlanPage: { title: "Plans & Pricing", subtitle: "Choose the perfect plan to scale your forms and boost conversions." },
   };
   const pageTitle = computed(() => pageMeta[route.name as string]?.title || "");
   const pageSubtitle = computed(() => pageMeta[route.name as string]?.subtitle || "");

@@ -9,7 +9,7 @@ export const useTimeDelaySettingStore = defineStore('timeDelaySetting', {
   state: () => ({
     timeDelaySetting: {
       is_time_delay: 0,
-      seconds: 5
+      seconds: 0,
     } as TimeDelaySettingStoreType
   })
 })

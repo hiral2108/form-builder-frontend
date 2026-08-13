@@ -25,7 +25,7 @@
         :data-tooltip-dir="displayRuleSetting.cta_icon_position === 'left' ? 'right' : 'left'">
         <div
           v-if="displayRuleSetting.button_text && (!isFormOpen || !allowOpen)"
-          class="cta-tooltip relative px-3.5 py-1.5 rounded-lg text-sm font-semibold whitespace-nowrap"
+          class="cta-tooltip relative px-3.5 py-1.5 rounded-lg text-sm font-semibold whitespace-normal max-w-[185px] break-words text-center"
           style="background-color: var(--widget-tooltip-bg-color); color: var(--widget-tooltip-text-color)">
           {{ displayRuleSetting.button_text }}
         </div>

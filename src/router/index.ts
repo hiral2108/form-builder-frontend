@@ -33,31 +33,31 @@ const routes = [
         path: "/dashboard",
         name: "DashboardPage",
         component: () => import("@/views/sidebarSettingpages/DashboardPage.vue"),
-        // meta: { requireAuth: true},
+        meta: { requireAuth: true },
       },
       {
         path: "/forms",
         name: "FormsPage",
         component: () => import("@/views/sidebarSettingpages/FormsListPage.vue"),
-        // meta: { requireAuth: true },
+        meta: { requireAuth: true },
       },
       {
         path: "/submissions",
         name: "SubmissionsPage",
         component: () => import("@/views/sidebarSettingpages/SubmissionsPage.vue"),
-        // meta: { requireAuth: true},
+        meta: { requireAuth: true },
       },
       {
         path: "/plan",
         name: "PlanPage",
         component: () => import("@/views/sidebarSettingpages/PlanPage.vue"),
-        // meta: { requireAuth: true},
+        meta: { requireAuth: true },
       },
       {
         path: "/form-settings/:uniqueId?",
         name: "FormSettingsPage",
         component: () => import("@/views/sidebarSettingpages/FormSettingsPage.vue"),
-        // meta: { requireAuth: true},
+        meta: { requireAuth: true },
       },
     ],
   },
@@ -74,17 +74,73 @@ const router = createRouter({
   routes,
 });
 
+// router.beforeEach(async (to, from, next) => {
+//   const requiresAuth = to.matched.some((record) => record.meta.requireAuth);
+//   const auth = sessionStorage.getItem("authToken") as string;
+//   const redirectPath = sessionStorage.getItem("redirectPath");
+
+//   if (!requiresAuth) {
+//     return next();
+//   }
+
+//   if (!auth) {
+//     // Not logged in -> save redirect and go to login
+//     sessionStorage.setItem("redirectPath", to.fullPath);
+//     return next({ path: "/login" });
+//   }
+
+//   if (requiresAuth) {
+//     let isVerifyToken = false;
+//     try {
+//       const res = await new UserService().getShopToken("verify-token");
+//       isVerifyToken = Boolean(res.verify_token);
+//       if (!isVerifyToken && res.message) {
+//         showErrorMessage(res.message);
+//       }
+//     } catch (err) {
+//       // Network or server error — treat as not verified
+//       showErrorMessage(err);
+//       isVerifyToken = false;
+//     }
+
+//     if (!isVerifyToken) {
+//       // token invalid -> clear session and redirect to login
+//       sessionStorage.clear();
+//       sessionStorage.setItem("redirectPath", to.fullPath);
+//       return next({ path: "/login" });
+//     }
+
+//     // token valid
+//     if (redirectPath && auth && isVerifyToken) {
+//       // if we stored a redirect, go there first and remove it
+//       sessionStorage.removeItem("redirectPath");
+//       return next({ path: redirectPath });
+//     }
+
+//     // otherwise proceed to requested route
+//     return next();
+//   }
+// });
+
 router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requireAuth);
-  const auth = sessionStorage.getItem("authToken") as string;
+  const isGuestRoute = to.matched.some((record) => record.meta.guest);
+
+  // 🔍 Check BOTH session and local storage
+  const auth = sessionStorage.getItem("authToken") || localStorage.getItem("authToken");
   const redirectPath = sessionStorage.getItem("redirectPath");
+
+  // 1. If user is already logged in and tries to go to Login/Register, send them to Dashboard
+  if (isGuestRoute && auth) {
+    return next({ path: "/dashboard" });
+  }
 
   if (!requiresAuth) {
     return next();
   }
 
+  // 2. Not logged in -> redirect to login
   if (!auth) {
-    // Not logged in -> save redirect and go to login
     sessionStorage.setItem("redirectPath", to.fullPath);
     return next({ path: "/login" });
   }
@@ -98,26 +154,23 @@ router.beforeEach(async (to, from, next) => {
         showErrorMessage(res.message);
       }
     } catch (err) {
-      // Network or server error — treat as not verified
       showErrorMessage(err);
       isVerifyToken = false;
     }
 
     if (!isVerifyToken) {
-      // token invalid -> clear session and redirect to login
-      sessionStorage.clear();
+      // Token is invalid -> clear stored tokens and redirect
+      sessionStorage.removeItem("authToken");
+      localStorage.removeItem("authToken");
       sessionStorage.setItem("redirectPath", to.fullPath);
       return next({ path: "/login" });
     }
 
-    // token valid
     if (redirectPath && auth && isVerifyToken) {
-      // if we stored a redirect, go there first and remove it
       sessionStorage.removeItem("redirectPath");
       return next({ path: redirectPath });
     }
 
-    // otherwise proceed to requested route
     return next();
   }
 });

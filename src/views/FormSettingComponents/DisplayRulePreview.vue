@@ -13,7 +13,7 @@
           ]"
           style="background-color: var(--widget-bg-color); color: var(--widget-text-color)"
           class="font-semibold text-sm tracking-wide shadow-md cursor-pointer pointer-events-auto flex items-center justify-center">
-          <span class="whitespace-nowrap">{{ displayRuleSetting.button_text || "Contact Us" }}</span>
+          <span class="whitespace-nowrap">{{ displayRuleSetting.button_text }}</span>
         </button>
       </div>
     </template>
@@ -46,27 +46,26 @@
           ">
           <div
             class="w-full h-full flex items-center justify-center transition-transform duration-300 ease-in-out"
-            :class="allowOpen && isFormOpen ? 'rotate-180' : 'rotate-0'">
+            :class="allowOpen && isFormOpen ? 'rotate-90' : 'rotate-0'">
             <svg
               v-if="allowOpen && isFormOpen"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor">
               <path
-                d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z" />
+                d="M12 10.5858L16.95 5.63584L18.3642 7.05006L13.4142 12.0001L18.3642 16.9501L16.95 18.3643L12 13.4143L7.05 18.3643L5.63574 16.9501L10.5858 12.0001L5.63574 7.05006L7.05 5.63584L12 10.5858Z" />
             </svg>
 
-            <!-- Render custom image if uploaded and selected (fills the full button circle) -->
-            <img
-              v-if="displayRuleSetting.cta_icon === 'upload' && displayRuleSetting.custom_cta_url"
-              :src="displayRuleSetting.custom_cta_url"
-              class="absolute inset-0 w-full h-full object-cover rounded-full"
-            />
-            <!-- Render default SVG choice -->
-            <div
-              v-else
-              v-html="selectedIconSvg"
-              class="w-1/2 h-1/2 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full [&>svg]:fill-current [&>svg]:text-current"></div>
+            <template v-else>
+              <img
+                v-if="displayRuleSetting.cta_icon === 'upload' && displayRuleSetting.custom_cta_url"
+                :src="displayRuleSetting.custom_cta_url"
+                class="absolute inset-0 w-full h-full object-cover rounded-full" />
+              <div
+                v-else
+                v-html="selectedIconSvg"
+                class="w-1/2 h-1/2 flex items-center justify-center [&>svg]:w-full [&>svg]:h-full [&>svg]:fill-current [&>svg]:text-current"></div>
+            </template>
           </div>
         </button>
       </div>
@@ -103,13 +102,10 @@
   // Compute CTA icon SVG
   const selectedIconSvg = computed(() => {
     // Fallback to the first icon (chat-lines) if upload is selected but no image is uploaded
-    if (
-      displayRuleSetting.value.cta_icon === "upload" &&
-      !displayRuleSetting.value.custom_cta_url
-    ) {
+    if (displayRuleSetting.value.cta_icon === "upload" && !displayRuleSetting.value.custom_cta_url) {
       return ctaIcons[0].icon;
     }
-    
+
     const iconObj = ctaIcons.find((item) => item.key === displayRuleSetting.value.cta_icon);
     return iconObj ? iconObj.icon : ctaIcons[0].icon;
   });
@@ -386,15 +382,15 @@
     }
   }
 
-.form-slide-box {
-  transition:
-    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
+  .form-slide-box {
+    transition:
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
 
   .form-slide-box.form-open {
     opacity: 1;

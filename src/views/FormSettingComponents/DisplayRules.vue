@@ -94,18 +94,26 @@
           <InputColorPicker v-model="displayRuleSetting.tooltip_bg_color" label="Tooltip Background Color" />
           <InputColorPicker v-model="displayRuleSetting.tooltip_text_color" label="Tooltip Text Color" />
         </div>
-        <div>
-          <InputField type="text" v-model="displayRuleSetting.button_text" label="Button Text" focusColor="teal" />
+         <div>
+          <InputField 
+            type="text" 
+            v-model="displayRuleSetting.button_text" 
+            label="Button Text" 
+            focusColor="teal" 
+            fieldId="button_text" 
+            :hasError="Boolean(validationErrors?.button_text)"
+            :validationMessage="validationErrors?.button_text ? [{ $message: validationErrors.button_text }] : []"
+            @input="delete validationErrors.button_text"
+          />
         </div>
-                <template v-if="displayRuleSetting.form_type === 'tooltip'">
+        <template v-if="displayRuleSetting.form_type === 'tooltip'">
           <!-- Hidden native file input element -->
           <input
             ref="customFileInputRef"
             type="file"
             class="sr-only"
             accept="image/jpg,image/png,image/jpeg,image/webp,image/gif"
-            @change="onCustomIconChange"
-          />
+            @change="onCustomIconChange" />
 
           <div>
             <RadioGrid
@@ -121,14 +129,9 @@
                 <div
                   v-if="option.key === 'upload'"
                   class="w-full h-full flex items-center justify-center"
-                  @click.stop="openCustomIconPicker"
-                >
+                  @click.stop="openCustomIconPicker">
                   <!-- Render uploaded icon centered with padding/border around it -->
-                  <img
-                    v-if="customIconUrl"
-                    :src="customIconUrl"
-                    class="w-full h-8 object-cover rounded"
-                  />
+                  <img v-if="customIconUrl" :src="customIconUrl" class="w-full h-8 object-cover rounded" />
 
                   <!-- Render default upload icon -->
                   <span v-else v-html="option.icon" class="flex items-center justify-center"></span>
@@ -137,8 +140,7 @@
                   <span
                     v-if="customIconUrl"
                     class="absolute -top-2 -right-2 w-5 h-5 bg-white text-red-600 text-xs p-2.5 rounded-full flex items-center justify-center cursor-pointer shadow-lg"
-                    @click.stop="removeCustomIcon"
-                  >
+                    @click.stop="removeCustomIcon">
                     ✕
                   </span>
                 </div>
@@ -209,7 +211,7 @@
   } from "@/data/DisplayRuleOptions";
 
   const DisplayRuleSettingStore = useDisplayRuleSettingStore();
-  const { displayRuleSetting } = formSetting();
+  const { displayRuleSetting, validationErrors } = formSetting();
   const toast = useToast();
 
   // Custom Icon Upload States
@@ -231,7 +233,7 @@
 
     if (!allowedExtensions.includes(file.type)) {
       toast.error("Only JPG, JPEG, PNG, WEBP, and GIF files are allowed.");
-      event.target.value = ""; 
+      event.target.value = "";
       return;
     }
 
@@ -243,17 +245,17 @@
 
     customIconFile.value = file;
     customIconUrl.value = URL.createObjectURL(file);
-    
+
     // Update local store path configuration temporarily
     displayRuleSetting.value.custom_cta_file = customIconUrl.value;
     displayRuleSetting.value.custom_cta_url = customIconUrl.value;
-    
+
     uploadImage();
-    
+
     event.target.value = "";
-    
+
     // Select the custom upload icon in grid
-    displayRuleSetting.value.cta_icon = 'upload';
+    displayRuleSetting.value.cta_icon = "upload";
   };
 
   // Upload selected image file to backend
@@ -321,5 +323,15 @@
       }
     },
     { deep: true, immediate: true }
+  );
+
+    // Clear button_text error when switching to another form layout (e.g. tooltip)
+  watch(
+    () => displayRuleSetting.value.form_type,
+    (newType) => {
+      if (newType !== "sticky") {
+        delete validationErrors.button_text;
+      }
+    }
   );
 </script>

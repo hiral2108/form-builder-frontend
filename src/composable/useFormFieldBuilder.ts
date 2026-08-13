@@ -20,9 +20,18 @@ import HiddenIcon from "@/assets/icons/FormFields/EyesOff.svg";
 import { formSetting } from "@/composable/useFormSettings";
 import { useFormFieldSettingStore, type FormFieldType } from "@/stores/formFieldStore";
 import { useFormStyle } from "@/composable/useFormStyle";
+import { useUserStore } from "@/stores/user.ts"; 
+import { useToast } from "vue-toastification";
 
 export function useFormFieldsBuilder() {
   const FormFieldSettingStore = useFormFieldSettingStore();
+   const userStore = useUserStore();
+  const toast = useToast();
+  // Helper to identify if a field is locked under the current plan
+  const isFieldLocked = (type: string): boolean => {
+    const proFields = ['dropdown', 'radio', 'checkboxes', 'datepicker', 'timepicker', 'fileupload', 'multiselect', 'hidden'];
+    return userStore.plan_id === 1 && proFields.includes(type);
+  };
   const { formFieldSetting, formStyleSetting } = formSetting();
   const { cssVars } = useFormStyle();
 
@@ -35,14 +44,14 @@ export function useFormFieldsBuilder() {
     { type: "number", label: "Number", icon: NumberIcon },
     { type: "phone", label: "Phone Number", icon: PhoneIcon },
     { type: "textarea", label: "Textarea", icon: TextAreaIcon },
+    { type: "url", label: "URL", icon: UrlIcon },
+    { type: "password", label: "Password", icon: PasswordIcon },
     { type: "dropdown", label: "Dropdown", icon: DropDownIcon },
     { type: "radio", label: "Radio Button", icon: RadionButtonIcon },
     { type: "checkboxes", label: "Checkbox", icon: CheckBoxIcon },
     { type: "datepicker", label: "Date Picker", icon: DatePickerIcon },
     { type: "timepicker", label: "Time Picker", icon: TimePickerIcon },
     { type: "fileupload", label: "File Upload", icon: FileUploadIcon },
-    { type: "url", label: "URL", icon: UrlIcon },
-    { type: "password", label: "Password", icon: PasswordIcon },
     { type: "multiselect", label: "Multiselect", icon: MultiSelectIcon },
     { type: "hidden", label: "Hidden Field", icon: HiddenIcon },
   ];
@@ -85,6 +94,7 @@ export function useFormFieldsBuilder() {
   };
 
   const addField = (type: string) => {
+    if (isFieldLocked(type)) return;
     const id = Date.now().toString();
     let label = "";
     let placeholder = "";
@@ -149,6 +159,14 @@ export function useFormFieldsBuilder() {
         label = "Textarea";
         placeholder = "Enter text...";
         break;
+      case "url":
+        label = "URL";
+        placeholder = "https://example.com";
+        break;
+      case "password":
+        label = "Password";
+        placeholder = "Enter password";
+        break;
       case "dropdown":
         label = "Dropdown Options";
         placeholder = "Select option";
@@ -173,14 +191,6 @@ export function useFormFieldsBuilder() {
       case "fileupload":
         label = "File Upload";
         placeholder = "Click or Drag files to upload";
-        break;
-      case "url":
-        label = "URL";
-        placeholder = "https://example.com";
-        break;
-      case "password":
-        label = "Password";
-        placeholder = "Enter password";
         break;
       case "multiselect":
         label = "Multiselect Options";
@@ -499,5 +509,6 @@ export function useFormFieldsBuilder() {
     canHaveMaxLength,
     labelStyleObject,
     cssVars,
+    isFieldLocked,
   };
 }

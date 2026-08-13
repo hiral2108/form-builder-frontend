@@ -107,7 +107,11 @@
         <div v-if="isRecommended(plan.name)" class="absolute -top-3.5 left-1/2 -translate-x-1/2">
           <span
             class="inline-flex items-center gap-1 px-4 py-1 rounded-full bg-gradient-to-r from-teal-500 to-teal-600 text-white text-xs font-semibold shadow-md shadow-teal-500/30 whitespace-nowrap">
-            <i class="ri-star-fill text-[10px]"></i>Most Popular
+            <img
+              v-svg-inline
+              src="@/assets/icons/submission-page/star-fill.svg"
+              alt="star"
+              class="h-3.5 w-3.5" />Most Popular
           </span>
         </div>
 

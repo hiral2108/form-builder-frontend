@@ -4,7 +4,7 @@
     <div class="mb-6 flex items-center justify-between gap-4 flex-wrap">
       <h2 class="text-xl font-bold text-slate-800 tracking-tight">Welcome to {{ appName }}</h2>
       <button 
-        @click="showCreateFormModal = true"
+        @click="handleCreateClick"
         class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10 max-[380px]:w-full max-[380px]:justify-center"
       >
         <img v-svg-inline src="@/assets/icons/dashboardpage/add-line.svg" class="w-5 h-5"/>
@@ -148,24 +148,50 @@
       </div>
     </div>
   <CreateFormModal :isShowModal="showCreateFormModal" @closeModal="showCreateFormModal = false" />
+  <UpdatePlanModal :isShowModal="showUpdatePlanModal" @closeModal="showUpdatePlanModal = false" />
 </template>
 
 <script setup lang="ts">
 
-import { inject, ref, computed } from 'vue';
+import { inject, ref, computed, onMounted } from 'vue';
 import CreateFormModal from "@/components/modals/CreateFormModal.vue";
 import LineChart from "@/components/global/fields/LineChart.vue";
 import SelectField from "@/components/global/fields/SelectField.vue";
 import { ElDatePicker } from "element-plus";
+import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue"; 
+import FormService from "@/services/api/form-services"; 
+import { useUserStore } from "@/stores/user.ts";
 
 const appName = inject("appName");
 const showCreateFormModal = ref(false);
+const showUpdatePlanModal = ref(false);
+const totalForms = ref(0);
+const userStore = useUserStore();
 
 const visitorRate = ref(35);
 const formattedUserVisitors = ref("3,500");
 const formattedPlanVisitors = ref("10,000");
 const formattedResetDate = ref("09/09/2026");
-const totalFormsCreated = ref(8);
+const totalFormsCreated = ref(0);
+
+const handleCreateClick = () => {
+  if (totalForms.value >= 1 && userStore.plan_id === 1) {
+    showUpdatePlanModal.value = true;
+  } else {
+    showCreateFormModal.value = true;
+  }
+};
+// Fetch total forms from API on load
+onMounted(async () => {
+  try {
+    const response = await new FormService().getFormsFilter({ time: "all_time", start_date: "", end_date: "" }, 1);
+    totalForms.value = response.totalWidget || 0;
+    totalFormsCreated.value = response.totalWidget || 0;
+  } catch (error) {
+    console.error("Failed to fetch forms for dashboard:", error);
+  }
+});
+
 const views = ref(24850);
 const clicks = ref(7425);
 const conversionRate = computed(() => {

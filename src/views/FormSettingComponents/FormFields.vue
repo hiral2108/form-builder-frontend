@@ -22,17 +22,46 @@
           <button
             v-for="item in fieldLibrary"
             :key="item.type"
-            @click="addField(item.type)"
-            class="w-full flex items-center gap-3 px-4 py-3 border border-slate-100 hover:ring-2 hover:ring-teal-500 hover:bg-teal-50/10 rounded-xl text-left text-sm text-slate-700 font-medium transition-all cursor-pointer group">
+            @click="isFieldLocked(item.type) ? openUpgradeModal() : addField(item.type)"
+            class="w-full flex items-center gap-3 px-4 py-3 border border-slate-100 rounded-xl text-left text-sm font-medium transition-all group relative cursor-pointer"
+            :class="[
+              isFieldLocked(item.type)
+                ? 'opacity-75 bg-slate-50/65 border-slate-200 hover:bg-slate-100/50 hover:border-slate-300'
+                : 'hover:ring-2 hover:ring-teal-500 hover:bg-teal-50/10 text-slate-700'
+            ]">
+            
+            <!-- Icon Container -->
             <div
-              class="w-8 h-8 rounded-lg bg-slate-50 group-hover:bg-teal-100/60 flex items-center justify-center text-slate-500 group-hover:text-teal-700 transition-colors">
+              class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500 transition-colors"
+              :class="[
+                isFieldLocked(item.type)
+                  ? 'bg-slate-100 text-slate-400'
+                  : 'group-hover:bg-teal-100/60 group-hover:text-teal-700'
+              ]">
               <img
                 v-svg-inline
                 :src="item.icon"
                 :alt="item.label"
-                class="w-4 h-4 text-slate-500 group-hover:text-teal-600 transition-colors fill-current" />
+                class="w-4 h-4 transition-colors fill-current"
+                :class="[
+                  isFieldLocked(item.type)
+                    ? 'text-slate-400'
+                    : 'text-slate-500 group-hover:text-teal-600'
+                ]" />
             </div>
-            {{ item.label }}
+
+            <!-- Label -->
+            <span :class="isFieldLocked(item.type) ? 'text-slate-400 font-normal' : 'text-slate-700'">{{ item.label }}</span>
+            
+            <!-- Premium Red-to-Orange Pro Badge with Lock (matches Page Rule) -->
+            <span
+              v-if="isFieldLocked(item.type)"
+              class="ml-auto flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-sm uppercase tracking-wider scale-90">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-2.5 h-2.5">
+                <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+              </svg>
+              Pro
+            </span>
           </button>
         </div>
       </div>
@@ -789,16 +818,25 @@
     :fieldLabel="fieldToDeleteLabel"
     @close="isDeleteModalOpen = false"
     @confirm="confirmDelete" />
+
+    <UpdatePlanModal
+    :isShowModal="isUpgradeModalOpen"
+    @closeModal="isUpgradeModalOpen = false" />
 </template>
 
 <script setup lang="ts">
+  import { ref } from "vue"; // Imported ref
   import DeleteFieldConfirmModal from "@/components/modals/DeleteFieldConfirmModal.vue";
+  import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue"; // Imported UpdatePlanModal
   import { useFormFieldsBuilder } from "@/composable/useFormFieldBuilder";
-
   defineProps<{
     isLoading?: boolean;
   }>();
-
+  // Modal toggle state
+  const isUpgradeModalOpen = ref(false);
+  const openUpgradeModal = () => {
+    isUpgradeModalOpen.value = true;
+  };
   const {
     fieldLibrary,
     formFieldSetting,
@@ -837,6 +875,7 @@
     canHaveMaxLength,
     labelStyleObject,
     cssVars,
+    isFieldLocked, 
   } = useFormFieldsBuilder();
 </script>
 

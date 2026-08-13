@@ -214,7 +214,7 @@
                       placeholder="Enter URL or path..."
                       focusColor="teal"
                       v-model="rule.rule_value"
-                      :id="`rule_value_${rule.id}`"
+                      :fieldId="`rule_value_${rule.id}`"
                       :classes="`h-[42px] ${validationErrors[`rule_value_${rule.id}`] ? 'border-red-500' : ''}`" />
                     <p v-if="validationErrors[`rule_value_${rule.id}`]" class="text-xs text-red-500 mt-1">
                       {{ validationErrors[`rule_value_${rule.id}`] }}
@@ -245,10 +245,10 @@
             <!-- PRO Upgrade Overlay -->
             <div
               v-if="userStore.plan_id === 1"
-              class="absolute inset-0 bg-white/70 flex items-center justify-center z-10 rounded-b-xl">
+              class="pro-overlay absolute hidden inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-10 rounded-b-xl">
               <router-link
                 to="/plan"
-                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-lg font-semibold text-sm shadow-md">
+                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-lg font-semibold text-sm shadow-md transition-transform hover:scale-[1.03]">
                 <img v-svg-inline src="@/assets/icons/auth/password.svg" />
                 Upgrade to Pro
               </router-link>
@@ -408,13 +408,13 @@
                       <div>
                         <label
                           class="block text-sm font-medium text-slate-700 mb-2"
-                          :for="`date_rule_start_date_${key}`"
+                          :for="`date_rule_start_date_${dateRule.id}`"
                           >Start Date</label
                         >
                         <div class="calender-input relative">
                           <el-date-picker
                             v-model="dateRule.start_date"
-                            :id="`date_rule_start_date_${key}`"
+                            :id="`date_rule_start_date_${dateRule.id}`"
                             type="date"
                             placeholder="Start date"
                             :disabled-date="disabledStartDateFactory(key)"
@@ -429,13 +429,13 @@
                         </div>
                       </div>
                       <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_end_date_${key}`"
+                        <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_end_date_${dateRule.id}`"
                           >End Date</label
                         >
                         <div class="calender-input relative">
                           <el-date-picker
                             v-model="dateRule.end_date"
-                            :id="`date_rule_end_date_${key}`"
+                            :id="`date_rule_end_date_${dateRule.id}`"
                             type="date"
                             placeholder="End date"
                             :disabled-date="disabledEndDateFactory(key)"
@@ -527,10 +527,10 @@
             <!-- PRO Upgrade Overlay -->
             <div
               v-if="userStore.plan_id === 1"
-              class="absolute inset-0 bg-white/70 flex items-center justify-center z-10 rounded-b-xl">
+              class="pro-overlay absolute hidden inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-10 rounded-b-xl">
               <router-link
                 to="/plan"
-                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-lg font-semibold text-sm shadow-md">
+                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-lg font-semibold text-sm shadow-md transition-transform hover:scale-[1.03]">
                 <img v-svg-inline src="@/assets/icons/auth/password.svg" /> Upgrade to Pro
               </router-link>
             </div>
@@ -655,10 +655,10 @@
             <!-- PRO Upgrade Overlay -->
             <div
               v-if="userStore.plan_id === 1"
-              class="absolute inset-0 bg-white/70 flex items-center justify-center z-10 rounded-b-xl">
+              class="pro-overlay absolute hidden inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-10 rounded-b-xl">
               <router-link
                 to="/plan"
-                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-lg font-semibold text-sm shadow-md">
+                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-lg font-semibold text-sm shadow-md transition-transform hover:scale-[1.03]">
                 <img v-svg-inline src="@/assets/icons/auth/password.svg" /> Upgrade to Pro
               </router-link>
             </div>
@@ -795,10 +795,10 @@
             <!-- PRO Upgrade Overlay -->
             <div
               v-if="userStore.plan_id === 1"
-              class="absolute inset-0 bg-white/70 flex items-center justify-center z-10 rounded-b-xl">
+              class="pro-overlay absolute hidden inset-0 bg-white/60 backdrop-blur-[1px] flex items-center justify-center z-10 rounded-b-xl">
               <router-link
                 to="/plan"
-                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-lg font-semibold text-sm shadow-md">
+                class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-lg font-semibold text-sm shadow-md transition-transform hover:scale-[1.03]">
                 <img v-svg-inline src="@/assets/icons/auth/password.svg" /> Upgrade to Pro
               </router-link>
             </div>
@@ -833,7 +833,6 @@
   import { useDayHourSettingsStore } from "@/stores/dayHourSettings";
   import { useCountryTargetingStore } from "@/stores/countryTargeting";
   import { ElTimeSelect, ElDatePicker } from "element-plus";
-  import "element-plus/dist/index.css";
 
   const {
     timeDelaySetting,
@@ -1021,5 +1020,19 @@
 
   .day-schedule-rules :deep(.el-input__wrapper:focus-within) {
     box-shadow: 0 0 0 2px #0d9488 inset !important;
+  }
+
+    /* PRO Upgrade Hover Blur & Overlay Reveal */
+  .pro-content:hover .pro-overlay {
+    display: flex !important;
+  }
+  
+  .pro-content:hover .page-rules-container,
+  .pro-content:hover .date-time-rule-container,
+  .pro-content:hover .day-hours-rule-container,
+  .pro-content:hover .country-rule-container {
+    filter: blur(3px);
+    pointer-events: none; /* Prevents clicking fields when blurred */
+    transition: filter 0.2s ease-in-out;
   }
 </style>

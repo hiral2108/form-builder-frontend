@@ -60,12 +60,12 @@
             <div class="w-8 h-8 flex-shrink-0 rounded-full overflow-hidden">
               <div
                 class="w-full h-full flex items-center justify-center bg-teal-50 text-teal-700 text-xs font-semibold">
-                JD
+                {{ userInitials }}
               </div>
             </div>
             <div class="collapse-hidden-item min-w-0">
-              <p class="text-xs font-semibold text-slate-800 truncate">John Doe</p>
-              <p class="text-[10px] text-slate-400 truncate">john@example.com</p>
+              <p class="text-xs font-semibold text-slate-800 truncate">{{ name }}</p>
+              <p class="text-[10px] text-slate-400 truncate">{{ email }}</p>
             </div>
           </div>
         </div>
@@ -130,14 +130,26 @@
   import formNav from "@/assets/icons/settingpage/file-list-2-line.svg";
   import submissionNav from "@/assets/icons/settingpage/task-line.svg";
   import PlanPageIcon from "@/assets/icons/trigger-targeting/crown.svg"
+  import { useShopUser } from "@/composable/useShopUser";
 
-  const route = useRoute();
+    const route = useRoute();
   const isCollapsed = ref(false);
   const userCollapsedChoice = ref(false);
   const isMobile = ref(false);
   const isMobileSidebarOpen = ref(false);
 
   const appName = inject("appName");
+
+  // Initialize Shop User store
+  const { name, email, getCurrentUser } = useShopUser();
+
+  // Compute Initials dynamically from user name
+  const userInitials = computed(() => {
+    if (!name.value) return "U";
+    const parts = name.value.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+    return (parts[0][0] + (parts[1]?.[0] || "")).toUpperCase();
+  });
 
   const activeLink = ref(String(route.name || ""));
 
@@ -194,6 +206,7 @@
   onMounted(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
+    getCurrentUser();
   });
 
   onUnmounted(() => {

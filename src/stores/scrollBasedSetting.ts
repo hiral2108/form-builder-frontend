@@ -9,7 +9,7 @@ export const useScrollBasedSettingStore = defineStore('scrollBasedSetting', {
   state: () => ({
     scrollBasedSetting: {
       is_scroll_trigger: 0,
-      scroll: 50
+      scroll: 0
     } as ScrollBasedSettingStoreType
   })
 })

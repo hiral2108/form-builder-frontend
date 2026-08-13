@@ -38,7 +38,8 @@ $axios.interceptors.response.use(
     }
 
     if ([401].includes(code) && !window.location.pathname.includes("/login")) {
-      sessionStorage.clear();
+      sessionStorage.removeItem("authToken");
+      localStorage.removeItem("authToken"); // 👈 Clear local storage token too
       window.location.href = "/login";
     }
 

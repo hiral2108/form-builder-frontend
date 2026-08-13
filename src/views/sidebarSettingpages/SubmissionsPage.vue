@@ -271,7 +271,6 @@ import { ref, computed, onMounted } from 'vue';
 import SelectField from "@/components/global/fields/SelectField.vue";
 import CustomDefaultCheckbox from "@/components/global/fields/CustomDefaultCheckbox.vue";
 import { ElDatePicker } from "element-plus";
-import "element-plus/dist/index.css";
 import { useToast } from 'vue-toastification';
 import DeleteFormLead from '@/components/modals/DeleteFormLead.vue';
 import DeleteBulkFormLead from '@/components/modals/DeleteBulkFormLead.vue';

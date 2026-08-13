@@ -157,7 +157,6 @@ import CreateFormModal from "@/components/modals/CreateFormModal.vue";
 import LineChart from "@/components/global/fields/LineChart.vue";
 import SelectField from "@/components/global/fields/SelectField.vue";
 import { ElDatePicker } from "element-plus";
-import "element-plus/dist/index.css";
 
 const appName = inject("appName");
 const showCreateFormModal = ref(false);

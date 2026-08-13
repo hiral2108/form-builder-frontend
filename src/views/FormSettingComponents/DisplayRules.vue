@@ -107,18 +107,19 @@
           />
         </div>
         <template v-if="displayRuleSetting.form_type === 'tooltip'">
-          <!-- Hidden native file input element -->
+                    <!-- Hidden native file input element (disabled on free tier) -->
           <input
             ref="customFileInputRef"
             type="file"
             class="sr-only"
             accept="image/jpg,image/png,image/jpeg,image/webp,image/gif"
+            :disabled="userStore.plan_id === 1"
             @change="onCustomIconChange" />
 
           <div>
             <RadioGrid
               v-model="displayRuleSetting.cta_icon"
-              :options="ctaIcons"
+              :options="computedCtaIcons"
               label="CTA Icon"
               :columns="8"
               renderMode="icon"
@@ -191,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from "vue";
+  import { ref, watch, computed } from "vue"; // Added computed
   import { useToast } from "vue-toastification";
   import PreviewTemplate from "@/views/FormSettingComponents/PreviewTemplate.vue";
   import DisplayRulePreview from "@/views/FormSettingComponents/DisplayRulePreview.vue";
@@ -199,6 +200,7 @@
   import { formSetting } from "@/composable/useFormSettings";
   import { useDisplayRuleSettingStore } from "@/stores/DisplayRuleStore";
   import FormSettingService from "@/services/api/form-setting-services";
+  import { useUserStore } from "@/stores/user.ts"; // Imported user store
 
   import {
     stickyPositionOptions,
@@ -211,6 +213,7 @@
   } from "@/data/DisplayRuleOptions";
 
   const DisplayRuleSettingStore = useDisplayRuleSettingStore();
+  const userStore = useUserStore();
   const { displayRuleSetting, validationErrors } = formSetting();
   const toast = useToast();
 
@@ -218,6 +221,19 @@
   const customIconFile = ref<File | null>(null);
   const customIconUrl = ref<string | null>(null);
   const customFileInputRef = ref<HTMLInputElement | null>(null);
+
+  // Disables the custom file upload option if the user is not on a Pro plan
+  const computedCtaIcons = computed(() => {
+    return ctaIcons.map(icon => {
+      if (icon.key === 'upload') {
+        return {
+          ...icon,
+          disabled: userStore.plan_id === 1
+        };
+      }
+      return icon;
+    });
+  });
 
   const openCustomIconPicker = () => {
     customFileInputRef.value?.click();

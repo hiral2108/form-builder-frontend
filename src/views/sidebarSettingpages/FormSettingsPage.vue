@@ -1,7 +1,7 @@
 <template>
   <div class="h-auto bg-slate-50/50 flex flex-col overflow-visible">
     <header
-      class="fixed top-0 left-0 w-full bg-white z-38 h-18 flex items-center px-4 lg:px-6 transition-all duration-300 ease-in-out"
+      class="fixed top-0 left-0 w-full bg-white z-[38] h-18 flex items-center px-4 lg:px-6 transition-all duration-300 ease-in-out"
       :class="isCollapsible ? 'lg:pl-20' : 'lg:pl-60'">
       <div class="w-full px-4 lg:px-6 flex items-center justify-between">
         <div class="flex items-center gap-4">
@@ -123,7 +123,7 @@
       </div>
     </div>
 
-    <main class="flex-1 pt-6 max-w-7xl mx-auto w-full overflow-visible relative min-h-[400px]">
+    <main class="flex-1 pt-6 max-w-7xl mx-auto w-full overflow-visible relative min-h-[335px]">
       <div
         v-if="isWidgetDataLoading && currentStep !== 1"
         class="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-[1.5px] z-50">
@@ -286,23 +286,91 @@
     return true;
   };
 
-  const validateMessageAndNotification = (): boolean => {
+   const validateMessageAndNotification = (): boolean => {
+    // Clear previous step 4 validation errors
     delete validationErrors.custom_url;
+    delete validationErrors.email_name;
+    delete validationErrors.email_send_to;
+    delete validationErrors.email_subject;
+    delete validationErrors.email_body;
+    delete validationErrors.email_reply_to;
+    delete validationErrors.email_bcc;
+    delete validationErrors.email_cc;
+
+    // 1. Custom URL validation (if option is selected)
     if (submissionSetting.value.confirmationType === "custom_url") {
       if (!submissionSetting.value.customUrl || !submissionSetting.value.customUrl.trim()) {
         validationErrors.custom_url = "Custom URL is required";
+      }
+    }
 
-        // Redirect to Step 4 and focus on the input field
-        currentStep.value = 4;
-        nextTick(() => {
-          const el = document.getElementById("custom_url");
+    // 2. Email settings validation (only if Send Email toggle is active)
+    if (submissionSetting.value.sendEmail) {
+      if (!submissionSetting.value.emailSettings.name || !submissionSetting.value.emailSettings.name.trim()) {
+        validationErrors.email_name = "Name is required";
+      }
+      
+      if (!submissionSetting.value.emailSettings.sendToEmail || !submissionSetting.value.emailSettings.sendToEmail.trim()) {
+        validationErrors.email_send_to = "Send to Email is required";
+      } else {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(submissionSetting.value.emailSettings.sendToEmail.trim())) {
+          validationErrors.email_send_to = "Please enter a valid email address";
+        }
+      }
+      
+      if (!submissionSetting.value.emailSettings.subject || !submissionSetting.value.emailSettings.subject.trim()) {
+        validationErrors.email_subject = "Subject is required";
+      }
+      
+      // Strip HTML tags to check if the Quill editor body has text
+      const cleanBody = (submissionSetting.value.emailSettings.emailBody || "")
+        .replace(/<[^>]*>/g, "")
+        .trim();
+      if (!cleanBody) {
+        validationErrors.email_body = "Email Body is required";
+      }
+      
+      if (!submissionSetting.value.emailSettings.replyTo || !submissionSetting.value.emailSettings.replyTo.trim()) {
+        validationErrors.email_reply_to = "Reply To is required";
+      } else {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(submissionSetting.value.emailSettings.replyTo.trim())) {
+          validationErrors.email_reply_to = "Please enter a valid email address";
+        }
+      }
+      
+      if (!submissionSetting.value.emailSettings.bcc || !submissionSetting.value.emailSettings.bcc.trim()) {
+        validationErrors.email_bcc = "BCC is required";
+      }
+      
+      if (!submissionSetting.value.emailSettings.cc || !submissionSetting.value.emailSettings.cc.trim()) {
+        validationErrors.email_cc = "CC is required";
+      }
+    }
+
+    // 3. If validation fails, redirect to Step 4, scroll and focus on first error field
+    if (Object.keys(validationErrors).length > 0) {
+      currentStep.value = 4;
+      nextTick(() => {
+        const step4Keys = ["custom_url", "email_name", "email_send_to", "email_subject", "email_body", "email_reply_to", "email_bcc", "email_cc"];
+        const firstErrorKey = Object.keys(validationErrors).find(key => step4Keys.includes(key));
+        if (firstErrorKey) {
+          const el = document.getElementById(firstErrorKey);
           if (el) {
             el.scrollIntoView({ behavior: "smooth", block: "center" });
-            (el as HTMLElement).focus?.();
+            
+            // Focus element appropriately (Quill editor needs targeting inner editor pane)
+            if (firstErrorKey === "email_body") {
+              const quillEditor = el.querySelector(".ql-editor");
+              (quillEditor as HTMLElement)?.focus?.();
+            } else {
+              (el as HTMLElement).focus?.();
+            }
           }
-        });
-        return false;
-      }
+        }
+      });
+      return false;
     }
     return true;
   };
@@ -435,7 +503,8 @@
   };
 
   const nextStep = () => {
-    if (currentStep.value === 3 && !validateDisplayRules()) return; // 👈 Add this line
+    if (currentStep.value === 3 && !validateDisplayRules()) return;
+    if (currentStep.value === 4 && !validateMessageAndNotification()) return; // Validates Step 4 fields
     if (currentStep.value < 5 && !isStepDisabled(currentStep.value + 1)) {
       currentStep.value++;
     }
@@ -444,6 +513,7 @@
   // Step navigation validator
   const handleStepNavigation = (stepNumber: number) => {
     if (stepNumber > 3 && !validateDisplayRules()) return;
+    if (stepNumber > 4 && !validateMessageAndNotification()) return; // Validates Step 4 fields
 
     currentStep.value = stepNumber;
   };

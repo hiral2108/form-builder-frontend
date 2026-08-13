@@ -36,7 +36,17 @@
 
       <!-- User Initials -->
       <div class="relative">
-        <button class="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+        <!-- Skeleton state shown while fetching user -->
+        <div v-if="!id" class="flex items-center gap-2 px-2 py-1.5 animate-pulse">
+          <div class="w-8 h-8 rounded-full bg-slate-200 flex-shrink-0"></div>
+          <div class="hidden sm:block space-y-1.5">
+            <div class="h-3 bg-slate-200 rounded w-16"></div>
+            <div class="h-2.5 bg-slate-200 rounded w-24"></div>
+          </div>
+        </div>
+        
+        <!-- Real loaded state -->
+        <button v-else class="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
           <div class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center font-semibold text-sm">
             {{ userInitials }}
           </div>
@@ -61,7 +71,7 @@ defineProps({
   subtitle: String,
 });
 
-const { name, email } = useShopUser();
+const { id, name, email } = useShopUser();
 
 // Compute Initials dynamically from user name
 const userInitials = computed(() => {

@@ -43,7 +43,7 @@
         </div>
 
         <button
-          @click="showCreateFormModal = true"
+          @click="handleCreateClick"
           class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
             <path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path>
@@ -240,7 +240,7 @@
       <!-- Buttons Container (With Create Trigger) -->
       <div class="flex flex-col items-center gap-3 animate-fade-in-up" style="animation-delay: 0.4s">
         <button
-          @click="showCreateFormModal = true"
+          @click="handleCreateClick"
           class="group relative px-7 py-3 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 whitespace-nowrap cursor-pointer hover:scale-[1.03] shadow-sm shadow-teal-600/10 animate-pulse-glow">
           <img v-svg-inline src="@/assets/icons/dashboardpage/add-line.svg" class="w-5 h-5" />
           Create Your First Form
@@ -447,6 +447,9 @@
     :isShowModal="showCreateFormModal"
     @closeModal="showCreateFormModal = false"
     @confirmCreate="handleCreateForm" />
+  <UpdatePlanModal
+    :isShowModal="showUpdatePlanModal"
+    @closeModal="showUpdatePlanModal = false" />
 </template>
 
 <script setup lang="ts">
@@ -459,14 +462,27 @@
   import CloneFormModal from "@/components/modals/CloneFormModal.vue";
   import DeleteFormModal from "@/components/modals/DeleteFormModal.vue";
   import CreateFormModal from "@/components/modals/CreateFormModal.vue";
+  import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue"; 
+  import { useUserStore } from "@/stores/user.ts";
 
   // Modal triggers and tracking state
   const showRenameModal = ref(false);
   const showCloneModal = ref(false);
   const showDeleteModal = ref(false);
   const showCreateFormModal = ref(false);
+  const showUpdatePlanModal = ref(false); 
   const selectedForm = ref<any>(null);
-
+  
+  const userStore = useUserStore(); 
+  
+  // Triggers either Creation modal or Upgrade Plan modal
+  const handleCreateClick = () => {
+    if (totalForms.value >= 1 && userStore.plan_id === 1) {
+      showUpdatePlanModal.value = true;
+    } else {
+      showCreateFormModal.value = true;
+    }
+  };
   // Appends a new form dynamically after creating it via API
   const handleCreateForm = async (newFormTitle: string) => {
     try {
@@ -497,8 +513,12 @@
   };
 
   const openCloneModal = (form: any) => {
-    selectedForm.value = form;
-    showCloneModal.value = true;
+    if (userStore.plan_id === 1) {
+      showUpdatePlanModal.value = true;
+    } else {
+      selectedForm.value = form;
+      showCloneModal.value = true;
+    }
   };
 
   const openDeleteModal = (form: any) => {

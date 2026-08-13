@@ -55,7 +55,7 @@
               </template>
             </slot>
           </label>
-          <div
+                    <div
             v-if="isDisabled(opt)"
             class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2
              whitespace-nowrap rounded-md bg-gray-900 text-white text-xs
@@ -63,6 +63,7 @@
              transition-opacity pointer-events-none z-20"
           >
             Upgrade to Pro
+            <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@ export interface EmailSettingsType {
   replyTo: string;
   bcc: string;
   cc: string;
+  selectedFields?: string[];
 }
 
 export interface SubmissionSettingType {
@@ -37,6 +38,7 @@ export const useSubmissionSettingStore = defineStore("submissionSetting", {
         replyTo: "",
         bcc: "",
         cc: "",
+        selectedFields: [],
       },
     } as SubmissionSettingType,
   }),

@@ -203,7 +203,7 @@
 
                   <!-- 2. Select Dropdown (fixed width) -->
                   <div class="w-[145px] shrink-0 relative">
-                    <SelectField v-model="rule.url_rule" :options="urlRule" />
+                    <SelectField v-model="rule.url_rule" :options="urlRule" customClass="h-10"/>
                   </div>
 
                   <!-- 3. URL Input (flex-1, min 160px) -->
@@ -215,7 +215,7 @@
                       focusColor="teal"
                       v-model="rule.rule_value"
                       :fieldId="`rule_value_${rule.id}`"
-                      :classes="`h-[42px] ${validationErrors[`rule_value_${rule.id}`] ? 'border-red-500' : ''}`" />
+                      :classes="`h-10 ${validationErrors[`rule_value_${rule.id}`] ? 'border-red-500' : ''}`" />
                     <p v-if="validationErrors[`rule_value_${rule.id}`]" class="text-xs text-red-500 mt-1">
                       {{ validationErrors[`rule_value_${rule.id}`] }}
                     </p>
@@ -507,7 +507,7 @@
                         <button
                           type="button"
                           @click="removeDateRule(dateRule.id)"
-                          class="w-[42px] h-[40px] bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors flex items-center justify-center cursor-pointer">
+                          class="w-10 h-10 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition-colors flex items-center justify-center cursor-pointer">
                           <img v-svg-inline src="@/assets/icons/form-list/delete.svg" alt="" class="text-lg" />
                         </button>
                       </div>

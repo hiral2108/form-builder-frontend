@@ -1,27 +1,23 @@
 <template>
   <div id="root">
     <div class="flex h-screen bg-white relative font-sans">
-      <!-- Mobile Sidebar Backdrop overlay -->
       <div
         v-if="isMobile && isMobileSidebarOpen"
         @click="isMobileSidebarOpen = false"
         class="fixed inset-0 bg-slate-900/50 z-30 lg:hidden transition-opacity"></div>
 
-      <!-- Collapsible White Sidebar (No Right Border Partition) -->
       <aside
         class="setting-sidebar fixed top-0 left-0 h-full z-40 flex flex-col bg-white text-slate-800 transition-all duration-300 ease-in-out w-60 lg:translate-x-0"
         :class="[
           { 'collapse-sidebar': isCollapsed },
           isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
         ]">
-        <!-- Branding Header -->
         <div class="h-16 flex items-center px-6 justify-between app-icon">
           <router-link to="/dashboard" class="flex items-center gap-2.5 min-w-0">
             <div
               class="w-8 h-8 rounded-lg bg-gradient-to-r from-teal-600 to-teal-700 flex items-center justify-center flex-shrink-0 shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40">
               <img v-svg-inline src="@/assets/icons/settingpage/file-list-3-line.svg" class="text-white w-5 h-5" />
             </div>
-            <!-- <span class="font-bold text-teal-900 text-xl tracking-tight truncate collapse-hidden-item">{{appName}}</span> -->
             <span
               class="font-bold text-teal-900 text-xl tracking-tight truncate collapse-hidden-item"
               style="font-family: math">
@@ -30,14 +26,12 @@
           </router-link>
         </div>
 
-        <!-- Navigation list -->
         <nav class="flex-1 py-4 px-2 space-y-1">
           <div v-for="item in navItems" :key="item.routeName" class="relative tooltip-wrapper">
             <router-link
               :to="item.path"
               class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer relative whitespace-nowrap text-slate-600 hover:bg-slate-50 hover:text-slate-900 setting-sidebar-item"
               :class="{ active: activeLink === item.routeName }">
-              <!-- Teal left indicator bar -->
               <span
                 v-if="activeLink === item.routeName"
                 class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-teal-600 rounded-r-full"></span>
@@ -48,14 +42,26 @@
               <span class="collapse-hidden-item">{{ item.label }}</span>
             </router-link>
 
-            <!-- Tooltip visible on collapse hover -->
             <span class="sidebar-tooltip">{{ item.label }}</span>
           </div>
         </nav>
 
-        <!-- Bottom User details -->
+       <!-- Bottom User details -->
         <div class="p-2 border-t border-slate-100/50">
+          <!-- Skeleton state shown while fetching user -->
           <div
+            v-if="!id"
+            class="flex items-center gap-3 px-3 py-2.5 user-detail-section animate-pulse">
+            <div class="w-8 h-8 flex-shrink-0 rounded-full bg-slate-200"></div>
+            <div class="collapse-hidden-item flex-1 min-w-0 space-y-1.5">
+              <div class="h-3 bg-slate-200 rounded w-16"></div>
+              <div class="h-2.5 bg-slate-200 rounded w-24"></div>
+            </div>
+          </div>
+
+          <!-- Real loaded state -->
+          <div
+            v-else
             class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 transition-colors user-detail-section">
             <div class="w-8 h-8 flex-shrink-0 rounded-full overflow-hidden">
               <div
@@ -70,7 +76,6 @@
           </div>
         </div>
 
-        <!-- Floating Sidebar Collapse Toggle Button (Sticks on the border) -->
         <template v-if="route.name !== 'FormSettingsPage'">
           <template v-if="!isCollapsed">
             <button
@@ -98,20 +103,32 @@
         </template>
       </aside>
 
-      <!-- Main Panel area (No partition background) -->
       <main
         class="flex-1 flex flex-col relative h-screen transition-all duration-300 bg-white overflow-x-hidden"
         :class="[isMobile ? '' : isCollapsed ? 'pl-20' : 'pl-60']">
-        <!-- Header -->
         <Header
           @toggle-mobile-sidebar="isMobileSidebarOpen = !isMobileSidebarOpen"
           :title="pageTitle"
           :subtitle="pageSubtitle" />
 
-        <!-- Curved Content Container -->
         <div class="flex-1 pt-0 pb-2 px-2 sm:px-4 lg:pl-0 bg-white relative overflow-y-auto">
           <div
-            class="w-full bg-slate-50 border border-slate-200/50 rounded-[20px] relative p-3 lg:p-5 min-h-[calc(100vh-80px)]">
+            class="w-full bg-slate-50 border border-slate-200/50 rounded-[20px] relative p-3 lg:p-5 min-h-[calc(100vh-80px)]"
+            :class="{ 'h-[calc(100vh-100px)] overflow-hidden': isRouteLoading }">
+            <div
+              v-if="isRouteLoading"
+              class="absolute inset-0 flex items-center justify-center bg-slate-50/80 backdrop-blur-[1.5px] z-[35] rounded-[20px]">
+              <div class="flex flex-col items-center gap-4">
+                <div class="meta-loader">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+                <span class="text-sm font-semibold text-slate-500 tracking-wide select-none">Loading...</span>
+              </div>
+            </div>
+
             <router-view v-slot="{ Component }">
               <component :is="Component" :is-collapsible="isCollapsed" />
             </router-view>
@@ -129,10 +146,11 @@
   import dashboardNav from "@/assets/icons/settingpage/dashboard-line.svg";
   import formNav from "@/assets/icons/settingpage/file-list-2-line.svg";
   import submissionNav from "@/assets/icons/settingpage/task-line.svg";
-  import PlanPageIcon from "@/assets/icons/trigger-targeting/crown.svg"
+  import PlanPageIcon from "@/assets/icons/trigger-targeting/crown.svg";
   import { useShopUser } from "@/composable/useShopUser";
+  import { isRouteLoading } from "@/composable/useRouteLoader.ts";
 
-    const route = useRoute();
+  const route = useRoute();
   const isCollapsed = ref(false);
   const userCollapsedChoice = ref(false);
   const isMobile = ref(false);
@@ -140,10 +158,8 @@
 
   const appName = inject("appName");
 
-  // Initialize Shop User store
-  const { name, email, getCurrentUser } = useShopUser();
+  const { name, email, getCurrentUser, id } = useShopUser();
 
-  // Compute Initials dynamically from user name
   const userInitials = computed(() => {
     if (!name.value) return "U";
     const parts = name.value.trim().split(/\s+/);
@@ -155,7 +171,7 @@
 
   const collapseMenu = () => {
     isCollapsed.value = !isCollapsed.value;
-    userCollapsedChoice.value = isCollapsed.value; // Remember user's choice
+    userCollapsedChoice.value = isCollapsed.value; 
   };
 
   const handleResize = () => {
@@ -198,7 +214,10 @@
     DashboardPage: { title: "Dashboard", subtitle: "Build, manage, and track all your forms." },
     FormsPage: { title: "Forms", subtitle: "Manage your active and draft forms in one place." },
     SubmissionsPage: { title: "Submissions", subtitle: "Review and analyze form user responses." },
-    PlanPage: { title: "Plans & Pricing", subtitle: "Choose the perfect plan to scale your forms and boost conversions." },
+    PlanPage: {
+      title: "Plans & Pricing",
+      subtitle: "Choose the perfect plan to scale your forms and boost conversions.",
+    },
   };
   const pageTitle = computed(() => pageMeta[route.name as string]?.title || "");
   const pageSubtitle = computed(() => pageMeta[route.name as string]?.subtitle || "");
@@ -216,13 +235,16 @@
   watch(
     () => route.name,
     (newName) => {
+      const scrollContainer = document.querySelector(".overflow-y-auto");
+      if (scrollContainer) {
+        scrollContainer.scrollTop = 0;
+      }
+
       isMobileSidebarOpen.value = false;
-      // Automatically collapse sidebar on FormSettingsPage
       if (newName === "FormSettingsPage") {
         isCollapsed.value = true;
-        activeLink.value = "FormsPage"; // Keeps the "Forms" sidebar item active on settings page
+        activeLink.value = "FormsPage"; 
       } else {
-        // Restore their last manual toggle choice when navigating other pages
         isCollapsed.value = userCollapsedChoice.value;
         activeLink.value = String(newName || "");
       }
@@ -231,4 +253,49 @@
   );
 </script>
 
-<style scoped></style>
+<style scoped>
+  .meta-loader {
+    position: relative;
+    width: 48px;
+    height: 48px;
+  }
+
+  .meta-loader span {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #0d9488; 
+    animation: meta-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  }
+
+  .meta-loader span:nth-child(1) {
+    animation-delay: -0.45s;
+    opacity: 1;
+  }
+
+  .meta-loader span:nth-child(2) {
+    animation-delay: -0.3s;
+    opacity: 0.7;
+  }
+
+  .meta-loader span:nth-child(3) {
+    animation-delay: -0.15s;
+    opacity: 0.4;
+  }
+
+  .meta-loader span:nth-child(4) {
+    animation-delay: 0s;
+    opacity: 0.2;
+  }
+
+  @keyframes meta-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { showErrorMessage } from "@/utils";
 import UserService from "@/services/api/user-services";
+import { isRouteLoading } from "@/composable/useRouteLoader";
 
 const routes = [
   {
@@ -123,6 +124,7 @@ const router = createRouter({
 // });
 
 router.beforeEach(async (to, from, next) => {
+  isRouteLoading.value = true;
   const requiresAuth = to.matched.some((record) => record.meta.requireAuth);
   const isGuestRoute = to.matched.some((record) => record.meta.guest);
 
@@ -173,6 +175,13 @@ router.beforeEach(async (to, from, next) => {
 
     return next();
   }
+});
+
+router.afterEach(() => {
+  // small delay prevents flicker
+  setTimeout(() => {
+    isRouteLoading.value = false;
+  }, 300);
 });
 
 export default router;

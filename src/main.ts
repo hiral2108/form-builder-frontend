@@ -5,6 +5,7 @@ import router from "./router";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import "remixicon/fonts/remixicon.css";
+import "element-plus/dist/index.css";
 import "@/assets/tailwind.css";
 import "@/assets/form-theme.css";
 

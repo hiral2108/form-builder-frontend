@@ -146,7 +146,7 @@
         <button
           type="button"
           :disabled="isPlanDisabled(plan)"
-          @click="!isPlanDisabled(plan) && submitPlan(plan)"
+          @click="!isPlanDisabled(plan)"
           class="w-full py-3 rounded-xl text-sm font-semibold transition-all duration-200 whitespace-nowrap mb-5 flex items-center justify-center gap-2"
           :class="getPlanButtonClass(plan)">
           {{ getPlanButtonText(plan) }}
@@ -249,10 +249,6 @@ const fetchPlans = async () => {
   }
 };
 
-onMounted(() => {
-  fetchPlans();
-});
-
 // 2. Helper functions
 const togglePlanType = (type: "monthly" | "yearly") => {
   selectedPlanType.value = type;
@@ -311,7 +307,7 @@ const getPlanFeatures = (name: string) => {
   return (planFeaturesData.PlanFeature as any)?.[key] || [];
 };
 
-const submitPlan = (plan: any) => {
-  console.log("Submitting plan:", plan);
-};
+onMounted(() => {
+  fetchPlans();
+});
 </script>

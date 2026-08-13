@@ -54,7 +54,11 @@
               type="text"
               focusColor="teal"
               placeholder="https://example.com/thank-you"
-              class="flex-1" />
+              fieldId="custom_url"
+              :hasError="Boolean(validationErrors?.custom_url)"
+              :validationMessage="validationErrors?.custom_url ? [{ $message: validationErrors.custom_url }] : []"
+              @input="delete validationErrors.custom_url"
+              class="w-full" />
           </div>
 
           <div class="flex flex-col sm:flex-row sm:items-center gap-2">
@@ -190,7 +194,7 @@
   import { useSubmissionSettingStore } from "@/stores/submissionStore";
 
   const submissionSettingStore = useSubmissionSettingStore();
-  const { submissionSetting } = formSetting();
+  const { submissionSetting, validationErrors } = formSetting();
 
   const confirmationTypeOptions = [
     { label: "Same Page", value: "same_page" },

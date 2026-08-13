@@ -61,8 +61,8 @@
           <slot />
       </div>
       
-      <div v-for="(error, index) in validationMessage" :key="index">
-        <span v-if="index == 0" class="text-red-700 text-sm">
+      <div v-for="(error, index) in validationMessage" :key="index" class="mt-[-4px]">
+        <span v-if="index == 0" class="text-red-700 text-xs">
           {{ error.$message }}
         </span>
       </div>

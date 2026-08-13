@@ -43,41 +43,47 @@
 
           <div class="relative">
             <div class="inline-flex rounded-lg overflow-hidden bg-teal-600 shadow-md">
-            <button
-              type="button"
-              @click="isRedirectToDashboard = false; saveFormSettings()"
-              class="text-white hover:bg-teal-700 cursor-pointer transition-colors flex items-center save-changes px-4 py-2 font-semibold text-sm">
-              <span class="flex items-center gap-2">
-                <span class="max-[420px]:hidden">Save Changes</span>
-                <span class="min-[420px]:hidden">Save</span>
-                <ButtonLoader v-if="isLoading && isRedirectToDashboard === false" />
-              </span>
-            </button>
+              <button
+                type="button"
+                @click="
+                  isRedirectToDashboard = false;
+                  saveFormSettings();
+                "
+                class="text-white hover:bg-teal-700 cursor-pointer transition-colors flex items-center save-changes px-4 py-2 font-semibold text-sm">
+                <span class="flex items-center gap-2">
+                  <span class="max-[420px]:hidden">Save Changes</span>
+                  <span class="min-[420px]:hidden">Save</span>
+                  <ButtonLoader v-if="isLoading && isRedirectToDashboard === false" />
+                </span>
+              </button>
 
-            <button
-              type="button"
-              @click.stop="toggleSaveDropdown"
-              class="px-3 py-2 border-l border-teal-500 flex items-center justify-center hover:bg-teal-700 cursor-pointer save-dropdown-icon">
-              <img
-                v-svg-inline
-                src="@/assets/icons/form-settings/arrow-down-s-line.svg"
-                alt="Save button dropdown"
-                class="w-5 h-5 text-white" />
-            </button>
-          </div>
+              <button
+                type="button"
+                @click.stop="toggleSaveDropdown"
+                class="px-3 py-2 border-l border-teal-500 flex items-center justify-center hover:bg-teal-700 cursor-pointer save-dropdown-icon">
+                <img
+                  v-svg-inline
+                  src="@/assets/icons/form-settings/arrow-down-s-line.svg"
+                  alt="Save button dropdown"
+                  class="w-5 h-5 text-white" />
+              </button>
+            </div>
 
-          <div
-            class="dropdown-content absolute right-0 top-full shadow-lg bg-white border border-gray-200 rounded-lg text-center w-max mt-1 z-50"
-            v-show="showSaveDropdown">
-            <button
-              type="button"
-              @click="isRedirectToDashboard = true; saveFormSettings()"
-              class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 rounded-lg cursor-pointer w-full text-left">
-              Save &amp; View Dashboard
-              <ButtonLoader
-                v-if="isLoading && isRedirectToDashboard === true"
-                :classes="['border-gray-700! border-b-transparent!']" />
-            </button>
+            <div
+              class="dropdown-content absolute right-0 top-full shadow-lg bg-white border border-gray-200 rounded-lg text-center w-max mt-1 z-50"
+              v-show="showSaveDropdown">
+              <button
+                type="button"
+                @click="
+                  isRedirectToDashboard = true;
+                  saveFormSettings();
+                "
+                class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 rounded-lg cursor-pointer w-full text-left">
+                Save &amp; View Dashboard
+                <ButtonLoader
+                  v-if="isLoading && isRedirectToDashboard === true"
+                  :classes="['border-gray-700! border-b-transparent!']" />
+              </button>
             </div>
           </div>
         </div>
@@ -91,7 +97,7 @@
             v-for="step in steps"
             :key="step.number"
             :disabled="isStepDisabled(step.number)"
-            @click="!isStepDisabled(step.number) && (currentStep = step.number)"
+            @click="!isStepDisabled(step.number) && handleStepNavigation(step.number)"
             class="p-3 xl:p-4 border-b-2 font-semibold text-md transition-all whitespace-nowrap flex items-center gap-2"
             :class="[
               isStepDisabled(step.number)
@@ -118,12 +124,12 @@
     </div>
 
     <main class="flex-1 pt-6 max-w-7xl mx-auto w-full overflow-visible relative min-h-[400px]">
-      <!-- Premium visual spinner overlay while loading API data (only for other steps) -->
-      <div v-if="isWidgetDataLoading && currentStep !== 1" class="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-[1.5px] z-50">
+      <div
+        v-if="isWidgetDataLoading && currentStep !== 1"
+        class="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-[1.5px] z-50">
         <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-600"></div>
       </div>
-      
-      <!-- Render FormFields step immediately, passing the loading flag as a prop -->
+
       <FormFields v-if="currentStep === 1" :isLoading="isWidgetDataLoading" />
       <FormStyle v-if="!isWidgetDataLoading && currentStep === 2" />
       <DisplayRules v-if="!isWidgetDataLoading && currentStep === 3" />
@@ -142,7 +148,7 @@
   import DisplayRules from "@/views/FormSettingComponents/DisplayRules.vue";
   import MessageAndNotification from "@/views/FormSettingComponents/MessageAndNotification.vue";
   import TriggerAndTargeting from "@/views/FormSettingComponents/TriggerAndTargeting.vue";
-  
+
   import FormSettingService from "@/services/api/form-setting-services";
   import { formSetting } from "@/composable/useFormSettings";
   import type { SaveWidgetSettingPayload } from "@/types/form";
@@ -160,7 +166,7 @@
   const isLoading = ref(false);
   const isRedirectToDashboard = ref(false);
   const showSaveDropdown = ref(false);
-  
+
   const toggleSaveDropdown = () => {
     showSaveDropdown.value = !showSaveDropdown.value;
   };
@@ -170,7 +176,7 @@
     { number: 2, title: "Form Styles" },
     { number: 3, title: "Display Rules" },
     { number: 4, title: "Message & Notifications" },
-    { number: 5, title: "Trigger Settings" },
+    { number: 5, title: "Trigger & Targeting" },
   ];
 
   // Destructure Pinia stores, status loading indicators and fetch action from composable
@@ -187,7 +193,7 @@
     countryTargeting,
     validationErrors,
     isWidgetDataLoading,
-    fetchWidgetSetting
+    fetchWidgetSetting,
   } = formSetting();
 
   const hasVisibleFields = computed(() => {
@@ -198,7 +204,7 @@
   const isStepDisabled = (stepNumber: number) => {
     return stepNumber > 1 && !hasVisibleFields.value;
   };
-  
+
   // Auto return to Step 1 if all fields are removed
   watch(hasVisibleFields, (hasFields) => {
     if (!hasFields && currentStep.value > 1) {
@@ -212,7 +218,7 @@
     if (obj instanceof Date) return obj;
 
     if (
-      typeof obj === 'object' &&
+      typeof obj === "object" &&
       obj.r !== undefined &&
       obj.g !== undefined &&
       obj.b !== undefined &&
@@ -222,10 +228,10 @@
     }
 
     if (Array.isArray(obj)) {
-      return obj.map(item => convertColorsDeep(item));
+      return obj.map((item) => convertColorsDeep(item));
     }
 
-    if (typeof obj === 'object') {
+    if (typeof obj === "object") {
       const newObj: any = {};
       for (const key in obj) {
         newObj[key] = convertColorsDeep(obj[key]);
@@ -240,8 +246,8 @@
     if (!obj) return obj;
     if (obj instanceof Date) {
       const year = obj.getFullYear();
-      const month = String(obj.getMonth() + 1).padStart(2, '0');
-      const day = String(obj.getDate()).padStart(2, '0');
+      const month = String(obj.getMonth() + 1).padStart(2, "0");
+      const day = String(obj.getDate()).padStart(2, "0");
       return `${year}-${month}-${day}`;
     }
 
@@ -249,7 +255,7 @@
       return obj.map((item) => formatDatesDeep(item));
     }
 
-    if (typeof obj === 'object') {
+    if (typeof obj === "object") {
       const newObj: any = {};
       for (const key in obj) {
         newObj[key] = formatDatesDeep(obj[key]);
@@ -257,6 +263,48 @@
       return newObj;
     }
     return obj;
+  };
+
+  const validateDisplayRules = (): boolean => {
+    delete validationErrors.button_text;
+    if (displayRuleSetting.value.form_type === "sticky") {
+      if (!displayRuleSetting.value.button_text || !displayRuleSetting.value.button_text.trim()) {
+        validationErrors.button_text = "Button text is required";
+
+        // Redirect to Step 3 and focus on the input field
+        currentStep.value = 3;
+        nextTick(() => {
+          const el = document.getElementById("button_text");
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+            (el as HTMLElement).focus?.();
+          }
+        });
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const validateMessageAndNotification = (): boolean => {
+    delete validationErrors.custom_url;
+    if (submissionSetting.value.confirmationType === "custom_url") {
+      if (!submissionSetting.value.customUrl || !submissionSetting.value.customUrl.trim()) {
+        validationErrors.custom_url = "Custom URL is required";
+
+        // Redirect to Step 4 and focus on the input field
+        currentStep.value = 4;
+        nextTick(() => {
+          const el = document.getElementById("custom_url");
+          if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+            (el as HTMLElement).focus?.();
+          }
+        });
+        return false;
+      }
+    }
+    return true;
   };
 
   // Validation rules for triggers and targeting settings
@@ -274,7 +322,7 @@
         Number.isNaN(Number(raw)) ||
         Number(raw) < 0
       ) {
-        validationErrors.delay_duration = 'Delay duration must be a valid number';
+        validationErrors.delay_duration = "Delay duration must be a valid number";
       }
     }
 
@@ -290,7 +338,7 @@
         Number(raw) < 0 ||
         Number(raw) > 100
       ) {
-        validationErrors.page_scroll = 'Scroll percentage must be between 0 and 100';
+        validationErrors.page_scroll = "Scroll percentage must be between 0 and 100";
       }
     }
 
@@ -298,7 +346,7 @@
     if (pageRuleSetting.value.has_page_rule === 1) {
       pageRuleSetting.value.rule_setting.forEach((rule) => {
         if (!rule.rule_value?.trim()) {
-          validationErrors[`rule_value_${rule.id}`] = 'Page rule value is required';
+          validationErrors[`rule_value_${rule.id}`] = "Page rule value is required";
         }
       });
     }
@@ -307,17 +355,13 @@
     if (dateTimeSetting.value.has_date_rule === 1) {
       dateTimeSetting.value.rule_setting.forEach((rule: any) => {
         if (!rule.start_date) {
-          validationErrors[`date_rule_start_date_${rule.id}`] = 'Start date is required';
+          validationErrors[`date_rule_start_date_${rule.id}`] = "Start date is required";
         }
         if (!rule.end_date) {
-          validationErrors[`date_rule_end_date_${rule.id}`] = 'End date is required';
+          validationErrors[`date_rule_end_date_${rule.id}`] = "End date is required";
         }
-        if (
-          rule.start_date &&
-          rule.end_date &&
-          new Date(rule.start_date) > new Date(rule.end_date)
-        ) {
-          validationErrors[`date_rule_end_date_${rule.id}`] = 'End date must be after start date';
+        if (rule.start_date && rule.end_date && new Date(rule.start_date) > new Date(rule.end_date)) {
+          validationErrors[`date_rule_end_date_${rule.id}`] = "End date must be after start date";
         }
       });
     }
@@ -325,13 +369,13 @@
     // If validation fails, jump to step 5 and focus on error
     if (Object.keys(validationErrors).length > 0) {
       currentStep.value = 5;
-      
+
       nextTick(() => {
         const firstErrorKey = Object.keys(validationErrors)[0];
         if (!firstErrorKey) return;
         const el = document.getElementById(firstErrorKey);
         if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
           (el as HTMLElement).focus?.();
         }
       });
@@ -342,11 +386,13 @@
 
   // Save Settings Submit Handler
   const saveFormSettings = async () => {
+    if (!validateDisplayRules()) return;
+    if (!validateMessageAndNotification()) return;
     if (!validateTriggersAndTargetingSettings()) return;
 
     isLoading.value = true;
     showSaveDropdown.value = false;
-    
+
     try {
       const widgetId = String(route.params.uniqueId);
 
@@ -361,12 +407,12 @@
         date_time_setting: formatDatesDeep(dateTimeSetting.value),
         day_hour_setting: dayHourSetting.value,
         country_rule_setting: countryTargeting.value,
-        widget_id: widgetId
+        widget_id: widgetId,
       };
 
       const finalPayload = convertColorsDeep(payload);
       const response = await new FormSettingService().savePopupSetting(finalPayload);
-      
+
       if (response.status === 1) {
         toast.success(response.message || "Settings saved successfully!");
         if (isRedirectToDashboard.value) {
@@ -383,25 +429,41 @@
     }
   };
 
-  // Watch for Route Param Changes to trigger fetching details on mounted
-  watch(
-    () => route.params.uniqueId,
-    (id) => {
-      if (typeof id === 'string') {
-        fetchWidgetSetting(id);
-      }
-    },
-    { immediate: true }
-  );
-
   // Navigation Steps
   const prevStep = () => {
     if (currentStep.value > 1) currentStep.value--;
   };
 
   const nextStep = () => {
+    if (currentStep.value === 3 && !validateDisplayRules()) return; // 👈 Add this line
     if (currentStep.value < 5 && !isStepDisabled(currentStep.value + 1)) {
       currentStep.value++;
     }
   };
+
+  // Step navigation validator
+  const handleStepNavigation = (stepNumber: number) => {
+    if (stepNumber > 3 && !validateDisplayRules()) return;
+
+    currentStep.value = stepNumber;
+  };
+
+  // Watch for Route Param Changes to trigger fetching details on mounted
+  watch(
+    () => route.params.uniqueId,
+    (id) => {
+      if (typeof id === "string") {
+        fetchWidgetSetting(id);
+      }
+    },
+    { immediate: true }
+  );
+  // Reset the layout scroll container to the top when the step changes
+  watch(currentStep, () => {
+    const scrollContainer = document.querySelector('.overflow-y-auto');
+    if (scrollContainer) {
+      scrollContainer.scrollTop = 0; // 👈 Scrolls the layout container back to the top
+    }
+    window.scrollTo({ top: 0, behavior: "instant" });
+  });
 </script>

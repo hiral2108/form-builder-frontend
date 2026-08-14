@@ -46,7 +46,7 @@
         </div>
         
         <!-- Real loaded state -->
-        <button v-else class="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer">
+        <button v-else class="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-slate-100 transition-colors cursor-default">
           <div class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center font-semibold text-sm">
             {{ userInitials }}
           </div>

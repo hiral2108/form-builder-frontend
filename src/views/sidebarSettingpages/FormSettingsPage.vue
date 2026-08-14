@@ -42,14 +42,17 @@
           </button>
 
           <div class="relative">
-            <div class="inline-flex rounded-lg overflow-hidden bg-teal-600 shadow-md">
+            <div
+              class="inline-flex rounded-lg overflow-hidden bg-teal-600 shadow-md"
+              :class="{ 'opacity-75': isLoading }">
               <button
                 type="button"
+                :disabled="isLoading"
                 @click="
                   isRedirectToDashboard = false;
                   saveFormSettings();
                 "
-                class="text-white hover:bg-teal-700 cursor-pointer transition-colors flex items-center save-changes px-4 py-2 font-semibold text-sm">
+                class="text-white hover:bg-teal-700 cursor-pointer transition-colors flex items-center save-changes px-4 py-2 font-semibold text-sm disabled:cursor-not-allowed">
                 <span class="flex items-center gap-2">
                   <span class="max-[420px]:hidden">Save Changes</span>
                   <span class="min-[420px]:hidden">Save</span>
@@ -59,8 +62,9 @@
 
               <button
                 type="button"
+                :disabled="isLoading"
                 @click.stop="toggleSaveDropdown"
-                class="px-3 py-2 border-l border-teal-500 flex items-center justify-center hover:bg-teal-700 cursor-pointer save-dropdown-icon">
+                class="px-3 py-2 border-l border-teal-500 flex items-center justify-center hover:bg-teal-700 cursor-pointer save-dropdown-icon disabled:cursor-not-allowed">
                 <img
                   v-svg-inline
                   src="@/assets/icons/form-settings/arrow-down-s-line.svg"
@@ -74,11 +78,12 @@
               v-show="showSaveDropdown">
               <button
                 type="button"
+                :disabled="isLoading"
                 @click="
                   isRedirectToDashboard = true;
                   saveFormSettings();
                 "
-                class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 rounded-lg cursor-pointer w-full text-left">
+                class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 rounded-lg cursor-pointer w-full text-left disabled:opacity-50 disabled:cursor-not-allowed">
                 Save &amp; View Dashboard
                 <ButtonLoader
                   v-if="isLoading && isRedirectToDashboard === true"
@@ -286,7 +291,7 @@
     return true;
   };
 
-   const validateMessageAndNotification = (): boolean => {
+  const validateMessageAndNotification = (): boolean => {
     // Clear previous step 4 validation errors
     delete validationErrors.custom_url;
     delete validationErrors.email_name;
@@ -309,8 +314,11 @@
       if (!submissionSetting.value.emailSettings.name || !submissionSetting.value.emailSettings.name.trim()) {
         validationErrors.email_name = "Name is required";
       }
-      
-      if (!submissionSetting.value.emailSettings.sendToEmail || !submissionSetting.value.emailSettings.sendToEmail.trim()) {
+
+      if (
+        !submissionSetting.value.emailSettings.sendToEmail ||
+        !submissionSetting.value.emailSettings.sendToEmail.trim()
+      ) {
         validationErrors.email_send_to = "Send to Email is required";
       } else {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -318,19 +326,17 @@
           validationErrors.email_send_to = "Please enter a valid email address";
         }
       }
-      
+
       if (!submissionSetting.value.emailSettings.subject || !submissionSetting.value.emailSettings.subject.trim()) {
         validationErrors.email_subject = "Subject is required";
       }
-      
+
       // Strip HTML tags to check if the Quill editor body has text
-      const cleanBody = (submissionSetting.value.emailSettings.emailBody || "")
-        .replace(/<[^>]*>/g, "")
-        .trim();
+      const cleanBody = (submissionSetting.value.emailSettings.emailBody || "").replace(/<[^>]*>/g, "").trim();
       if (!cleanBody) {
         validationErrors.email_body = "Email Body is required";
       }
-      
+
       if (!submissionSetting.value.emailSettings.replyTo || !submissionSetting.value.emailSettings.replyTo.trim()) {
         validationErrors.email_reply_to = "Reply To is required";
       } else {
@@ -339,11 +345,11 @@
           validationErrors.email_reply_to = "Please enter a valid email address";
         }
       }
-      
+
       if (!submissionSetting.value.emailSettings.bcc || !submissionSetting.value.emailSettings.bcc.trim()) {
         validationErrors.email_bcc = "BCC is required";
       }
-      
+
       if (!submissionSetting.value.emailSettings.cc || !submissionSetting.value.emailSettings.cc.trim()) {
         validationErrors.email_cc = "CC is required";
       }
@@ -353,13 +359,22 @@
     if (Object.keys(validationErrors).length > 0) {
       currentStep.value = 4;
       nextTick(() => {
-        const step4Keys = ["custom_url", "email_name", "email_send_to", "email_subject", "email_body", "email_reply_to", "email_bcc", "email_cc"];
-        const firstErrorKey = Object.keys(validationErrors).find(key => step4Keys.includes(key));
+        const step4Keys = [
+          "custom_url",
+          "email_name",
+          "email_send_to",
+          "email_subject",
+          "email_body",
+          "email_reply_to",
+          "email_bcc",
+          "email_cc",
+        ];
+        const firstErrorKey = Object.keys(validationErrors).find((key) => step4Keys.includes(key));
         if (firstErrorKey) {
           const el = document.getElementById(firstErrorKey);
           if (el) {
             el.scrollIntoView({ behavior: "smooth", block: "center" });
-            
+
             // Focus element appropriately (Quill editor needs targeting inner editor pane)
             if (firstErrorKey === "email_body") {
               const quillEditor = el.querySelector(".ql-editor");
@@ -458,8 +473,10 @@
     if (!validateMessageAndNotification()) return;
     if (!validateTriggersAndTargetingSettings()) return;
 
-    isLoading.value = true;
-    showSaveDropdown.value = false;
+     isLoading.value = true;
+    if (!isRedirectToDashboard.value) {
+      showSaveDropdown.value = false;
+    }
 
     try {
       const widgetId = String(route.params.uniqueId);
@@ -493,7 +510,10 @@
       toast.error("Failed to save settings");
       console.error(error);
     } finally {
-      isLoading.value = false;
+       setTimeout(() => {
+        isLoading.value = false;
+        showSaveDropdown.value = false;
+      }, 1000);
     }
   };
 
@@ -504,17 +524,14 @@
 
   const nextStep = () => {
     if (currentStep.value === 3 && !validateDisplayRules()) return;
-    if (currentStep.value === 4 && !validateMessageAndNotification()) return; // Validates Step 4 fields
     if (currentStep.value < 5 && !isStepDisabled(currentStep.value + 1)) {
       currentStep.value++;
     }
   };
 
   // Step navigation validator
-  const handleStepNavigation = (stepNumber: number) => {
+const handleStepNavigation = (stepNumber: number) => {
     if (stepNumber > 3 && !validateDisplayRules()) return;
-    if (stepNumber > 4 && !validateMessageAndNotification()) return; // Validates Step 4 fields
-
     currentStep.value = stepNumber;
   };
 
@@ -530,7 +547,7 @@
   );
   // Reset the layout scroll container to the top when the step changes
   watch(currentStep, () => {
-    const scrollContainer = document.querySelector('.overflow-y-auto');
+    const scrollContainer = document.querySelector(".overflow-y-auto");
     if (scrollContainer) {
       scrollContainer.scrollTop = 0; // 👈 Scrolls the layout container back to the top
     }

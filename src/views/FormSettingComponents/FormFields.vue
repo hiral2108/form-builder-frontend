@@ -31,8 +31,10 @@
             ]">
             
             <!-- Icon Container -->
+                        <!-- Icon Container (added flex-shrink-0 to prevent shrinking) -->
+                        <!-- Icon Container (added flex-shrink-0 to prevent shrinking) -->
             <div
-              class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500 transition-colors"
+              class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500 transition-colors flex-shrink-0"
               :class="[
                 isFieldLocked(item.type)
                   ? 'bg-slate-100 text-slate-400'
@@ -50,18 +52,24 @@
                 ]" />
             </div>
 
-            <!-- Label -->
-            <span :class="isFieldLocked(item.type) ? 'text-slate-400 font-normal' : 'text-slate-700'">{{ item.label }}</span>
-            
-            <!-- Premium Red-to-Orange Pro Badge with Lock (matches Page Rule) -->
-            <span
-              v-if="isFieldLocked(item.type)"
-              class="ml-auto flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-sm uppercase tracking-wider scale-90">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-2.5 h-2.5">
-                <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
-              </svg>
-              Pro
-            </span>
+            <!-- Wrapping Flex Container (forces badge to wrap only when space is tight) -->
+            <div class="flex-grow flex flex-row flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
+              <span 
+                :class="isFieldLocked(item.type) ? 'text-slate-400 font-normal' : 'text-slate-700'"
+                class="leading-tight">
+                {{ item.label }}
+              </span>
+              
+              <!-- Premium Red-to-Orange Pro Badge with Lock -->
+              <span
+                v-if="isFieldLocked(item.type)"
+                class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-bold bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-sm uppercase tracking-wider scale-90 flex-shrink-0 origin-left">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-2.2 h-2.2">
+                  <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                </svg>
+                Pro
+              </span>
+            </div>
           </button>
         </div>
       </div>

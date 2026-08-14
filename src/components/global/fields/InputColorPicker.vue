@@ -193,6 +193,7 @@ function onDocClick(e: MouseEvent) {
 
 function onWindowChange() {
   if (showPicker.value) {
+     showPicker.value = false;
     computePopupPosition();
   }
 }

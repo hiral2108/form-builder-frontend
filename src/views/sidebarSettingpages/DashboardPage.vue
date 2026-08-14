@@ -18,7 +18,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
           <path d="M9 1v2h6V1h2v2h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2Zm11 7H4v12h16V8Zm-9 3v4H8v-4h3Zm5 0v4h-3v-4h3Z"></path>
         </svg>
-        <SelectField v-model="selectedFilter" :options="filteredMenu" customClass="pl-10 !w-[200px] max-[350px]:!w-full" />
+        <SelectField v-model="selectedFilter" :options="filteredMenu" customClass="pl-10 !w-[200px] max-[350px]:!w-full h-10" />
       </div>
 
       <template v-if="selectedFilter === 'custom'">
@@ -41,7 +41,7 @@
         </div>
         <button 
           type="button" 
-          class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-[38px] text-white bg-teal-600 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10" 
+          class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-10 text-white bg-teal-600 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10" 
           @click="applyCustomFilter"
         >
           Apply

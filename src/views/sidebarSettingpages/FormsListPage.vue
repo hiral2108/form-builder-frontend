@@ -13,7 +13,7 @@
               <path
                 d="M9 1v2h6V1h2v2h4a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4V1h2Zm11 7H4v12h16V8Zm-9 3v4H8v-4h3Zm5 0v4h-3v-4h3Z"></path>
             </svg>
-            <SelectField v-model="selectedFilter" :options="filteredMenu" customClass="pl-10 !w-[200px]" />
+            <SelectField v-model="selectedFilter" :options="filteredMenu" customClass="pl-10 !w-[200px] h-10" />
           </div>
 
           <template v-if="selectedFilter === 'custom'">
@@ -35,7 +35,7 @@
             </div>
             <button
               type="button"
-              class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-[38px] text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10 animate-none"
+              class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-10   text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10 animate-none"
               @click="applyCustomFilter">
               Apply
             </button>
@@ -44,7 +44,7 @@
 
         <button
           @click="handleCreateClick"
-          class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10">
+          class="px-4 py-2 min-h-10 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
             <path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path>
           </svg>

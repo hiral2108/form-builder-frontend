@@ -150,7 +150,7 @@
         <button
           type="button"
           :disabled="isPlanDisabled(plan)"
-          @click="!isPlanDisabled(plan)"
+          @click="handlePlanClick(plan)"
           class="w-full py-3 rounded-xl text-sm font-semibold transition-all duration-200 whitespace-nowrap mb-5 flex items-center justify-center gap-2"
           :class="getPlanButtonClass(plan)">
           {{ getPlanButtonText(plan) }}
@@ -223,7 +223,12 @@
         </a>
       </p>
     </section>
+     
   </div>
+  <FreePlanModal
+      :isShowModal="isShowFreePlanModal"
+      @closeModal="isShowFreePlanModal = false"
+    />
 </template>
 
 <script setup lang="ts">
@@ -231,12 +236,15 @@ import { ref, onMounted } from "vue";
 import PlanService from "@/services/api/plan-services";
 import planFeaturesData from "@/data/planFeatures.json";
 import planFaqs from "@/data/planFaqs.json";
+import FreePlanModal from "@/components/modals/FreePlanModal.vue";
 
 type PlanKey = "free" | "pro";
 
 const isPlanLoading = ref(true);
 const selectedPlanType = ref<"monthly" | "yearly">("monthly");
 const plans = ref<any[]>([]);
+
+const isShowFreePlanModal = ref(true);
 
 // 1. Fetch Plans from API
 const fetchPlans = async () => {
@@ -309,6 +317,16 @@ const getPlanButtonClass = (plan: any) => {
 const getPlanFeatures = (name: string) => {
   const key = (name?.toLowerCase() || "free") as PlanKey;
   return (planFeaturesData.PlanFeature as any)?.[key] || [];
+};
+
+const handlePlanClick = (plan: any) => {
+  if (isPlanDisabled(plan)) return;
+  
+  if (plan.name?.toLowerCase() === "free") {
+    isShowFreePlanModal.value = true;
+  } else {
+    // Pro plan action/redirect
+  }
 };
 
 onMounted(() => {

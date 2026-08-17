@@ -356,19 +356,20 @@
     }
 
     // 3. If validation fails, redirect to Step 4, scroll and focus on first error field
-    if (Object.keys(validationErrors).length > 0) {
+    const step4Keys = [
+      "custom_url",
+      "email_name",
+      "email_send_to",
+      "email_subject",
+      "email_body",
+      "email_reply_to",
+      "email_bcc",
+      "email_cc",
+    ];
+    const hasStep4Errors = Object.keys(validationErrors).some((key) => step4Keys.includes(key));
+    if (hasStep4Errors) {
       currentStep.value = 4;
       nextTick(() => {
-        const step4Keys = [
-          "custom_url",
-          "email_name",
-          "email_send_to",
-          "email_subject",
-          "email_body",
-          "email_reply_to",
-          "email_bcc",
-          "email_cc",
-        ];
         const firstErrorKey = Object.keys(validationErrors).find((key) => step4Keys.includes(key));
         if (firstErrorKey) {
           const el = document.getElementById(firstErrorKey);
@@ -469,6 +470,8 @@
 
   // Save Settings Submit Handler
   const saveFormSettings = async () => {
+    if (!validateDisplayRules()) return;
+       Object.keys(validationErrors).forEach((k) => delete validationErrors[k]);
     if (!validateDisplayRules()) return;
     if (!validateMessageAndNotification()) return;
     if (!validateTriggersAndTargetingSettings()) return;

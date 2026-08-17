@@ -47,13 +47,17 @@
           <div
             class="w-full h-full flex items-center justify-center transition-transform duration-300 ease-in-out"
             :class="allowOpen && isFormOpen ? 'rotate-90' : 'rotate-0'">
-            <svg
+               <svg
               v-if="allowOpen && isFormOpen"
               xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor">
-              <path
-                d="M12 10.5858L16.95 5.63584L18.3642 7.05006L13.4142 12.0001L18.3642 16.9501L16.95 18.3643L12 13.4143L7.05 18.3643L5.63574 16.9501L10.5858 12.0001L5.63574 7.05006L7.05 5.63584L12 10.5858Z" />
+              viewBox="4.5 4.5 15 15"
+              fill="currentColor"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="w-[45%] h-[45%]">
+              <path d="M18 6L6 18M6 6l12 12" />
             </svg>
 
             <template v-else>

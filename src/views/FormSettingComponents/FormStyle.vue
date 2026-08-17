@@ -121,9 +121,9 @@
             />
           </div>
           <!-- Box Shadow -->
-          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 sm:w-28 flex-shrink-0">Box Shadow</label>
-            <div class="grid grid-cols-2 sm:flex sm:items-center gap-3 min-w-0 w-full">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2 responsive-shadow-row">
+            <label class="text-sm font-semibold text-gray-700 sm:w-28 flex-shrink-0 responsive-shadow-label">Box Shadow</label>
+            <div class="grid grid-cols-2 sm:flex sm:items-center gap-3 min-w-0 w-full responsive-shadow-grid">
               <!-- X Offset -->
               <InputFieldWithBadge
                 v-model="formStyleSetting.inputStyle.inputBoxShadowX"
@@ -191,7 +191,7 @@
             <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Padding <span class="text-[10px]">(PX)</span>
             </label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full responsive-pm-grid">
               <InputFieldWithBadge
                 v-model="formStyleSetting.inputStyle.inputPaddingTop"
                 type="number"
@@ -231,7 +231,7 @@
             <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Margin <span class="text-[10px]">(PX)</span>
             </label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full responsive-pm-grid">
               <InputFieldWithBadge
                 v-model="formStyleSetting.inputStyle.inputMarginTop"
                 type="number"
@@ -359,9 +359,9 @@
         </button>
         <div v-show="activeSection === 'buttonStyle'" class="p-4 space-y-3 bg-white rounded-b-xl">
           <!-- Box Shadow -->
-          <div class="flex flex-col sm:flex-row sm:items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 sm:w-28 flex-shrink-0">Box Shadow</label>
-            <div class="grid grid-cols-2 sm:flex sm:items-center gap-3 min-w-0 w-full">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2 responsive-shadow-row">
+            <label class="text-sm font-semibold text-gray-700 sm:w-28 flex-shrink-0 responsive-shadow-label">Box Shadow</label>
+            <div class="grid grid-cols-2 sm:flex sm:items-center gap-3 min-w-0 w-full responsive-shadow-grid">
               <InputFieldWithBadge
                 v-model="formStyleSetting.buttonStyle.btnBoxShadowX"
                 type="number"
@@ -424,7 +424,7 @@
             <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Padding <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full responsive-pm-grid">
               <InputFieldWithBadge
                 v-model="formStyleSetting.buttonStyle.btnPaddingTop"
                 type="number"
@@ -464,7 +464,7 @@
             <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Margin <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full responsive-pm-grid">
               <InputFieldWithBadge
                 v-model="formStyleSetting.buttonStyle.btnMarginTop"
                 type="number"
@@ -622,7 +622,7 @@
             <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Padding <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full responsive-pm-grid">
               <InputFieldWithBadge
                 v-model="formStyleSetting.formTitleStyle.formTitlePaddingTop"
                 type="number"
@@ -662,7 +662,7 @@
             <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Margin <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full responsive-pm-grid">
               <InputFieldWithBadge
                 v-model="formStyleSetting.formTitleStyle.formTitleMarginTop"
                 type="number"
@@ -750,7 +750,7 @@
             <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Padding <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full responsive-pm-grid">
               <InputFieldWithBadge
                 v-model="formStyleSetting.formDescStyle.formDescPaddingTop"
                 type="number"
@@ -790,7 +790,7 @@
             <label class="text-sm font-semibold text-slate-700 sm:w-28 flex-shrink-0 sm:pt-2.5">
               Margin <span class="text-xs font-normal text-slate-400 ml-0.5">(PX)</span>
             </label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 flex-1 w-full responsive-pm-grid">
               <InputFieldWithBadge
                 v-model="formStyleSetting.formDescStyle.formDescMarginTop"
                 type="number"
@@ -912,3 +912,26 @@ watch(
   { immediate: true }
 );
 </script>
+
+<style scoped>
+@media (max-width: 1425px) {
+  .responsive-shadow-row {
+    align-items: flex-start !important;
+  }
+
+  .responsive-shadow-label {
+    padding-top: 0.625rem !important;
+  }
+
+  .responsive-shadow-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+  }
+
+  .responsive-pm-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+  }
+}
+</style>

@@ -44,11 +44,6 @@
   --button-margin-left: 0px;
 }
 
-/* ===== Actual style rules (never change these again) ===== */
-/* Every rule below is scoped under .gform-wrapper so it ONLY affects
-   the live preview — never the settings panel, which reuses the same
-   InputField / TextareaField / SelectField components. */
-
 .gform-wrapper {
   background-color: var(--form-bg-color);
 }
@@ -125,4 +120,13 @@
   width: 100% !important;
   max-width: 100% !important;
   min-width: 0 !important;
+}
+
+.gform-wrapper .textarea-field textarea {
+  height: auto !important;
+  min-height: 80px !important;
+}
+/* 👉 Increase top padding slightly so the text doesn't touch the top border */
+.gform-wrapper .textarea-field textarea {
+  padding-top: var(--input-padding-top) !important;
 }

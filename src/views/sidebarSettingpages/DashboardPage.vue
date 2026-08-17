@@ -134,12 +134,12 @@
 
   </div>
       <!-- Performance Analytics Chart Card -->
-    <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-4 sm:p-6 mb-6 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300 overflow-x-auto max-[640px]:hidden">
+    <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-4 sm:p-6 mb-6 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300 overflow-x-auto max-[600px]:hidden">
       <div class="mb-4">
         <h3 class="text-base font-bold text-slate-800 tracking-tight">Performance Analytics</h3>
         <p class="text-xs text-slate-400 mt-0.5">Visual representation of views and form submissions over time.</p>
       </div>
-      <div class="w-full min-w-[500px] h-56 sm:h-70 relative">
+      <div class="w-full min-w-[500px] h-70 relative">
         <LineChart
           :dateList="dateData"
           :viewData="viewData"

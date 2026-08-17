@@ -47,7 +47,7 @@
           <div
             class="w-full h-full flex items-center justify-center transition-transform duration-300 ease-in-out"
             :class="allowOpen && isFormOpen ? 'rotate-90' : 'rotate-0'">
-               <svg
+            <svg
               v-if="allowOpen && isFormOpen"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="4.5 4.5 15 15"

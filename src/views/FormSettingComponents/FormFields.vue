@@ -27,45 +27,43 @@
             :class="[
               isFieldLocked(item.type)
                 ? 'opacity-75 bg-slate-50/65 border-slate-200 hover:bg-slate-100/50 hover:border-slate-300'
-                : 'hover:ring-2 hover:ring-teal-500 hover:bg-teal-50/10 text-slate-700'
+                : 'hover:ring-2 hover:ring-teal-500 hover:bg-teal-50/10 text-slate-700',
             ]">
-            
             <!-- Icon Container -->
-                        <!-- Icon Container (added flex-shrink-0 to prevent shrinking) -->
-                        <!-- Icon Container (added flex-shrink-0 to prevent shrinking) -->
+            <!-- Icon Container (added flex-shrink-0 to prevent shrinking) -->
+            <!-- Icon Container (added flex-shrink-0 to prevent shrinking) -->
             <div
               class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500 transition-colors flex-shrink-0"
               :class="[
                 isFieldLocked(item.type)
                   ? 'bg-slate-100 text-slate-400'
-                  : 'group-hover:bg-teal-100/60 group-hover:text-teal-700'
+                  : 'group-hover:bg-teal-100/60 group-hover:text-teal-700',
               ]">
               <img
                 v-svg-inline
                 :src="item.icon"
                 :alt="item.label"
                 class="w-4 h-4 transition-colors fill-current"
-                :class="[
-                  isFieldLocked(item.type)
-                    ? 'text-slate-400'
-                    : 'text-slate-500 group-hover:text-teal-600'
-                ]" />
+                :class="[isFieldLocked(item.type) ? 'text-slate-400' : 'text-slate-500 group-hover:text-teal-600']" />
             </div>
 
             <!-- Wrapping Flex Container (forces badge to wrap only when space is tight) -->
             <div class="flex-grow flex flex-row flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
-              <span 
+              <span
                 :class="isFieldLocked(item.type) ? 'text-slate-400 font-normal' : 'text-slate-700'"
                 class="leading-tight">
                 {{ item.label }}
               </span>
-              
+
               <!-- Premium Red-to-Orange Pro Badge with Lock -->
               <span
                 v-if="isFieldLocked(item.type)"
                 class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-bold bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-sm uppercase tracking-wider scale-90 flex-shrink-0 origin-left">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-2.2 h-2.2">
-                  <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z"
+                    clip-rule="evenodd" />
                 </svg>
                 Pro
               </span>
@@ -401,8 +399,9 @@
       </div>
     </section>
 
-    <section
+        <section
       class="settings-panel lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm h-[420px] lg:h-auto flex flex-col overflow-hidden lg:sticky lg:top-[80px] lg:max-h-[calc(100vh-210px)]">
+
       <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
         <h3 class="font-semibold text-slate-800 text-md">Field Settings</h3>
       </div>
@@ -513,35 +512,128 @@
                   { label: 'Split Name', value: 'split' },
                 ]" />
             </template>
-            <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split'">
-              <div>
-                <InputField
-                  type="text"
-                  v-model="selectedField.firstNameLabel"
-                  label="First Name Label"
-                  focusColor="teal" />
+                       <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split'">
+              
+              <!-- 1. First Name Settings Collapsible -->
+              <div class="border border-slate-200 rounded-xl overflow-hidden -mx-1 mb-4">
+                <button
+                  type="button"
+                  @click="toggleFirstNameSettings"
+                  class="w-full flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+                  <span class="text-sm font-semibold text-gray-700">First Name Settings</span>
+                  <span
+                    class="inline-flex items-center justify-center transition-transform duration-200"
+                    :class="{ 'rotate-180': isFirstNameSettingsOpen }">
+                    <img
+                      v-svg-inline
+                      src="@/assets/icons/form-settings/arrow-down-s-line.svg"
+                      alt="Toggle Arrow"
+                      class="w-5 h-5 text-slate-400" />
+                  </span>
+                </button>
+
+                <div v-if="isFirstNameSettingsOpen" class="p-4 space-y-4 bg-white border-t border-slate-100">
+                  <div>
+                    <InputField
+                      type="text"
+                      v-model="selectedField.firstNameLabel"
+                      label="First Name Label"
+                      focusColor="teal" />
+                  </div>
+                  <div>
+                    <InputField
+                      type="text"
+                      v-model="selectedField.firstNamePlaceholder"
+                      label="First Name Placeholder"
+                      focusColor="teal" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Required</label>
+                    <div class="flex gap-2">
+                      <CustomDefaultRadio
+                        id="first-required-yes"
+                        name="firstRequired"
+                        :value="1"
+                        label="Yes"
+                        v-model="selectedField.firstNameRequired" />
+                      <CustomDefaultRadio
+                        id="first-required-no"
+                        name="firstRequired"
+                        :value="0"
+                        label="No"
+                        v-model="selectedField.firstNameRequired" />
+                    </div>
+                  </div>
+                  <div v-if="selectedField.firstNameRequired">
+                    <InputField
+                      type="text"
+                      v-model="selectedField.firstNameRequiredMessage"
+                      label="Required Message"
+                      focusColor="teal" />
+                  </div>
+                </div>
               </div>
-              <div>
-                <InputField
-                  type="text"
-                  v-model="selectedField.firstNamePlaceholder"
-                  label="First Name Placeholder"
-                  focusColor="teal" />
+
+              <!-- 2. Last Name Settings Collapsible -->
+              <div class="border border-slate-200 rounded-xl overflow-hidden -mx-1">
+                <button
+                  type="button"
+                  @click="toggleLastNameSettings"
+                  class="w-full flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer">
+                  <span class="text-sm font-semibold text-gray-700">Last Name Settings</span>
+                  <span
+                    class="inline-flex items-center justify-center transition-transform duration-200"
+                    :class="{ 'rotate-180': isLastNameSettingsOpen }">
+                    <img
+                      v-svg-inline
+                      src="@/assets/icons/form-settings/arrow-down-s-line.svg"
+                      alt="Toggle Arrow"
+                      class="w-5 h-5 text-slate-400" />
+                  </span>
+                </button>
+
+                <div v-if="isLastNameSettingsOpen" class="p-4 space-y-4 bg-white border-t border-slate-100">
+                  <div>
+                    <InputField
+                      type="text"
+                      v-model="selectedField.lastNameLabel"
+                      label="Last Name Label"
+                      focusColor="teal" />
+                  </div>
+                  <div>
+                    <InputField
+                      type="text"
+                      v-model="selectedField.lastNamePlaceholder"
+                      label="Last Name Placeholder"
+                      focusColor="teal" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Required</label>
+                    <div class="flex gap-2">
+                      <CustomDefaultRadio
+                        id="last-required-yes"
+                        name="lastRequired"
+                        :value="1"
+                        label="Yes"
+                        v-model="selectedField.lastNameRequired" />
+                      <CustomDefaultRadio
+                        id="last-required-no"
+                        name="lastRequired"
+                        :value="0"
+                        label="No"
+                        v-model="selectedField.lastNameRequired" />
+                    </div>
+                  </div>
+                  <div v-if="selectedField.lastNameRequired">
+                    <InputField
+                      type="text"
+                      v-model="selectedField.lastNameRequiredMessage"
+                      label="Required Message"
+                      focusColor="teal" />
+                  </div>
+                </div>
               </div>
-              <div>
-                <InputField
-                  type="text"
-                  v-model="selectedField.lastNameLabel"
-                  label="Last Name Label"
-                  focusColor="teal" />
-              </div>
-              <div>
-                <InputField
-                  type="text"
-                  v-model="selectedField.lastNamePlaceholder"
-                  label="Last Name Placeholder"
-                  focusColor="teal" />
-              </div>
+
             </template>
             <template v-else>
               <div>
@@ -588,7 +680,8 @@
                 ]" />
             </template>
 
-            <div v-if="selectedField.type !== 'hidden'">
+                       <!-- 👇 Hide global required toggle when Name format is split -->
+            <div v-if="selectedField.type !== 'hidden' && !(selectedField.type === 'name' && selectedField.nameFormat === 'split')">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Required</label>
               <div class="flex">
                 <CustomDefaultRadio
@@ -606,7 +699,8 @@
               </div>
             </div>
 
-            <div v-if="selectedField.required">
+            <!-- 👇 Hide global required message when Name format is split -->
+            <div v-if="selectedField.required && !(selectedField.type === 'name' && selectedField.nameFormat === 'split')">
               <InputField
                 type="text"
                 v-model="selectedField.requiredMessage"
@@ -742,7 +836,8 @@
               </div>
             </div>
 
-            <div class="border border-slate-200 rounded-xl overflow-hidden -mx-1">
+                      <!-- Advance Settings Accordion -->
+             <div class="border border-slate-200 rounded-xl overflow-hidden -mx-1">
               <button
                 type="button"
                 @click="toggleAdvanceSettings"
@@ -760,38 +855,137 @@
               </button>
 
               <div v-if="isAdvanceSettingsOpen" class="p-4 space-y-4 bg-white">
-                <div v-if="canHaveDefaultValue(selectedField)">
-                  <InputField
-                    type="text"
-                    v-model="selectedField.defaultValue"
-                    label="Default Value"
-                    focusColor="teal" />
-                </div>
-
-                <div v-if="canHaveMaxLength(selectedField)">
-                  <InputFieldWithBadge
-                    type="number"
-                    v-model.number="selectedField.maxLength"
-                    label="Max Text Length"
+                <!-- 1. Radio Toggle Selector for Split Name fields -->
+                <div v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split'" class="mb-4">
+                  <RadioTypeSelector
+                    v-model="activeNameSubField"
+                    label="Configure Sub-field"
+                    name="activeNameSubField"
                     width="full"
-                    :min="1"
-                    badge='<svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 9 12 3 6 9H18ZM18 15 12 21 6 15H18Z" fill="currentColor"></path></svg>' />
+                    :columns="2"
+                    :options="[
+                      { label: 'First Name', value: 'first' },
+                      { label: 'Last Name', value: 'last' },
+                    ]" />
                 </div>
 
-                <div>
-                  <InputField
-                    type="text"
-                    v-model="selectedField.containerClass"
-                    label="Container Class"
-                    focusColor="teal" />
+                <!-- 2. Default Value Input -->
+                <div v-if="canHaveDefaultValue(selectedField)">
+                  <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'first'">
+                    <InputField
+                      type="text"
+                      v-model="selectedField.firstNameDefaultValue"
+                      label="First Name Default Value"
+                      focusColor="teal" />
+                  </template>
+                  <template v-else-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'last'">
+                    <InputField
+                      type="text"
+                      v-model="selectedField.lastNameDefaultValue"
+                      label="Last Name Default Value"
+                      focusColor="teal" />
+                  </template>
+                  <template v-else>
+                    <InputField
+                      type="text"
+                      v-model="selectedField.defaultValue"
+                      label="Default Value"
+                      focusColor="teal" />
+                  </template>
                 </div>
 
-                <div>
-                  <InputField type="text" v-model="selectedField.fieldClass" label="Field Class" focusColor="teal" />
+                <!-- 3. Max Text Length Input -->
+                <div v-if="canHaveMaxLength(selectedField)">
+                  <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'first'">
+                    <InputFieldWithBadge
+                      type="number"
+                      v-model.number="selectedField.firstNameMaxLength"
+                      label="First Name Max Length"
+                      width="full"
+                      :min="1"
+                      badge='<svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 9 12 3 6 9H18ZM18 15 12 21 6 15H18Z" fill="currentColor"></path></svg>' />
+                  </template>
+                  <template v-else-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'last'">
+                    <InputFieldWithBadge
+                      type="number"
+                      v-model.number="selectedField.lastNameMaxLength"
+                      label="Last Name Max Length"
+                      width="full"
+                      :min="1"
+                      badge='<svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 9 12 3 6 9H18ZM18 15 12 21 6 15H18Z" fill="currentColor"></path></svg>' />
+                  </template>
+                  <template v-else>
+                    <InputFieldWithBadge
+                      type="number"
+                      v-model.number="selectedField.maxLength"
+                      label="Max Text Length"
+                      width="full"
+                      :min="1"
+                      badge='<svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 9 12 3 6 9H18ZM18 15 12 21 6 15H18Z" fill="currentColor"></path></svg>' />
+                  </template>
                 </div>
 
+                <!-- 4. Container Class Input -->
                 <div>
-                  <TextareaField v-model="selectedField.helpMessage" label="Help Message" :rows="3" />
+                  <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'first'">
+                    <InputField
+                      type="text"
+                      v-model="selectedField.firstNameContainerClass"
+                      label="First Name Container Class"
+                      focusColor="teal" />
+                  </template>
+                  <template v-else-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'last'">
+                    <InputField
+                      type="text"
+                      v-model="selectedField.lastNameContainerClass"
+                      label="Last Name Container Class"
+                      focusColor="teal" />
+                  </template>
+                  <template v-else>
+                    <InputField
+                      type="text"
+                      v-model="selectedField.containerClass"
+                      label="Container Class"
+                      focusColor="teal" />
+                  </template>
+                </div>
+
+                <!-- 5. Field Class Input -->
+                <div>
+                  <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'first'">
+                    <InputField
+                      type="text"
+                      v-model="selectedField.firstNameFieldClass"
+                      label="First Name Field Class"
+                      focusColor="teal" />
+                  </template>
+                  <template v-else-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'last'">
+                    <InputField
+                      type="text"
+                      v-model="selectedField.lastNameFieldClass"
+                      label="Last Name Field Class"
+                      focusColor="teal" />
+                  </template>
+                  <template v-else>
+                    <InputField
+                      type="text"
+                      v-model="selectedField.fieldClass"
+                      label="Field Class"
+                      focusColor="teal" />
+                  </template>
+                </div>
+
+                <!-- 6. Help Message Input -->
+                <div>
+                  <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'first'">
+                    <TextareaField v-model="selectedField.firstNameHelpMessage" label="First Name Help Message" :rows="3" />
+                  </template>
+                  <template v-else-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'last'">
+                    <TextareaField v-model="selectedField.lastNameHelpMessage" label="Last Name Help Message" :rows="3" />
+                  </template>
+                  <template v-else>
+                    <TextareaField v-model="selectedField.helpMessage" label="Help Message" :rows="3" />
+                  </template>
                 </div>
               </div>
             </div>
@@ -827,15 +1021,13 @@
     @close="isDeleteModalOpen = false"
     @confirm="confirmDelete" />
 
-    <UpdatePlanModal
-    :isShowModal="isUpgradeModalOpen"
-    @closeModal="isUpgradeModalOpen = false" />
+  <UpdatePlanModal :isShowModal="isUpgradeModalOpen" @closeModal="isUpgradeModalOpen = false" />
 </template>
 
 <script setup lang="ts">
-  import { ref } from "vue"; // Imported ref
+  import { ref, watch } from "vue"; 
   import DeleteFieldConfirmModal from "@/components/modals/DeleteFieldConfirmModal.vue";
-  import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue"; // Imported UpdatePlanModal
+  import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue"; 
   import { useFormFieldsBuilder } from "@/composable/useFormFieldBuilder";
   defineProps<{
     isLoading?: boolean;
@@ -844,6 +1036,25 @@
   const isUpgradeModalOpen = ref(false);
   const openUpgradeModal = () => {
     isUpgradeModalOpen.value = true;
+  };
+
+  const activeNameSubField = ref<"first" | "last">("first");
+  const isFirstNameSettingsOpen = ref(false);
+  const isLastNameSettingsOpen = ref(false);
+ const toggleFirstNameSettings = () => {
+    isFirstNameSettingsOpen.value = !isFirstNameSettingsOpen.value;
+    if (isFirstNameSettingsOpen.value) {
+      isLastNameSettingsOpen.value = false;
+      isAdvanceSettingsOpen.value = false;
+    }
+  };
+  // 2. Toggle Last Name panel (closes First Name and Advance Settings)
+  const toggleLastNameSettings = () => {
+    isLastNameSettingsOpen.value = !isLastNameSettingsOpen.value;
+    if (isLastNameSettingsOpen.value) {
+      isFirstNameSettingsOpen.value = false;
+      isAdvanceSettingsOpen.value = false;
+    }
   };
   const {
     fieldLibrary,
@@ -883,8 +1094,14 @@
     canHaveMaxLength,
     labelStyleObject,
     cssVars,
-    isFieldLocked, 
+    isFieldLocked,
   } = useFormFieldsBuilder();
+   watch(isAdvanceSettingsOpen, (isOpen) => {
+    if (isOpen) {
+      isFirstNameSettingsOpen.value = false;
+      isLastNameSettingsOpen.value = false;
+    }
+  });
 </script>
 
 <style scoped>

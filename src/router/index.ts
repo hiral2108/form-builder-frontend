@@ -123,7 +123,7 @@ const router = createRouter({
 //   }
 // });
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   isRouteLoading.value = true;
   const requiresAuth = to.matched.some((record) => record.meta.requireAuth);
   const isGuestRoute = to.matched.some((record) => record.meta.guest);
@@ -147,21 +147,60 @@ router.beforeEach(async (to, from, next) => {
     return next({ path: "/login" });
   }
 
+  // if (requiresAuth) {
+  //   let isVerifyToken = false;
+  //   try {
+  //     const res = await new UserService().getShopToken("verify-token");
+  //     isVerifyToken = Boolean(res.verify_token);
+  //     if (!isVerifyToken && res.message) {
+  //       showErrorMessage(res.message);
+  //     }
+  //   } catch (err) {
+  //     showErrorMessage(err);
+  //     isVerifyToken = false;
+  //   }
+
+  //   if (!isVerifyToken) {
+  //     // Token is invalid -> clear stored tokens and redirect
+  //     sessionStorage.removeItem("authToken");
+  //     localStorage.removeItem("authToken");
+  //     sessionStorage.setItem("redirectPath", to.fullPath);
+  //     return next({ path: "/login" });
+  //   }
+
+  //   if (redirectPath && auth && isVerifyToken) {
+  //     sessionStorage.removeItem("redirectPath");
+  //     return next({ path: redirectPath });
+  //   }
+
+  //   return next();
+  // }
   if (requiresAuth) {
     let isVerifyToken = false;
+    let isNetworkError = false;
     try {
       const res = await new UserService().getShopToken("verify-token");
       isVerifyToken = Boolean(res.verify_token);
       if (!isVerifyToken && res.message) {
         showErrorMessage(res.message);
       }
-    } catch (err) {
-      showErrorMessage(err);
+    } catch (err: any) {
+      // If there is no response, the backend server is not running or unreachable
+      if (!err.response) {
+        isNetworkError = true;
+      } else {
+        showErrorMessage(err);
+      }
       isVerifyToken = false;
     }
 
     if (!isVerifyToken) {
-      // Token is invalid -> clear stored tokens and redirect
+      // If it is a network error (server offline), keep the token and proceed
+      if (isNetworkError) {
+        return next();
+      }
+
+      // If the server explicitly rejected the token, clear it and redirect to login
       sessionStorage.removeItem("authToken");
       localStorage.removeItem("authToken");
       sessionStorage.setItem("redirectPath", to.fullPath);

@@ -26,6 +26,20 @@ export interface FormFieldType {
   fieldClass?: string;
   helpMessage?: string;
   maxLength?: number;
+  firstNameRequired?: number;
+  lastNameRequired?: number;
+  firstNameRequiredMessage?: string;
+  lastNameRequiredMessage?: string;
+  firstNameContainerClass?: string;
+  lastNameContainerClass?: string;
+  firstNameFieldClass?: string;
+  lastNameFieldClass?: string;
+  firstNameDefaultValue?: string;
+  lastNameDefaultValue?: string;
+  firstNameMaxLength?: number;
+  lastNameMaxLength?: number;
+  firstNameHelpMessage?: string;
+  lastNameHelpMessage?: string;
 }
 
 export interface FormFieldSettingType {

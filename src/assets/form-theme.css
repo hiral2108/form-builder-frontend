@@ -42,6 +42,30 @@
   --button-margin-right: 0px;
   --button-margin-bottom: 10px;
   --button-margin-left: 0px;
+
+  --form-title-color: #1e293b;
+  --form-title-font-size: 16px;
+  --form-title-align: left;
+  --form-title-padding-top: 0px;
+  --form-title-padding-right: 0px;
+  --form-title-padding-bottom: 0px;
+  --form-title-padding-left: 0px;
+  --form-title-margin-top: 0px;
+  --form-title-margin-right: 0px;
+  --form-title-margin-bottom: 10px;
+  --form-title-margin-left: 0px;
+  /* Description defaults */
+  --form-desc-color: #5f6368;
+  --form-desc-font-size: 14px;
+  --form-desc-align: left;
+  --form-desc-padding-top: 0px;
+  --form-desc-padding-right: 0px;
+  --form-desc-padding-bottom: 0px;
+  --form-desc-padding-left: 0px;
+  --form-desc-margin-top: 0px;
+  --form-desc-margin-right: 0px;
+  --form-desc-margin-bottom: 20px;
+  --form-desc-margin-left: 0px;
 }
 
 .gform-wrapper {
@@ -115,6 +139,25 @@
   color: var(--widget-tooltip-text-color) !important;
 }
 
+.gform-title {
+  color: var(--form-title-color) !important;
+  font-size: var(--form-title-font-size) !important;
+  text-align: var(--form-title-align) !important;
+  padding: var(--form-title-padding-top) var(--form-title-padding-right) var(--form-title-padding-bottom)
+    var(--form-title-padding-left) !important;
+  margin: var(--form-title-margin-top) var(--form-title-margin-right) var(--form-title-margin-bottom)
+    var(--form-title-margin-left) !important;
+}
+.gform-desc {
+  color: var(--form-desc-color) !important;
+  font-size: var(--form-desc-font-size) !important;
+  text-align: var(--form-desc-align) !important;
+  padding: var(--form-desc-padding-top) var(--form-desc-padding-right) var(--form-desc-padding-bottom)
+    var(--form-desc-padding-left) !important;
+  margin: var(--form-desc-margin-top) var(--form-desc-margin-right) var(--form-desc-margin-bottom)
+    var(--form-desc-margin-left) !important;
+}
+
 .gform-wrapper .grid .input-field,
 .gform-wrapper .grid .input-field input {
   width: 100% !important;
@@ -126,7 +169,7 @@
   height: auto !important;
   min-height: 80px !important;
 }
-/* 👉 Increase top padding slightly so the text doesn't touch the top border */
+
 .gform-wrapper .textarea-field textarea {
   padding-top: var(--input-padding-top) !important;
 }

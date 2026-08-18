@@ -59,6 +59,9 @@ export function useFormStyle() {
     const widthStyle = fieldWidthMap[input.inputWidth] || "100%";
     const heightStyle = fieldSizeMap[input.inputSize] || "auto";
 
+    const title = formStyleSetting.value.formTitleStyle || {};
+    const desc = formStyleSetting.value.formDescStyle || {};
+
     return {
       "--form-bg-color": fs.formBgColor || "#FFFFFF",
 
@@ -114,6 +117,30 @@ export function useFormStyle() {
           ? `${display.cta_custom_size ?? 54}px`
           : ctaButtonSizeMap[display.cta_icon_size] || "54px",
       "--widget-position": display.cta_icon_position === "left" ? "left" : "right",
+
+      "--form-title-color": title.formTitleTextColor || "#1e293b",
+      "--form-title-font-size": `${title.formTitleFontSize ?? 16}px`,
+      "--form-title-align": title.formTitleAlign || "left",
+      "--form-title-padding-top": `${title.formTitlePaddingTop ?? 0}px`,
+      "--form-title-padding-right": `${title.formTitlePaddingRight ?? 0}px`,
+      "--form-title-padding-bottom": `${title.formTitlePaddingBottom ?? 0}px`,
+      "--form-title-padding-left": `${title.formTitlePaddingLeft ?? 0}px`,
+      "--form-title-margin-top": `${title.formTitleMarginTop ?? 0}px`,
+      "--form-title-margin-right": `${title.formTitleMarginRight ?? 0}px`,
+      "--form-title-margin-bottom": `${title.formTitleMarginBottom ?? 10}px`,
+      "--form-title-margin-left": `${title.formTitleMarginLeft ?? 0}px`,
+
+      "--form-desc-color": desc.formDescTextColor || "#5f6368",
+      "--form-desc-font-size": `${desc.formDescFontSize ?? 14}px`,
+      "--form-desc-align": desc.formDescAlign || "left",
+      "--form-desc-padding-top": `${desc.formDescPaddingTop ?? 0}px`,
+      "--form-desc-padding-right": `${desc.formDescPaddingRight ?? 0}px`,
+      "--form-desc-padding-bottom": `${desc.formDescPaddingBottom ?? 0}px`,
+      "--form-desc-padding-left": `${desc.formDescPaddingLeft ?? 0}px`,
+      "--form-desc-margin-top": `${desc.formDescMarginTop ?? 0}px`,
+      "--form-desc-margin-right": `${desc.formDescMarginRight ?? 0}px`,
+      "--form-desc-margin-bottom": `${desc.formDescMarginBottom ?? 20}px`,
+      "--form-desc-margin-left": `${desc.formDescMarginLeft ?? 0}px`,
     };
   });
 

@@ -20,16 +20,23 @@ import HiddenIcon from "@/assets/icons/FormFields/EyesOff.svg";
 import { formSetting } from "@/composable/useFormSettings";
 import { useFormFieldSettingStore, type FormFieldType } from "@/stores/formFieldStore";
 import { useFormStyle } from "@/composable/useFormStyle";
-import { useUserStore } from "@/stores/user.ts"; 
-import { useToast } from "vue-toastification";
+import { useUserStore } from "@/stores/user.ts";
 
 export function useFormFieldsBuilder() {
   const FormFieldSettingStore = useFormFieldSettingStore();
-   const userStore = useUserStore();
-  const toast = useToast();
+  const userStore = useUserStore();
   // Helper to identify if a field is locked under the current plan
   const isFieldLocked = (type: string): boolean => {
-    const proFields = ['dropdown', 'radio', 'checkboxes', 'datepicker', 'timepicker', 'fileupload', 'multiselect', 'hidden'];
+    const proFields = [
+      "dropdown",
+      "radio",
+      "checkboxes",
+      "datepicker",
+      "timepicker",
+      "fileupload",
+      "multiselect",
+      "hidden",
+    ];
     return userStore.plan_id === 1 && proFields.includes(type);
   };
   const { formFieldSetting, formStyleSetting } = formSetting();
@@ -107,6 +114,20 @@ export function useFormFieldsBuilder() {
     let lastNameLabel: string | undefined = undefined;
     let lastNamePlaceholder: string | undefined = undefined;
     let requiredMessage = "This field is required";
+    let firstNameRequired: number | undefined = undefined;
+    let lastNameRequired: number | undefined = undefined;
+    let firstNameRequiredMessage: string | undefined = undefined;
+    let lastNameRequiredMessage: string | undefined = undefined;
+    let firstNameContainerClass: string | undefined = undefined;
+    let lastNameContainerClass: string | undefined = undefined;
+    let firstNameFieldClass: string | undefined = undefined;
+    let lastNameFieldClass: string | undefined = undefined;
+    let firstNameDefaultValue: string | undefined = undefined;
+    let lastNameDefaultValue: string | undefined = undefined;
+    let firstNameMaxLength: number | undefined = undefined;
+    let lastNameMaxLength: number | undefined = undefined;
+    let firstNameHelpMessage: string | undefined = undefined;
+    let lastNameHelpMessage: string | undefined = undefined;
     let rows: number | undefined = undefined;
     let validateEmail: number | undefined = undefined;
     let emailErrorMessage: string | undefined = undefined;
@@ -128,6 +149,10 @@ export function useFormFieldsBuilder() {
       firstNamePlaceholder = "Enter first name";
       lastNameLabel = "Last Name";
       lastNamePlaceholder = "Enter last name";
+      firstNameRequired = 1;
+      lastNameRequired = 1;
+      firstNameRequiredMessage = "First name is required";
+      lastNameRequiredMessage = "Last name is required";
     } else if (type === "timepicker") {
       timeFormat = "12h";
     } else if (type === "password") {
@@ -225,6 +250,20 @@ export function useFormFieldsBuilder() {
       uniqueEmailErrorMessage,
       timeFormat,
       showPasswordIcon,
+      firstNameRequired,
+      lastNameRequired,
+      firstNameRequiredMessage,
+      lastNameRequiredMessage,
+      firstNameContainerClass,
+      lastNameContainerClass,
+      firstNameFieldClass,
+      lastNameFieldClass,
+      firstNameDefaultValue,
+      lastNameDefaultValue,
+      firstNameMaxLength,
+      lastNameMaxLength,
+      firstNameHelpMessage,
+      lastNameHelpMessage,
     };
     formFieldSetting.value.fields.push(newField);
     formFieldSetting.value.selectedFieldId = id;

@@ -19,7 +19,6 @@ export interface FormFieldType {
   uniqueEmail?: number;
   uniqueEmailErrorMessage?: string;
   rows?: number;
-  timeFormat?: "12h" | "24h";
   showPasswordIcon?: number;
   defaultValue?: string;
   containerClass?: string;

@@ -29,9 +29,6 @@
                 ? 'opacity-75 bg-slate-50/65 border-slate-200 hover:bg-slate-100/50 hover:border-slate-300'
                 : 'hover:ring-2 hover:ring-teal-500 hover:bg-teal-50/10 text-slate-700',
             ]">
-            <!-- Icon Container -->
-            <!-- Icon Container (added flex-shrink-0 to prevent shrinking) -->
-            <!-- Icon Container (added flex-shrink-0 to prevent shrinking) -->
             <div
               class="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500 transition-colors flex-shrink-0"
               :class="[
@@ -176,6 +173,7 @@
                 class="space-y-1.5"
                 v-if="['text', 'email', 'number', 'phone', 'url', 'password'].includes(field.type)">
                 <div class="relative" style="width: var(--input-width)">
+                  <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                   <InputField
                     disable
                     :required="field.required"
@@ -200,46 +198,56 @@
               <div class="space-y-1.5" v-else-if="field.type === 'name'">
                 <template v-if="field.nameFormat === 'split'">
                   <div class="grid grid-cols-2 gap-3 w-full" style="width: var(--input-width)">
+                    <div class="relative w-full">
+                      <HelpTooltip :message="field.firstNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
+                      <InputField
+                        disable
+                        :required="field.firstNameRequired == 1"
+                        :label="field.firstNameLabel"
+                        :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
+                        :label-style="labelStyleObject"
+                        type="text"
+                        :placeholder="field.firstNamePlaceholder"
+                        :modelValue="field.firstNameDefaultValue"
+                        :helpMessage="field.firstNameHelpMessage"
+                        class="pointer-events-none" />
+                    </div>
+                    <div class="relative w-full">
+                      <HelpTooltip :message="field.lastNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
+                      <InputField
+                        disable
+                        :required="field.lastNameRequired == 1"
+                        :label="field.lastNameLabel"
+                        :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
+                        :label-style="labelStyleObject"
+                        type="text"
+                        :placeholder="field.lastNamePlaceholder"
+                        :modelValue="field.lastNameDefaultValue"
+                        :helpMessage="field.lastNameHelpMessage"
+                        class="pointer-events-none" />
+                    </div>
+                  </div>
+                </template>
+                <template v-else>
+                  <div style="width: var(--input-width)" class="relative w-full">
+                    <HelpTooltip :message="field.lastNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
                     <InputField
                       disable
                       :required="field.required"
-                      :label="field.firstNameLabel"
+                      :label="field.label"
                       :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
                       :label-style="labelStyleObject"
                       type="text"
-                      :placeholder="field.firstNamePlaceholder"
-                      :modelValue="field.defaultValue"
-                      :helpMessage="field.helpMessage"
-                      class="pointer-events-none" />
-                    <InputField
-                      disable
-                      :required="field.required"
-                      :label="field.lastNameLabel"
-                      :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
-                      :label-style="labelStyleObject"
-                      type="text"
-                      :placeholder="field.lastNamePlaceholder"
+                      :placeholder="field.placeholder"
                       :modelValue="field.defaultValue"
                       :helpMessage="field.helpMessage"
                       class="pointer-events-none" />
                   </div>
                 </template>
-                <template v-else>
-                  <InputField
-                    disable
-                    :required="field.required"
-                    :label="field.label"
-                    :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
-                    :label-style="labelStyleObject"
-                    type="text"
-                    :placeholder="field.placeholder"
-                    :modelValue="field.defaultValue"
-                    :helpMessage="field.helpMessage"
-                    class="pointer-events-none" />
-                </template>
               </div>
 
-              <div class="space-y-1.5" v-else-if="field.type === 'textarea'">
+              <div class="space-y-1.5 relative" v-else-if="field.type === 'textarea'" style="width: var(--input-width)">
+                <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <TextareaField
                   :required="field.required"
                   :label="field.label"
@@ -252,9 +260,13 @@
                   class="pointer-events-none" />
               </div>
 
-              <div class="space-y-1.5" v-else-if="['dropdown', 'multiselect'].includes(field.type)">
+              <div
+                class="space-y-1.5 relative"
+                v-else-if="['dropdown', 'multiselect'].includes(field.type)"
+                style="width: var(--input-width)">
+                <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <label
-                  class="block text-sm font-semibold text-gray-700 pointer-events-none select-none gform-label"
+                  class="block text-sm font-semibold text-gray-700 pointer-events-none select-none gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
                   {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
@@ -268,14 +280,15 @@
                   class="pointer-events-none" />
               </div>
 
-              <div class="space-y-1.5" v-else-if="field.type === 'radio'">
+              <div class="space-y-1.5 relative" v-else-if="field.type === 'radio'" style="width: var(--input-width)">
+                <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <label
-                  class="block text-sm font-semibold text-slate-700 pointer-events-none select-none gform-label"
+                  class="block text-sm font-semibold text-slate-700 pointer-events-none select-none gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
                   {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
                 </label>
-                <div class="flex flex-col gap-1">
+                <div class="flex flex-col gap-1 px-3" :style="optionStyle">
                   <CustomDefaultRadio
                     v-for="(opt, idx) in field.options"
                     :key="opt"
@@ -284,37 +297,40 @@
                     :value="opt"
                     :label="opt"
                     :modelValue="null"
-                    class="pointer-events-none" />
+                    class="pointer-events-none" 
+                    />
                 </div>
               </div>
 
-              <div class="space-y-1.5" v-else-if="field.type === 'checkboxes'">
+              <div class="space-y-1.5" v-else-if="field.type === 'checkboxes'" style="width: var(--input-width)">
+                <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <label
-                  class="block text-sm font-semibold text-slate-700 pointer-events-none select-none gform-label"
+                  class="block text-sm font-semibold text-slate-700 pointer-events-none select-none gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
                   {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
                 </label>
-
-                <div class="flex flex-col gap-1 px-3">
+                <div class="flex flex-col gap-1 px-3" :style="optionStyle">
                   <CustomDefaultCheckbox
                     v-for="opt in field.options"
                     :key="opt"
                     :label="opt"
                     class="pointer-events-none"
                     size="sm"
-                    labelClass="text-sm text-gray-700 py-0.5" />
+                    labelClass="text-sm text-gray-700 py-0.5" 
+                    />
                 </div>
               </div>
 
-              <div class="space-y-1.5" v-else-if="field.type === 'datepicker'">
+              <div class="space-y-1.5" v-else-if="field.type === 'datepicker'" style="width: var(--input-width)">
+                <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <label
-                  class="block text-sm font-semibold text-slate-700 gform-label"
+                  class="block text-sm font-semibold text-slate-700 gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
                   {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
                 </label>
-                <div class="relative" style="width: var(--input-width)">
+                <div class="relative w-full">
                   <input
                     disabled
                     type="date"
@@ -331,14 +347,18 @@
                 </div>
               </div>
 
-              <div class="space-y-1.5" v-else-if="field.type === 'timepicker'">
+              <div
+                class="space-y-1.5 relative"
+                v-else-if="field.type === 'timepicker'"
+                style="width: var(--input-width)">
+                <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <label
-                  class="block text-sm font-semibold text-slate-700 gform-label"
+                  class="block text-sm font-semibold text-slate-700 gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
                   {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
                 </label>
-                <div class="relative" style="width: var(--input-width)">
+                <div class="relative w-full">
                   <input
                     disabled
                     type="time"
@@ -355,9 +375,13 @@
                 </div>
               </div>
 
-              <div class="space-y-1.5" v-else-if="field.type === 'fileupload'">
+              <div
+                class="space-y-1.5 relative"
+                v-else-if="field.type === 'fileupload'"
+                style="width: var(--input-width)">
+                <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <label
-                  class="block text-sm font-semibold text-slate-700 gform-label"
+                  class="block text-sm font-semibold text-slate-700 gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
                   {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
@@ -399,9 +423,8 @@
       </div>
     </section>
 
-        <section
+    <section
       class="settings-panel lg:col-span-3 bg-white border border-slate-200 rounded-2xl shadow-sm h-[420px] lg:h-auto flex flex-col overflow-hidden lg:sticky lg:top-[80px] lg:max-h-[calc(100vh-210px)]">
-
       <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
         <h3 class="font-semibold text-slate-800 text-md">Field Settings</h3>
       </div>
@@ -512,8 +535,7 @@
                   { label: 'Split Name', value: 'split' },
                 ]" />
             </template>
-                       <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split'">
-              
+            <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split'">
               <!-- 1. First Name Settings Collapsible -->
               <div class="border border-slate-200 rounded-xl overflow-hidden -mx-1 mb-4">
                 <button
@@ -633,7 +655,6 @@
                   </div>
                 </div>
               </div>
-
             </template>
             <template v-else>
               <div>
@@ -667,21 +688,12 @@
                 ]" />
             </div>
 
-            <template v-if="selectedField.type === 'timepicker'">
-              <RadioTypeSelector
-                v-model="selectedField.timeFormat"
-                label="Time Format"
-                name="timeFormat"
-                width="full"
-                :columns="2"
-                :options="[
-                  { label: '12 Hour', value: '12h' },
-                  { label: '24 Hour', value: '24h' },
-                ]" />
-            </template>
-
-                       <!-- 👇 Hide global required toggle when Name format is split -->
-            <div v-if="selectedField.type !== 'hidden' && !(selectedField.type === 'name' && selectedField.nameFormat === 'split')">
+            <!-- 👇 Hide global required toggle when Name format is split -->
+            <div
+              v-if="
+                selectedField.type !== 'hidden' &&
+                !(selectedField.type === 'name' && selectedField.nameFormat === 'split')
+              ">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Required</label>
               <div class="flex">
                 <CustomDefaultRadio
@@ -700,7 +712,8 @@
             </div>
 
             <!-- 👇 Hide global required message when Name format is split -->
-            <div v-if="selectedField.required && !(selectedField.type === 'name' && selectedField.nameFormat === 'split')">
+            <div
+              v-if="selectedField.required && !(selectedField.type === 'name' && selectedField.nameFormat === 'split')">
               <InputField
                 type="text"
                 v-model="selectedField.requiredMessage"
@@ -836,8 +849,8 @@
               </div>
             </div>
 
-                      <!-- Advance Settings Accordion -->
-             <div class="border border-slate-200 rounded-xl overflow-hidden -mx-1">
+            <!-- Advance Settings Accordion -->
+            <div class="border border-slate-200 rounded-xl overflow-hidden -mx-1">
               <button
                 type="button"
                 @click="toggleAdvanceSettings"
@@ -871,14 +884,24 @@
 
                 <!-- 2. Default Value Input -->
                 <div v-if="canHaveDefaultValue(selectedField)">
-                  <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'first'">
+                  <template
+                    v-if="
+                      selectedField.type === 'name' &&
+                      selectedField.nameFormat === 'split' &&
+                      activeNameSubField === 'first'
+                    ">
                     <InputField
                       type="text"
                       v-model="selectedField.firstNameDefaultValue"
                       label="First Name Default Value"
                       focusColor="teal" />
                   </template>
-                  <template v-else-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'last'">
+                  <template
+                    v-else-if="
+                      selectedField.type === 'name' &&
+                      selectedField.nameFormat === 'split' &&
+                      activeNameSubField === 'last'
+                    ">
                     <InputField
                       type="text"
                       v-model="selectedField.lastNameDefaultValue"
@@ -896,7 +919,12 @@
 
                 <!-- 3. Max Text Length Input -->
                 <div v-if="canHaveMaxLength(selectedField)">
-                  <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'first'">
+                  <template
+                    v-if="
+                      selectedField.type === 'name' &&
+                      selectedField.nameFormat === 'split' &&
+                      activeNameSubField === 'first'
+                    ">
                     <InputFieldWithBadge
                       type="number"
                       v-model.number="selectedField.firstNameMaxLength"
@@ -905,7 +933,12 @@
                       :min="1"
                       badge='<svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 9 12 3 6 9H18ZM18 15 12 21 6 15H18Z" fill="currentColor"></path></svg>' />
                   </template>
-                  <template v-else-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'last'">
+                  <template
+                    v-else-if="
+                      selectedField.type === 'name' &&
+                      selectedField.nameFormat === 'split' &&
+                      activeNameSubField === 'last'
+                    ">
                     <InputFieldWithBadge
                       type="number"
                       v-model.number="selectedField.lastNameMaxLength"
@@ -927,14 +960,24 @@
 
                 <!-- 4. Container Class Input -->
                 <div>
-                  <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'first'">
+                  <template
+                    v-if="
+                      selectedField.type === 'name' &&
+                      selectedField.nameFormat === 'split' &&
+                      activeNameSubField === 'first'
+                    ">
                     <InputField
                       type="text"
                       v-model="selectedField.firstNameContainerClass"
                       label="First Name Container Class"
                       focusColor="teal" />
                   </template>
-                  <template v-else-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'last'">
+                  <template
+                    v-else-if="
+                      selectedField.type === 'name' &&
+                      selectedField.nameFormat === 'split' &&
+                      activeNameSubField === 'last'
+                    ">
                     <InputField
                       type="text"
                       v-model="selectedField.lastNameContainerClass"
@@ -952,14 +995,24 @@
 
                 <!-- 5. Field Class Input -->
                 <div>
-                  <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'first'">
+                  <template
+                    v-if="
+                      selectedField.type === 'name' &&
+                      selectedField.nameFormat === 'split' &&
+                      activeNameSubField === 'first'
+                    ">
                     <InputField
                       type="text"
                       v-model="selectedField.firstNameFieldClass"
                       label="First Name Field Class"
                       focusColor="teal" />
                   </template>
-                  <template v-else-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'last'">
+                  <template
+                    v-else-if="
+                      selectedField.type === 'name' &&
+                      selectedField.nameFormat === 'split' &&
+                      activeNameSubField === 'last'
+                    ">
                     <InputField
                       type="text"
                       v-model="selectedField.lastNameFieldClass"
@@ -967,21 +1020,33 @@
                       focusColor="teal" />
                   </template>
                   <template v-else>
-                    <InputField
-                      type="text"
-                      v-model="selectedField.fieldClass"
-                      label="Field Class"
-                      focusColor="teal" />
+                    <InputField type="text" v-model="selectedField.fieldClass" label="Field Class" focusColor="teal" />
                   </template>
                 </div>
 
                 <!-- 6. Help Message Input -->
                 <div>
-                  <template v-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'first'">
-                    <TextareaField v-model="selectedField.firstNameHelpMessage" label="First Name Help Message" :rows="3" />
+                  <template
+                    v-if="
+                      selectedField.type === 'name' &&
+                      selectedField.nameFormat === 'split' &&
+                      activeNameSubField === 'first'
+                    ">
+                    <TextareaField
+                      v-model="selectedField.firstNameHelpMessage"
+                      label="First Name Help Message"
+                      :rows="3" />
                   </template>
-                  <template v-else-if="selectedField.type === 'name' && selectedField.nameFormat === 'split' && activeNameSubField === 'last'">
-                    <TextareaField v-model="selectedField.lastNameHelpMessage" label="Last Name Help Message" :rows="3" />
+                  <template
+                    v-else-if="
+                      selectedField.type === 'name' &&
+                      selectedField.nameFormat === 'split' &&
+                      activeNameSubField === 'last'
+                    ">
+                    <TextareaField
+                      v-model="selectedField.lastNameHelpMessage"
+                      label="Last Name Help Message"
+                      :rows="3" />
                   </template>
                   <template v-else>
                     <TextareaField v-model="selectedField.helpMessage" label="Help Message" :rows="3" />
@@ -1025,9 +1090,9 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from "vue"; 
+  import { ref, watch } from "vue";
   import DeleteFieldConfirmModal from "@/components/modals/DeleteFieldConfirmModal.vue";
-  import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue"; 
+  import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue";
   import { useFormFieldsBuilder } from "@/composable/useFormFieldBuilder";
   defineProps<{
     isLoading?: boolean;
@@ -1041,7 +1106,7 @@
   const activeNameSubField = ref<"first" | "last">("first");
   const isFirstNameSettingsOpen = ref(false);
   const isLastNameSettingsOpen = ref(false);
- const toggleFirstNameSettings = () => {
+  const toggleFirstNameSettings = () => {
     isFirstNameSettingsOpen.value = !isFirstNameSettingsOpen.value;
     if (isFirstNameSettingsOpen.value) {
       isLastNameSettingsOpen.value = false;
@@ -1094,9 +1159,10 @@
     canHaveMaxLength,
     labelStyleObject,
     cssVars,
+    optionStyle,
     isFieldLocked,
   } = useFormFieldsBuilder();
-   watch(isAdvanceSettingsOpen, (isOpen) => {
+  watch(isAdvanceSettingsOpen, (isOpen) => {
     if (isOpen) {
       isFirstNameSettingsOpen.value = false;
       isLastNameSettingsOpen.value = false;
@@ -1117,4 +1183,8 @@
   .gform-wrapper {
     background-color: transparent !important;
   }
+:deep(.gform-wrapper .discount-type-radio-toggle label) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 </style>

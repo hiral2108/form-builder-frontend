@@ -22,6 +22,7 @@ import RadioTypeSelector from "@/components/global/fields/RadioTypeSelector.vue"
 import InputColorPicker from "@/components/global/fields/InputColorPicker.vue";
 import InputFieldWithBadge from "@/components/global/fields/InputFieldWithBadge.vue";
 import RadioGrid from "@/components/global/fields/RadioGrid.vue";
+import HelpTooltip from "@/components/global/fields/HelpTooltip.vue";
 
 import VueSvgInlinePlugin from "@/utils/vue-svg-inline-vite.ts";
 
@@ -56,5 +57,6 @@ app.component("RadioTypeSelector", RadioTypeSelector);
 app.component("InputColorPicker", InputColorPicker);
 app.component("InputFieldWithBadge", InputFieldWithBadge);
 app.component("RadioGrid", RadioGrid);
+app.component("HelpTooltip", HelpTooltip);
 
 app.mount("#app");

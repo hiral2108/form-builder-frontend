@@ -1,18 +1,25 @@
 <template>
   <div
     :style="cssVars"
-    class="gform-wrapper w-full h-full overflow-auto border border-slate-200 rounded-xl p-5 transition-colors duration-150">
-    <div class="space-y-4 w-fit min-w-full">
-      <h2 v-if="formStyleSetting.formInfo.formTitle" class="font-bold break-words leading-tight gform-title">
-        {{ formStyleSetting.formInfo.formTitle }}
-      </h2>
+    class="gform-wrapper w-full h-full overflow-auto border border-slate-200 rounded-xl transition-colors duration-150">
+    <div class="w-fit min-w-full">
+      
+      <!-- 1. Header Part: Title & Description -->
+      <div class="gform-header-container">
+        <h2 v-if="formStyleSetting.formInfo.formTitle" class="font-bold break-words leading-tight gform-title">
+          {{ formStyleSetting.formInfo.formTitle }}
+        </h2>
 
-      <p v-if="formStyleSetting.formInfo.formDescription" class="break-words leading-relaxed gform-desc">
-        {{ formStyleSetting.formInfo.formDescription }}
-      </p>
+        <p v-if="formStyleSetting.formInfo.formDescription" class="break-words leading-relaxed gform-desc">
+          {{ formStyleSetting.formInfo.formDescription }}
+        </p>
+      </div>
 
-      <div class="space-y-4 pt-1">
+      <!-- 2. Body Part: Form Fields -->
+      <div class="gform-body-container space-y-4">
         <div v-for="field in formFieldSetting.fields" :key="field.id" class="space-y-1.5">
+          
+          <!-- Text/Password/Email Input Fields -->
           <div
             v-if="['text', 'email', 'number', 'phone', 'url', 'password'].includes(field.type)"
             class="relative"
@@ -32,11 +39,9 @@
               "
               :placeholder="field.placeholder"
               v-model="formData[field.id]"
-              :helpMessage="field.helpMessage"
               @keydown="handleKeyDown($event, field.type)"
               :classes="field.type === 'password' && field.showPasswordIcon == 1 ? 'pr-10' : ''"
               :class="interactive ? '' : 'pointer-events-none'">
-              <!-- 👉 Eye icon placed inside InputField slot -->
               <div
                 v-if="field.type === 'password' && field.showPasswordIcon == 1"
                 class="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center cursor-pointer pointer-events-auto"
@@ -52,7 +57,8 @@
             </InputField>
           </div>
 
-          <div v-else-if="field.type === 'name'">
+          <!-- Name Fields (Single or Split) -->
+          <div v-else-if="field.type === 'name'" style="width: var(--input-width)">
             <template v-if="field.nameFormat === 'split'">
               <div class="grid grid-cols-2 gap-4 w-full" style="width: var(--input-width)">
                 <div class="relative w-full">
@@ -65,7 +71,6 @@
                     type="text"
                     :placeholder="field.firstNamePlaceholder"
                     v-model="formData[field.id + '_firstName']"
-                    :helpMessage="field.helpMessage"
                     :class="interactive ? '' : 'pointer-events-none'" />
                 </div>
                 <div class="relative w-full">
@@ -78,14 +83,13 @@
                     type="text"
                     :placeholder="field.lastNamePlaceholder"
                     v-model="formData[field.id + '_lastName']"
-                    :helpMessage="field.helpMessage"
                     :class="interactive ? '' : 'pointer-events-none'" />
                 </div>
               </div>
             </template>
             <template v-else>
               <div class="relative w-full">
-                <HelpTooltip :message="field.lastNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
+                <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <InputField
                   :disable="!interactive"
                   :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
@@ -94,13 +98,13 @@
                   type="text"
                   :placeholder="field.placeholder"
                   v-model="formData[field.id]"
-                  :helpMessage="field.helpMessage"
                   :class="interactive ? '' : 'pointer-events-none'" />
               </div>
             </template>
           </div>
 
-          <div v-else-if="field.type === 'textarea'" class="relative"  style="width: var(--input-width)">
+          <!-- Textarea Fields -->
+          <div v-else-if="field.type === 'textarea'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <TextareaField
               :disable="!interactive"
@@ -114,6 +118,7 @@
               :class="interactive ? '' : 'pointer-events-none'" />
           </div>
 
+          <!-- Single Dropdown Fields -->
           <div v-else-if="field.type === 'dropdown'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
@@ -130,6 +135,7 @@
               :class="interactive ? '' : 'pointer-events-none'" />
           </div>
 
+          <!-- Multiselect Dropdown Fields -->
           <div
             v-else-if="field.type === 'multiselect'"
             class="relative multiselect-wrapper"
@@ -170,7 +176,10 @@
 
               <div
                 v-if="interactive && openMultiselect[field.id]"
-                class="absolute w-full mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-50 overflow-y-auto max-h-56 py-1">
+                class="absolute mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-50 overflow-y-auto max-h-56 py-1"
+                :style="{
+                  width: 'var(--input-width)',
+                }">
                 <div
                   v-for="opt in field.options || []"
                   :key="opt"
@@ -181,13 +190,13 @@
                     :modelValue="isOptionSelected(field.id, opt)"
                     @update:modelValue="toggleMultiselectOption(field.id, opt)"
                     size="sm"
-                    labelClass="text-sm py-0.5 pointer-events-none"
-                     />
+                    labelClass="text-sm py-0.5 pointer-events-none" />
                 </div>
               </div>
             </div>
           </div>
 
+          <!-- Radio Fields -->
           <div v-else-if="field.type === 'radio'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
@@ -196,7 +205,13 @@
               class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1">
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
-            <div class="flex flex-col gap-1 px-3" :style="optionStyle">
+            <div
+              class="flex flex-col gap-1 px-3 radio-checkbox-options-container"
+              :class="[
+                field.labelPlacement === 'center' ? 'items-center text-center' : '',
+                field.labelPlacement === 'right' ? 'items-end text-right' : '',
+                field.labelPlacement === 'left' || !field.labelPlacement ? 'items-start text-left' : ''
+              ]">
               <CustomDefaultRadio
                 v-for="(opt, idx) in field.options || []"
                 :key="opt"
@@ -210,6 +225,7 @@
             </div>
           </div>
 
+          <!-- Checkboxes Fields -->
           <div v-else-if="field.type === 'checkboxes'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
@@ -218,7 +234,13 @@
               class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1">
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
-            <div class="flex flex-col gap-1 px-3" :style="optionStyle">
+            <div
+              class="flex flex-col gap-1 px-3 radio-checkbox-options-container"
+              :class="[
+                field.labelPlacement === 'center' ? 'items-center text-center' : '',
+                field.labelPlacement === 'right' ? 'items-end text-right' : '',
+                field.labelPlacement === 'left' || !field.labelPlacement ? 'items-start text-left' : ''
+              ]">
               <CustomDefaultCheckbox
                 v-for="opt in field.options || []"
                 :key="opt"
@@ -231,6 +253,7 @@
             </div>
           </div>
 
+          <!-- Date Picker Fields -->
           <div v-else-if="field.type === 'datepicker'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
@@ -260,6 +283,7 @@
             </div>
           </div>
 
+          <!-- Time Picker Fields -->
           <div v-else-if="field.type === 'timepicker'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
@@ -288,7 +312,7 @@
             </div>
           </div>
 
-          <!-- 9. Fileupload -->
+          <!-- File Upload Fields -->
           <div v-else-if="field.type === 'fileupload'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
@@ -307,20 +331,22 @@
             </div>
           </div>
         </div>
-
-        <div
-          v-if="formFieldSetting.fields && formFieldSetting.fields.length > 0"
-          class="pt-2"
-          :class="submitButtonPlacementClass">
-          <button
-            type="button"
-            class="gform-submit-btn font-semibold pointer-events-none"
-            :class="submitButtonClass"
-            disabled>
-            {{ formFieldSetting.submitButtonText || "Submit" }}
-          </button>
-        </div>
       </div>
+
+      <!-- 3. Footer Part: Submit Button -->
+      <div
+        v-if="formFieldSetting.fields && formFieldSetting.fields.length > 0"
+        class="gform-footer-container"
+        :class="submitButtonPlacementClass">
+        <button
+          type="button"
+          class="gform-submit-btn font-semibold pointer-events-none"
+          :class="submitButtonClass"
+          disabled>
+          {{ formFieldSetting.submitButtonText || "Submit" }}
+        </button>
+      </div>
+
     </div>
   </div>
 </template>
@@ -459,8 +485,4 @@
   .gform-wrapper {
     scrollbar-gutter: stable;
   }
- :deep(.gform-wrapper .discount-type-radio-toggle label) {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
 </style>

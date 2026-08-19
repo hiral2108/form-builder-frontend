@@ -19,10 +19,10 @@
   --input-padding-right: 10px;
   --input-padding-bottom: 10px;
   --input-padding-left: 10px;
-  --input-margin-top: 0px;
-  --input-margin-right: 0px;
+  --input-margin-top: 10px;
+  --input-margin-right: 20px;
   --input-margin-bottom: 0px;
-  --input-margin-left: 0px;
+  --input-margin-left: 20px;
   --input-placeholder-color: #5f6368;
 
   --button-bg-color: #0d9488;
@@ -38,10 +38,10 @@
   --button-padding-right: 20px;
   --button-padding-bottom: 10px;
   --button-padding-left: 20px;
-  --button-margin-top: 10px;
-  --button-margin-right: 0px;
-  --button-margin-bottom: 10px;
-  --button-margin-left: 0px;
+  --button-margin-top: 20px;
+  --button-margin-right: 20px;
+  --button-margin-bottom: 20px;
+  --button-margin-left: 20px;
 
   --form-title-color: #1e293b;
   --form-title-font-size: 16px;
@@ -50,10 +50,10 @@
   --form-title-padding-right: 0px;
   --form-title-padding-bottom: 0px;
   --form-title-padding-left: 0px;
-  --form-title-margin-top: 0px;
+  --form-title-margin-top: 15px;
   --form-title-margin-right: 0px;
-  --form-title-margin-bottom: 10px;
-  --form-title-margin-left: 0px;
+  --form-title-margin-bottom: 0px;
+  --form-title-margin-left: 20px;
   /* Description defaults */
   --form-desc-color: #5f6368;
   --form-desc-font-size: 14px;
@@ -64,14 +64,22 @@
   --form-desc-padding-left: 0px;
   --form-desc-margin-top: 0px;
   --form-desc-margin-right: 0px;
-  --form-desc-margin-bottom: 20px;
+  --form-desc-margin-bottom: 0px;
   --form-desc-margin-left: 0px;
 }
 
 .gform-wrapper {
   background-color: var(--form-bg-color);
+  box-sizing: border-box !important;
 }
 
+.gform-wrapper:not(.editor-mode) .gform-body-container {
+  padding-left: var(--input-margin-left) !important;
+  padding-right: var(--input-margin-right) !important;
+  padding-top: var(--input-margin-top) !important;
+  padding-bottom: var(--input-margin-bottom) !important;
+  box-sizing: border-box !important;
+}
 .gform-wrapper .gform-label,
 .gform-wrapper .input-field label,
 .gform-wrapper .textarea-field label,
@@ -97,7 +105,6 @@
   font-weight: var(--input-font-weight) !important;
   box-shadow: var(--input-box-shadow) !important;
   padding: var(--input-padding-top) var(--input-padding-right) var(--input-padding-bottom) var(--input-padding-left) !important;
-  margin: var(--input-margin-top) var(--input-margin-right) var(--input-margin-bottom) var(--input-margin-left) !important;
 }
 
 .gform-wrapper .textarea-field textarea {
@@ -184,4 +191,23 @@
 .gform-wrapper label input[type="checkbox"]:checked + div {
   background-color: var(--input-text-color) !important;
   border-color: var(--input-text-color) !important;
+}
+
+.gform-wrapper .discount-type-radio-toggle label {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.gform-wrapper.editor-mode {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.gform-wrapper .radio-checkbox-options-container {
+  padding-top: var(--input-padding-top) !important;
+  padding-right: var(--input-padding-right) !important;
+  padding-bottom: var(--input-padding-bottom) !important;
+  padding-left: var(--input-padding-left) !important;
+  margin-top: var(--input-margin-top) !important;
+  margin-bottom: var(--input-margin-bottom) !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }

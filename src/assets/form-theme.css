@@ -76,10 +76,16 @@
 .gform-wrapper:not(.editor-mode) .gform-body-container {
   padding-left: var(--input-margin-left) !important;
   padding-right: var(--input-margin-right) !important;
-  padding-top: var(--input-margin-top) !important;
-  padding-bottom: var(--input-margin-bottom) !important;
+  padding-top: 0 !important; /* Changed to 0 */
+  padding-bottom: 0 !important; /* Changed to 0 */
   box-sizing: border-box !important;
 }
+/* Apply top and bottom margins to the outer field wrapper div (label + input together) */
+.gform-wrapper .gform-body-container > div {
+  margin-top: var(--input-margin-top) !important;
+  margin-bottom: var(--input-margin-bottom) !important;
+}
+
 .gform-wrapper .gform-label,
 .gform-wrapper .input-field label,
 .gform-wrapper .textarea-field label,
@@ -197,10 +203,7 @@
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
-.gform-wrapper.editor-mode {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
+
 .gform-wrapper .radio-checkbox-options-container {
   padding-top: var(--input-padding-top) !important;
   padding-right: var(--input-padding-right) !important;
@@ -210,4 +213,23 @@
   margin-bottom: var(--input-margin-bottom) !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
+}
+
+/* Apply all margins (top, bottom, left, right) ONLY to the label + input content wrapper inside the card */
+.gform-wrapper.editor-mode > div[id^="field-"] > div.space-y-1\.5 {
+  margin-top: var(--input-margin-top) !important;
+  margin-bottom: var(--input-margin-bottom) !important;
+  margin-left: var(--input-margin-left) !important;
+  margin-right: var(--input-margin-right) !important;
+}
+
+.gform-wrapper input[type="date"],
+.gform-wrapper input[type="time"],
+.gform-wrapper .input-field input[type="password"] {
+  width: 100% !important;
+}
+
+.gform-wrapper .input-field .relative:has(input[type="password"]) {
+  width: var(--input-width) !important;
+  max-width: 100% !important;
 }

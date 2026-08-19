@@ -15,7 +15,6 @@ import FileUploadIcon from "@/assets/icons/FormFields/Upload.svg";
 import UrlIcon from "@/assets/icons/FormFields/link.svg";
 import PasswordIcon from "@/assets/icons/auth/password.svg";
 import MultiSelectIcon from "@/assets/icons/FormFields/MultiSelect.svg";
-import HiddenIcon from "@/assets/icons/FormFields/EyesOff.svg";
 
 import { formSetting } from "@/composable/useFormSettings";
 import { useFormFieldSettingStore, type FormFieldType } from "@/stores/formFieldStore";
@@ -27,16 +26,7 @@ export function useFormFieldsBuilder() {
   const userStore = useUserStore();
   // Helper to identify if a field is locked under the current plan
   const isFieldLocked = (type: string): boolean => {
-    const proFields = [
-      "dropdown",
-      "radio",
-      "checkboxes",
-      "datepicker",
-      "timepicker",
-      "fileupload",
-      "multiselect",
-      "hidden",
-    ];
+    const proFields = ["dropdown", "radio", "checkboxes", "datepicker", "timepicker", "fileupload", "multiselect"];
     return userStore.plan_id === 1 && proFields.includes(type);
   };
   const { formFieldSetting, formStyleSetting } = formSetting();
@@ -60,7 +50,6 @@ export function useFormFieldsBuilder() {
     { type: "timepicker", label: "Time Picker", icon: TimePickerIcon },
     { type: "fileupload", label: "File Upload", icon: FileUploadIcon },
     { type: "multiselect", label: "Multiselect", icon: MultiSelectIcon },
-    { type: "hidden", label: "Hidden Field", icon: HiddenIcon },
   ];
 
   const selectedField = computed(() => {
@@ -219,9 +208,6 @@ export function useFormFieldsBuilder() {
         placeholder = "Select options...";
         options = ["Option A", "Option B", "Option C"];
         break;
-      case "hidden":
-        label = "Hidden Field";
-        break;
       default:
         label = "New Field";
     }
@@ -341,9 +327,8 @@ export function useFormFieldsBuilder() {
 
   const canHaveDefaultValue = (field: FormFieldType | null) => {
     if (!field) return false;
-    return typeableFieldTypes.includes(field.type) || field.type === "hidden";
+    return typeableFieldTypes.includes(field.type);
   };
-
   const canHaveMaxLength = (field: FormFieldType | null) => {
     if (!field) return false;
     return typeableFieldTypes.includes(field.type);
@@ -465,7 +450,7 @@ export function useFormFieldsBuilder() {
     const isSelected = formFieldSetting.value.selectedFieldId === "submit-button";
     const placement = formFieldSetting.value.submitButtonPlacement || "center";
 
-    const baseClasses = "w-full p-1.5 rounded-2xl border border-dashed transition-all duration-200 cursor-pointer flex";
+    const baseClasses = "w-full rounded-2xl border border-dashed transition-all duration-200 cursor-pointer flex";
 
     const selectionClass = isSelected
       ? "border-teal-600 bg-slate-50 shadow-sm"

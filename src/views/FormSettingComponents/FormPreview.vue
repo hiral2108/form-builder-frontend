@@ -4,7 +4,6 @@
     class="gform-wrapper w-full h-full overflow-auto border border-slate-200 rounded-xl transition-colors duration-150">
     <div class="w-fit min-w-full">
       
-      <!-- 1. Header Part: Title & Description -->
       <div class="gform-header-container">
         <h2 v-if="formStyleSetting.formInfo.formTitle" class="font-bold break-words leading-tight gform-title">
           {{ formStyleSetting.formInfo.formTitle }}
@@ -15,11 +14,9 @@
         </p>
       </div>
 
-      <!-- 2. Body Part: Form Fields -->
-      <div class="gform-body-container space-y-4">
-        <div v-for="field in formFieldSetting.fields" :key="field.id" class="space-y-1.5">
+      <div class="gform-body-container">
+        <div v-for="field in formFieldSetting.fields" :key="field.id">
           
-          <!-- Text/Password/Email Input Fields -->
           <div
             v-if="['text', 'email', 'number', 'phone', 'url', 'password'].includes(field.type)"
             class="relative"
@@ -52,12 +49,11 @@
                       ? '/src/assets/icons/submission-page/eye-line.svg'
                       : '/src/assets/icons/FormFields/EyesOff.svg'
                   "
-                  class="w-4 h-4 opacity-75 transition-opacity" />
+                  class="w-4 h-4  text-[#90a1b9] transition-opacity"/>
               </div>
             </InputField>
           </div>
 
-          <!-- Name Fields (Single or Split) -->
           <div v-else-if="field.type === 'name'" style="width: var(--input-width)">
             <template v-if="field.nameFormat === 'split'">
               <div class="grid grid-cols-2 gap-4 w-full" style="width: var(--input-width)">
@@ -103,7 +99,6 @@
             </template>
           </div>
 
-          <!-- Textarea Fields -->
           <div v-else-if="field.type === 'textarea'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <TextareaField
@@ -118,7 +113,6 @@
               :class="interactive ? '' : 'pointer-events-none'" />
           </div>
 
-          <!-- Single Dropdown Fields -->
           <div v-else-if="field.type === 'dropdown'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
@@ -135,7 +129,6 @@
               :class="interactive ? '' : 'pointer-events-none'" />
           </div>
 
-          <!-- Multiselect Dropdown Fields -->
           <div
             v-else-if="field.type === 'multiselect'"
             class="relative multiselect-wrapper"
@@ -196,7 +189,6 @@
             </div>
           </div>
 
-          <!-- Radio Fields -->
           <div v-else-if="field.type === 'radio'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
@@ -225,7 +217,6 @@
             </div>
           </div>
 
-          <!-- Checkboxes Fields -->
           <div v-else-if="field.type === 'checkboxes'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
@@ -253,7 +244,6 @@
             </div>
           </div>
 
-          <!-- Date Picker Fields -->
           <div v-else-if="field.type === 'datepicker'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
@@ -268,7 +258,7 @@
                 type="date"
                 v-model="formData[field.id]"
                 :class="[interactive ? '' : 'pointer-events-none', !formData[field.id] ? 'date-empty' : 'date-filled']"
-                class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 gform-input" />
+                class=" rounded-lg border border-slate-200 text-sm bg-slate-50/30 gform-input" />
 
               <span
                 v-if="!formData[field.id]"
@@ -283,7 +273,6 @@
             </div>
           </div>
 
-          <!-- Time Picker Fields -->
           <div v-else-if="field.type === 'timepicker'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
@@ -312,7 +301,6 @@
             </div>
           </div>
 
-          <!-- File Upload Fields -->
           <div v-else-if="field.type === 'fileupload'" class="relative" style="width: var(--input-width)">
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label

@@ -80,7 +80,7 @@
       </div>
 
       <div class="p-5 overflow-y-auto flex-1 scrollbar-thin">
-        <form @submit.prevent :style="cssVars" class="space-y-5 gform-wrapper w-fit min-w-full">
+        <form @submit.prevent :style="cssVars" class="space-y-5 gform-wrapper w-fit min-w-full editor-mode">
           <!-- Loading Form Preview Skeleton -->
           <template v-if="isLoading">
             <div
@@ -180,10 +180,9 @@
                     :label="field.label"
                     :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
                     :label-style="labelStyleObject"
-                    :type="field.type === 'name' ? 'text' : field.type"
+                    :type="field.type"
                     :placeholder="field.placeholder"
                     :modelValue="field.defaultValue"
-                    :helpMessage="field.helpMessage"
                     :classes="field.type === 'password' && field.showPasswordIcon == 1 ? 'pr-10' : ''"
                     class="pointer-events-none">
                     <div
@@ -209,7 +208,6 @@
                         type="text"
                         :placeholder="field.firstNamePlaceholder"
                         :modelValue="field.firstNameDefaultValue"
-                        :helpMessage="field.firstNameHelpMessage"
                         class="pointer-events-none" />
                     </div>
                     <div class="relative w-full">
@@ -223,14 +221,13 @@
                         type="text"
                         :placeholder="field.lastNamePlaceholder"
                         :modelValue="field.lastNameDefaultValue"
-                        :helpMessage="field.lastNameHelpMessage"
                         class="pointer-events-none" />
                     </div>
                   </div>
                 </template>
                 <template v-else>
                   <div style="width: var(--input-width)" class="relative w-full">
-                    <HelpTooltip :message="field.lastNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
+                    <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                     <InputField
                       disable
                       :required="field.required"
@@ -240,7 +237,6 @@
                       type="text"
                       :placeholder="field.placeholder"
                       :modelValue="field.defaultValue"
-                      :helpMessage="field.helpMessage"
                       class="pointer-events-none" />
                   </div>
                 </template>
@@ -387,7 +383,7 @@
                   {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
                 </label>
                 <div
-                  class="gform-input border-2 border-dashed border-slate-200 rounded-xl !h-auto !py-5 px-4 flex flex-col items-center justify-center bg-slate-50/50">
+                  class="gform-input border-2 border-dashed border-slate-200 rounded-xl !h-auto flex flex-col items-center justify-center bg-slate-50/50">
                   <img
                     v-svg-inline
                     src="@/assets/icons/FormFields/Upload.svg"
@@ -1183,8 +1179,5 @@
   .gform-wrapper {
     background-color: transparent !important;
   }
-:deep(.gform-wrapper .discount-type-radio-toggle label) {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
+
 </style>

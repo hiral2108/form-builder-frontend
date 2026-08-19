@@ -10,10 +10,10 @@ const fontWeightMap: Record<string, string> = {
 
 const fieldWidthMap: Record<string, string> = {
   "100%": "100%",
-  tiny: "150px",
-  small: "200px",
-  medium: "300px",
-  large: "400px",
+  tiny: "55%",
+  small: "70%",
+  medium: "85%",
+  large: "95%",
 };
 
 const fieldSizeMap: Record<string, string> = {
@@ -84,10 +84,10 @@ export function useFormStyle() {
       "--input-padding-right": `${input.inputPaddingRight ?? 10}px`,
       "--input-padding-bottom": `${input.inputPaddingBottom ?? 10}px`,
       "--input-padding-left": `${input.inputPaddingLeft ?? 10}px`,
-      "--input-margin-top": `${input.inputMarginTop ?? 0}px`,
-      "--input-margin-right": `${input.inputMarginRight ?? 0}px`,
+      "--input-margin-top": `${input.inputMarginTop ?? 20}px`,
+      "--input-margin-right": `${input.inputMarginRight ?? 20}px`,
       "--input-margin-bottom": `${input.inputMarginBottom ?? 0}px`,
-      "--input-margin-left": `${input.inputMarginLeft ?? 0}px`,
+      "--input-margin-left": `${input.inputMarginLeft ?? 20}px`,
       "--input-placeholder-color": input.inputPlaceholderColor || "#5F6368",
 
       "--button-bg-color": btn.btnBgColor || "#0D9488",
@@ -103,10 +103,10 @@ export function useFormStyle() {
       "--button-padding-right": `${btn.btnPaddingRight ?? 20}px`,
       "--button-padding-bottom": `${btn.btnPaddingBottom ?? 10}px`,
       "--button-padding-left": `${btn.btnPaddingLeft ?? 20}px`,
-      "--button-margin-top": `${btn.btnMarginTop ?? 10}px`,
-      "--button-margin-right": `${btn.btnMarginRight ?? 0}px`,
-      "--button-margin-bottom": `${btn.btnMarginBottom ?? 10}px`,
-      "--button-margin-left": `${btn.btnMarginLeft ?? 0}px`,
+      "--button-margin-top": `${btn.btnMarginTop ?? 20}px`,
+      "--button-margin-right": `${btn.btnMarginRight ?? 20}px`,
+      "--button-margin-bottom": `${btn.btnMarginBottom ?? 20}px`,
+      "--button-margin-left": `${btn.btnMarginLeft ?? 20}px`,
 
       "--widget-bg-color": display.cta_bg_color || "#0D9488",
       "--widget-text-color": display.cta_text_color || "#FFFFFF",
@@ -125,10 +125,10 @@ export function useFormStyle() {
       "--form-title-padding-right": `${title.formTitlePaddingRight ?? 0}px`,
       "--form-title-padding-bottom": `${title.formTitlePaddingBottom ?? 0}px`,
       "--form-title-padding-left": `${title.formTitlePaddingLeft ?? 0}px`,
-      "--form-title-margin-top": `${title.formTitleMarginTop ?? 0}px`,
+      "--form-title-margin-top": `${title.formTitleMarginTop ?? 15}px`,
       "--form-title-margin-right": `${title.formTitleMarginRight ?? 0}px`,
-      "--form-title-margin-bottom": `${title.formTitleMarginBottom ?? 10}px`,
-      "--form-title-margin-left": `${title.formTitleMarginLeft ?? 0}px`,
+      "--form-title-margin-bottom": `${title.formTitleMarginBottom ?? 0}px`,
+      "--form-title-margin-left": `${title.formTitleMarginLeft ?? 20}px`,
 
       "--form-desc-color": desc.formDescTextColor || "#5f6368",
       "--form-desc-font-size": `${desc.formDescFontSize ?? 14}px`,
@@ -137,7 +137,7 @@ export function useFormStyle() {
       "--form-desc-padding-right": `${desc.formDescPaddingRight ?? 0}px`,
       "--form-desc-padding-bottom": `${desc.formDescPaddingBottom ?? 0}px`,
       "--form-desc-padding-left": `${desc.formDescPaddingLeft ?? 0}px`,
-      "--form-desc-margin-top": `${desc.formDescMarginTop ?? 0}px`,
+      "--form-desc-margin-top": `${desc.formDescMarginTop ?? 20}px`,
       "--form-desc-margin-right": `${desc.formDescMarginRight ?? 0}px`,
       "--form-desc-margin-bottom": `${desc.formDescMarginBottom ?? 20}px`,
       "--form-desc-margin-left": `${desc.formDescMarginLeft ?? 0}px`,

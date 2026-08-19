@@ -79,8 +79,11 @@
         >
       </div>
 
-      <div class="p-5 overflow-y-auto flex-1 scrollbar-thin">
-        <form @submit.prevent :style="cssVars" class="space-y-5 gform-wrapper w-fit min-w-full editor-mode">
+      <!-- overflow-x-hidden added here as a second safety net: even if a field's
+           content somehow exceeds its box, the panel itself will never grow a
+           horizontal scrollbar — vertical scrolling still works as before. -->
+      <div class="p-5 overflow-y-auto overflow-x-hidden flex-1 scrollbar-thin">
+        <form @submit.prevent :style="cssVars" class="space-y-5 gform-wrapper w-full editor-mode">
           <!-- Loading Form Preview Skeleton -->
           <template v-if="isLoading">
             <div
@@ -120,7 +123,7 @@
               @dragleave="onDragLeave"
               @drop="onDrop(index)"
               @dragend="onDragEnd"
-              class="p-4 border rounded-xl relative cursor-pointer transition-all duration-200"
+              class="border rounded-xl relative cursor-pointer transition-all duration-200 overflow-hidden w-full box-border p-4"
               :class="[
                 formFieldSetting.selectedFieldId === field.id
                   ? 'border-l-[3px] border-teal-600 border-t-slate-200 border-r-slate-200 border-b-slate-200 bg-slate-50 shadow-sm rounded-l-none'
@@ -132,7 +135,7 @@
               ]">
               <div
                 v-if="formFieldSetting.selectedFieldId === field.id"
-                class="flex items-center justify-end gap-1.5 mb-1">
+                class="flex flex-wrap items-center justify-end gap-1.5 mb-1">
                 <button
                   type="button"
                   v-if="formFieldSetting.fields.length > 1"
@@ -142,7 +145,7 @@
                   "
                   @mouseup="isDraggable = false"
                   @mouseleave="isDraggable = false"
-                  class="drag-handle w-7 h-7 rounded-lg bg-teal-100 hover:bg-teal-200 flex items-center justify-center transition-colors text-amber-400"
+                  class="drag-handle w-7 h-7 rounded-lg bg-teal-100 hover:bg-teal-200 flex items-center justify-center transition-colors text-amber-400 flex-shrink-0"
                   :class="isDraggable ? 'cursor-grabbing' : 'cursor-grab'"
                   title="Drag to reorder">
                   <img
@@ -155,7 +158,7 @@
                 <button
                   type="button"
                   @click.stop="duplicateField(field.id)"
-                  class="w-7 h-7 rounded-lg bg-orange-100 hover:bg-orange-200 flex items-center justify-center transition-colors text-blue-400 cursor-pointer"
+                  class="w-7 h-7 rounded-lg bg-orange-100 hover:bg-orange-200 flex items-center justify-center transition-colors text-blue-400 cursor-pointer flex-shrink-0"
                   title="Duplicate Field">
                   <img v-svg-inline src="@/assets/icons/form-list/clone.svg" class="w-4! h-4!" />
                 </button>
@@ -163,7 +166,7 @@
                 <button
                   type="button"
                   @click.stop="triggerDeleteConfirm(field.id, field.label)"
-                  class="w-7 h-7 rounded-lg bg-red-100 hover:bg-red-200 flex items-center justify-center transition-colors text-red-500 hover:text-red-400 cursor-pointer"
+                  class="w-7 h-7 rounded-lg bg-red-100 hover:bg-red-200 flex items-center justify-center transition-colors text-red-500 hover:text-red-400 cursor-pointer flex-shrink-0"
                   title="Delete Field">
                   <img v-svg-inline src="@/assets/icons/form-list/delete.svg" class="w-4 h-4" />
                 </button>
@@ -171,8 +174,8 @@
 
               <div
                 class="space-y-1.5"
-                v-if="['text', 'email', 'number', 'phone', 'url', 'password'].includes(field.type)">
-                <div class="relative" style="width: var(--input-width)">
+                v-if="['text', 'email', 'number', 'phone', 'url', 'password'].includes(field.type)" style="width: var(--input-width)">
+                <div class="relative w-full" >
                   <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                   <InputField
                     disable
@@ -194,9 +197,9 @@
                 </div>
               </div>
 
-              <div class="space-y-1.5" v-else-if="field.type === 'name'">
-                <template v-if="field.nameFormat === 'split'">
-                  <div class="grid grid-cols-2 gap-3 w-full" style="width: var(--input-width)">
+              <div class="space-y-1.5" v-else-if="field.type === 'name'" style="width: var(--input-width)">
+                 <template v-if="field.nameFormat === 'split'">
+                  <div class="grid grid-cols-2 gap-3 w-full">
                     <div class="relative w-full">
                       <HelpTooltip :message="field.firstNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
                       <InputField
@@ -226,7 +229,7 @@
                   </div>
                 </template>
                 <template v-else>
-                  <div style="width: var(--input-width)" class="relative w-full">
+                  <div class="relative w-full">
                     <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                     <InputField
                       disable
@@ -293,8 +296,7 @@
                     :value="opt"
                     :label="opt"
                     :modelValue="null"
-                    class="pointer-events-none" 
-                    />
+                    class="pointer-events-none" />
                 </div>
               </div>
 
@@ -313,8 +315,7 @@
                     :label="opt"
                     class="pointer-events-none"
                     size="sm"
-                    labelClass="text-sm text-gray-700 py-0.5" 
-                    />
+                    labelClass="text-sm text-gray-700 py-0.5" />
                 </div>
               </div>
 
@@ -326,11 +327,11 @@
                   :style="labelStyleObject">
                   {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
                 </label>
-                <div class="relative w-full">
+                <div class="relative" style="width: var(--input-width)">
                   <input
                     disabled
                     type="date"
-                    class="gform-input w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
+                    class="gform-input px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
                   <span
                     class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10 gform-placeholder">
                     {{ field.placeholder }}
@@ -343,10 +344,7 @@
                 </div>
               </div>
 
-              <div
-                class="space-y-1.5 relative"
-                v-else-if="field.type === 'timepicker'"
-                style="width: var(--input-width)">
+              <div class="space-y-1.5" v-else-if="field.type === 'timepicker'" style="width: var(--input-width)">
                 <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <label
                   class="block text-sm font-semibold text-slate-700 gform-label mb-1"
@@ -354,11 +352,11 @@
                   :style="labelStyleObject">
                   {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
                 </label>
-                <div class="relative w-full">
+                <div class="relative" style="width: var(--input-width)">
                   <input
                     disabled
                     type="time"
-                    class="gform-input w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
+                    class="gform-input px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
                   <span
                     class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10 gform-placeholder">
                     {{ field.placeholder || "Select Time" }}
@@ -371,10 +369,7 @@
                 </div>
               </div>
 
-              <div
-                class="space-y-1.5 relative"
-                v-else-if="field.type === 'fileupload'"
-                style="width: var(--input-width)">
+              <div class="space-y-1.5" v-else-if="field.type === 'fileupload'" style="width: var(--input-width)">
                 <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <label
                   class="block text-sm font-semibold text-slate-700 gform-label mb-1"
@@ -390,18 +385,6 @@
                     class="w-5 h-5 shrink-0 text-slate-600 mb-1.5" />
                   <span class="text-xs text-slate-500 gform-placeholder">{{ field.placeholder }}</span>
                 </div>
-              </div>
-
-              <div
-                class="border border-dashed border-slate-300 rounded-xl p-3 bg-slate-100/50 flex items-center justify-between text-slate-500"
-                v-else-if="field.type === 'hidden'">
-                <div class="flex items-center gap-2">
-                  <img v-svg-inline src="@/assets/icons/FormFields/EyesOff.svg" class="w-4 h-4 text-slate-600" />
-                  <span class="text-xs font-semibold uppercase tracking-wider">Hidden Field</span>
-                </div>
-                <span class="text-xs font-medium"
-                  >{{ field.label }}<span v-if="field.defaultValue"> — {{ field.defaultValue }}</span></span
-                >
               </div>
             </div>
 
@@ -656,7 +639,7 @@
               <div>
                 <InputField type="text" v-model="selectedField.label" label="Field Label" focusColor="teal" />
               </div>
-              <div v-if="!['hidden', 'checkboxes', 'radio'].includes(selectedField.type)">
+              <div v-if="!['checkboxes', 'radio'].includes(selectedField.type)">
                 <InputField type="text" v-model="selectedField.placeholder" label="Placeholder" focusColor="teal" />
               </div>
             </template>
@@ -670,7 +653,7 @@
                 badge='<svg class="w-4 h-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 9 12 3 6 9H18ZM18 15 12 21 6 15H18Z" fill="currentColor"></path></svg>' />
             </div>
 
-            <div v-if="selectedField.type !== 'hidden'">
+            <div>
               <RadioTypeSelector
                 v-model="selectedField.labelPlacement"
                 label="Label Placement"
@@ -685,11 +668,7 @@
             </div>
 
             <!-- 👇 Hide global required toggle when Name format is split -->
-            <div
-              v-if="
-                selectedField.type !== 'hidden' &&
-                !(selectedField.type === 'name' && selectedField.nameFormat === 'split')
-              ">
+            <div v-if="!(selectedField.type === 'name' && selectedField.nameFormat === 'split')">
               <label class="block text-sm font-semibold text-gray-700 mb-1">Required</label>
               <div class="flex">
                 <CustomDefaultRadio
@@ -1179,5 +1158,4 @@
   .gform-wrapper {
     background-color: transparent !important;
   }
-
 </style>

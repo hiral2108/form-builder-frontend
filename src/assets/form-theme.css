@@ -173,3 +173,15 @@
 .gform-wrapper .textarea-field textarea {
   padding-top: var(--input-padding-top) !important;
 }
+
+.gform-wrapper .discount-type-radio-toggle input[type="radio"]:checked + label > span {
+  border-color: var(--input-text-color) !important;
+}
+.gform-wrapper .discount-type-radio-toggle input[type="radio"]:checked + label > span > span {
+  background-color: var(--input-text-color) !important;
+}
+/* 2. Selected Checkbox box background & border color */
+.gform-wrapper label input[type="checkbox"]:checked + div {
+  background-color: var(--input-text-color) !important;
+  border-color: var(--input-text-color) !important;
+}

@@ -133,7 +133,6 @@ export function useFormFieldsBuilder() {
     let emailErrorMessage: string | undefined = undefined;
     let uniqueEmail: number | undefined = undefined;
     let uniqueEmailErrorMessage: string | undefined = undefined;
-    let timeFormat: "12h" | "24h" | undefined = undefined;
     let showPasswordIcon: number | undefined = undefined;
 
     if (type === "textarea") {
@@ -153,8 +152,6 @@ export function useFormFieldsBuilder() {
       lastNameRequired = 1;
       firstNameRequiredMessage = "First name is required";
       lastNameRequiredMessage = "Last name is required";
-    } else if (type === "timepicker") {
-      timeFormat = "12h";
     } else if (type === "password") {
       showPasswordIcon = 0;
     }
@@ -248,7 +245,6 @@ export function useFormFieldsBuilder() {
       emailErrorMessage,
       uniqueEmail,
       uniqueEmailErrorMessage,
-      timeFormat,
       showPasswordIcon,
       firstNameRequired,
       lastNameRequired,
@@ -496,6 +492,19 @@ export function useFormFieldsBuilder() {
     };
   });
 
+  const optionStyle = computed(() => {
+    return {
+      paddingTop: "var(--input-padding-top)",
+      paddingRight: "var(--input-padding-right)",
+      paddingBottom: "var(--input-padding-bottom)",
+      paddingLeft: "var(--input-padding-left)",
+      marginTop: "var(--input-margin-top)",
+      marginRight: "var(--input-margin-right)",
+      marginBottom: "var(--input-margin-bottom)",
+      marginLeft: "var(--input-margin-left)",
+    };
+  });
+
   watch(
     formFieldSetting,
     (newVal) => {
@@ -549,5 +558,6 @@ export function useFormFieldsBuilder() {
     labelStyleObject,
     cssVars,
     isFieldLocked,
+    optionStyle,
   };
 }

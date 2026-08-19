@@ -2,15 +2,12 @@
   <div
     :style="cssVars"
     class="gform-wrapper w-full h-full overflow-auto border border-slate-200 rounded-xl p-5 transition-colors duration-150">
-    <div v-if="hasContent" class="space-y-4 w-fit min-w-full">
-      <h2
-        v-if="formStyleSetting.formInfo.formTitle"
-        :style="formTitleStyle"
-        class="font-bold break-words leading-tight">
+    <div class="space-y-4 w-fit min-w-full">
+      <h2 v-if="formStyleSetting.formInfo.formTitle" class="font-bold break-words leading-tight gform-title">
         {{ formStyleSetting.formInfo.formTitle }}
       </h2>
 
-      <p v-if="formStyleSetting.formInfo.formDescription" :style="formDescStyle" class="break-words leading-relaxed">
+      <p v-if="formStyleSetting.formInfo.formDescription" class="break-words leading-relaxed gform-desc">
         {{ formStyleSetting.formInfo.formDescription }}
       </p>
 
@@ -20,10 +17,12 @@
             v-if="['text', 'email', 'number', 'phone', 'url', 'password'].includes(field.type)"
             class="relative"
             style="width: var(--input-width)">
+            <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <InputField
               :disable="!interactive"
               :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
               :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.label : ''"
+              :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
               :type="
                 field.type === 'phone'
                   ? 'tel'
@@ -56,44 +55,58 @@
           <div v-else-if="field.type === 'name'">
             <template v-if="field.nameFormat === 'split'">
               <div class="grid grid-cols-2 gap-4 w-full" style="width: var(--input-width)">
+                <div class="relative w-full">
+                  <HelpTooltip :message="field.lastNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
+                  <InputField
+                    :disable="!interactive"
+                    :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
+                    :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.firstNameLabel : ''"
+                    :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
+                    type="text"
+                    :placeholder="field.firstNamePlaceholder"
+                    v-model="formData[field.id + '_firstName']"
+                    :helpMessage="field.helpMessage"
+                    :class="interactive ? '' : 'pointer-events-none'" />
+                </div>
+                <div class="relative w-full">
+                  <HelpTooltip :message="field.lastNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
+                  <InputField
+                    :disable="!interactive"
+                    :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
+                    :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.lastNameLabel : ''"
+                    :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
+                    type="text"
+                    :placeholder="field.lastNamePlaceholder"
+                    v-model="formData[field.id + '_lastName']"
+                    :helpMessage="field.helpMessage"
+                    :class="interactive ? '' : 'pointer-events-none'" />
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <div class="relative w-full">
+                <HelpTooltip :message="field.lastNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
                 <InputField
                   :disable="!interactive"
                   :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
-                  :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.firstNameLabel : ''"
+                  :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.label : ''"
+                  :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
                   type="text"
-                  :placeholder="field.firstNamePlaceholder"
-                  v-model="formData[field.id + '_firstName']"
-                  :helpMessage="field.helpMessage"
-                  :class="interactive ? '' : 'pointer-events-none'" />
-                <InputField
-                  :disable="!interactive"
-                  :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
-                  :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.lastNameLabel : ''"
-                  type="text"
-                  :placeholder="field.lastNamePlaceholder"
-                  v-model="formData[field.id + '_lastName']"
+                  :placeholder="field.placeholder"
+                  v-model="formData[field.id]"
                   :helpMessage="field.helpMessage"
                   :class="interactive ? '' : 'pointer-events-none'" />
               </div>
             </template>
-            <template v-else>
-              <InputField
-                :disable="!interactive"
-                :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
-                :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.label : ''"
-                type="text"
-                :placeholder="field.placeholder"
-                v-model="formData[field.id]"
-                :helpMessage="field.helpMessage"
-                :class="interactive ? '' : 'pointer-events-none'" />
-            </template>
           </div>
 
-          <div v-else-if="field.type === 'textarea'">
+          <div v-else-if="field.type === 'textarea'" class="relative"  style="width: var(--input-width)">
+            <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <TextareaField
               :disable="!interactive"
               :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
               :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.label : ''"
+              :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
               :placeholder="field.placeholder"
               v-model="formData[field.id]"
               :rows="field.rows || 2"
@@ -101,10 +114,12 @@
               :class="interactive ? '' : 'pointer-events-none'" />
           </div>
 
-          <div v-else-if="field.type === 'dropdown'">
+          <div v-else-if="field.type === 'dropdown'" class="relative" style="width: var(--input-width)">
+            <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
               v-if="formStyleSetting.labelStyle.showLabel === 'show'"
-              class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1">
+              class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1"
+              :class="labelPositionClass(field.labelPlacement)">
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
             <SelectField
@@ -115,10 +130,16 @@
               :class="interactive ? '' : 'pointer-events-none'" />
           </div>
 
-          <div v-else-if="field.type === 'multiselect'" class="relative multiselect-wrapper" :data-field-id="field.id">
+          <div
+            v-else-if="field.type === 'multiselect'"
+            class="relative multiselect-wrapper"
+            :data-field-id="field.id"
+            style="width: var(--input-width)">
+            <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
               v-if="formStyleSetting.labelStyle.showLabel === 'show'"
-              class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1">
+              class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1"
+              :class="labelPositionClass(field.labelPlacement)">
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
             <div class="relative">
@@ -160,19 +181,22 @@
                     :modelValue="isOptionSelected(field.id, opt)"
                     @update:modelValue="toggleMultiselectOption(field.id, opt)"
                     size="sm"
-                    labelClass="text-sm py-0.5 pointer-events-none" />
+                    labelClass="text-sm py-0.5 pointer-events-none"
+                     />
                 </div>
               </div>
             </div>
           </div>
 
-          <div v-else-if="field.type === 'radio'">
+          <div v-else-if="field.type === 'radio'" class="relative" style="width: var(--input-width)">
+            <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
               v-if="formStyleSetting.labelStyle.showLabel === 'show'"
+              :class="labelPositionClass(field.labelPlacement)"
               class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1">
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
-            <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-1 px-3" :style="optionStyle">
               <CustomDefaultRadio
                 v-for="(opt, idx) in field.options || []"
                 :key="opt"
@@ -186,13 +210,15 @@
             </div>
           </div>
 
-          <div v-else-if="field.type === 'checkboxes'">
+          <div v-else-if="field.type === 'checkboxes'" class="relative" style="width: var(--input-width)">
+            <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
               v-if="formStyleSetting.labelStyle.showLabel === 'show'"
+              :class="labelPositionClass(field.labelPlacement)"
               class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1">
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
-            <div class="flex flex-col gap-1 px-3">
+            <div class="flex flex-col gap-1 px-3" :style="optionStyle">
               <CustomDefaultCheckbox
                 v-for="opt in field.options || []"
                 :key="opt"
@@ -205,10 +231,12 @@
             </div>
           </div>
 
-          <div v-else-if="field.type === 'datepicker'">
+          <div v-else-if="field.type === 'datepicker'" class="relative" style="width: var(--input-width)">
+            <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
               v-if="formStyleSetting.labelStyle.showLabel === 'show'"
-              class="block text-sm font-semibold gform-label mb-1">
+              class="block text-sm font-semibold gform-label mb-1"
+              :class="labelPositionClass(field.labelPlacement)">
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
             <div class="relative" style="width: var(--input-width)">
@@ -232,10 +260,12 @@
             </div>
           </div>
 
-          <div v-else-if="field.type === 'timepicker'">
+          <div v-else-if="field.type === 'timepicker'" class="relative" style="width: var(--input-width)">
+            <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
               v-if="formStyleSetting.labelStyle.showLabel === 'show'"
-              class="block text-sm font-semibold gform-label mb-1">
+              class="block text-sm font-semibold gform-label mb-1"
+              :class="labelPositionClass(field.labelPlacement)">
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
             <div class="relative" style="width: var(--input-width)">
@@ -259,10 +289,12 @@
           </div>
 
           <!-- 9. Fileupload -->
-          <div v-else-if="field.type === 'fileupload'">
+          <div v-else-if="field.type === 'fileupload'" class="relative" style="width: var(--input-width)">
+            <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label
               v-if="formStyleSetting.labelStyle.showLabel === 'show'"
-              class="block text-sm font-semibold gform-label mb-1">
+              class="block text-sm font-semibold gform-label mb-1"
+              :class="labelPositionClass(field.labelPlacement)">
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
             <div
@@ -290,15 +322,6 @@
         </div>
       </div>
     </div>
-    <div
-      v-else
-      class="flex flex-col items-center justify-center h-full min-h-[240px] text-center text-slate-400 gap-2 py-10">
-      <svg class="w-8 h-8 text-slate-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-        <path
-          d="M20 22H4C3.44772 22 3 21.5523 3 21V3C3 2.44772 3.44772 2 4 2H20C20.5523 2 21 2.44772 21 3V21C21 21.5523 20.5523 22 20 22ZM19 20V4H5V20H19ZM7 8H17V10H7V8ZM7 12H17V14H7V12ZM7 16H13V18H7V16Z"></path>
-      </svg>
-      <p class="text-sm">Add a form title, description, or fields to see your live preview</p>
-    </div>
   </div>
 </template>
 
@@ -319,52 +342,11 @@
 
   const { formFieldSetting, formStyleSetting } = formSetting();
   const { cssVars } = useFormStyle();
-  const { submitButtonClass } = useFormFieldsBuilder();
+  const { submitButtonClass, labelPositionClass, optionStyle } = useFormFieldsBuilder();
 
   const formData = ref<Record<string, any>>({});
   const showPassword = ref<Record<string, boolean>>({});
   const openMultiselect = ref<Record<string, boolean>>({});
-
-  const hasContent = computed(() => {
-    const title = formStyleSetting.value?.formInfo?.formTitle;
-    const desc = formStyleSetting.value?.formInfo?.formDescription;
-    const fields = formFieldSetting.value?.fields;
-    return !!title || !!desc || (Array.isArray(fields) && fields.length > 0);
-  });
-
-  const formTitleStyle = computed(() => {
-    const title = formStyleSetting.value?.formTitleStyle || {};
-    return {
-      color: title.formTitleTextColor || "#1e293b",
-      fontSize: `${title.formTitleFontSize ?? 16}px`,
-      textAlign: (title.formTitleAlign || "left") as any,
-      paddingTop: `${title.formTitlePaddingTop ?? 0}px`,
-      paddingRight: `${title.formTitlePaddingRight ?? 0}px`,
-      paddingBottom: `${title.formTitlePaddingBottom ?? 0}px`,
-      paddingLeft: `${title.formTitlePaddingLeft ?? 0}px`,
-      marginTop: `${title.formTitleMarginTop ?? 0}px`,
-      marginRight: `${title.formTitleMarginRight ?? 0}px`,
-      marginBottom: `${title.formTitleMarginBottom ?? 10}px`,
-      marginLeft: `${title.formTitleMarginLeft ?? 0}px`,
-    };
-  });
-
-  const formDescStyle = computed(() => {
-    const desc = formStyleSetting.value?.formDescStyle || {};
-    return {
-      color: desc.formDescTextColor || "#5f6368",
-      fontSize: `${desc.formDescFontSize ?? 14}px`,
-      textAlign: (desc.formDescAlign || "left") as any,
-      paddingTop: `${desc.formDescPaddingTop ?? 0}px`,
-      paddingRight: `${desc.formDescPaddingRight ?? 0}px`,
-      paddingBottom: `${desc.formDescPaddingBottom ?? 0}px`,
-      paddingLeft: `${desc.formDescPaddingLeft ?? 0}px`,
-      marginTop: `${desc.formDescMarginTop ?? 0}px`,
-      marginRight: `${desc.formDescMarginRight ?? 0}px`,
-      marginBottom: `${desc.formDescMarginBottom ?? 20}px`,
-      marginLeft: `${desc.formDescMarginLeft ?? 0}px`,
-    };
-  });
 
   const submitButtonPlacementClass = computed(() => {
     const placement = formFieldSetting.value?.submitButtonPlacement || "center";
@@ -477,4 +459,8 @@
   .gform-wrapper {
     scrollbar-gutter: stable;
   }
+ :deep(.gform-wrapper .discount-type-radio-toggle label) {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 </style>

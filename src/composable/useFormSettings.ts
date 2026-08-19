@@ -66,7 +66,7 @@ export function formSetting() {
     const merged = structuredClone(toRaw(fallback)) as any;
     for (const key of Object.keys(value as any)) {
       const val = (value as any)[key];
-      if (val !== null && val !== undefined && val !== '' && !isEmpty(val)) {
+      if (val !== null && val !== undefined && val !== "" && !isEmpty(val)) {
         merged[key] = val;
       }
     }
@@ -79,18 +79,18 @@ export function formSetting() {
     try {
       isWidgetDataLoading.value = true;
       if (!uniqueId) {
-        throw new Error('Invalid widget id');
+        throw new Error("Invalid widget id");
       }
 
       const response = await new FormSettingService().getWidgetSetting(uniqueId);
 
       if (!response || !response.data) {
-        console.warn('Widget settings not found or response empty');
+        console.warn("Widget settings not found or response empty");
         return;
       }
 
       const data = response.data;
-      
+
       // Set values with fallback protection
       formFieldSetting.value = withDefault(data.form_field_setting, FormFieldSettingStore.formFieldSetting);
       formStyleSetting.value = withDefault(data.form_style_setting, FormStyleSettingStore.formStyleSetting);
@@ -102,7 +102,6 @@ export function formSetting() {
       dateTimeSetting.value = withDefault(data.date_time_setting, DateTimeSettingsStore.dateTimeSetting);
       dayHourSetting.value = withDefault(data.day_hour_setting, DayHourSettingsStore.dayHourSetting);
       countryTargeting.value = withDefault(data.country_rule_setting, CountryTargetingStore.countryTargeting);
-
     } catch (error) {
       console.error("Failed to load form details:", error);
     } finally {
@@ -129,6 +128,6 @@ export function formSetting() {
     dateTimeSetting,
     dayHourSetting,
     countryTargeting,
-    fetchWidgetSetting
+    fetchWidgetSetting,
   };
 }

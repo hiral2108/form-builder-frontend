@@ -7,7 +7,7 @@
     <span
       ref="trigger"
       class="relative cursor-pointer pointer-events-auto"
-      style="display: inline-flex !important; align-items: center !important; justify-content: center !important; vertical-align: middle !important; height: 1em !important; width: 1em !important; margin: 0 0 0 4px !important; padding: 0 !important; flex-shrink: 0 !important; line-height: 1 !important; transform: translateY(1.4px) !important;"
+      style="display: inline-flex !important; align-items: center !important; justify-content: center !important; vertical-align: middle !important; height: 1em !important; width: 1em !important; margin: 0 0 0 4px !important; padding: 0 !important; flex-shrink: 0 !important; line-height: 1 !important;"
       @mouseenter="show"
       @mouseleave="hide"
     >
@@ -65,12 +65,12 @@ const applyLabelFlexStyles = (label: HTMLElement) => {
       ? 'center'
       : 'flex-start';
 
-  const s = label.style;
+    const s = label.style;
   if (
     s.display === 'flex' &&
     s.alignItems === 'center' &&
     s.flexWrap === 'wrap' &&
-    s.width === '100%' &&
+    s.width === 'var(--input-width)' && /* 👈 Changed to check var(--input-width) */
     s.lineHeight === 'normal' &&
     s.justifyContent === justify
   ) {
@@ -81,7 +81,7 @@ const applyLabelFlexStyles = (label: HTMLElement) => {
   s.setProperty('display', 'flex', 'important');
   s.setProperty('align-items', 'center', 'important');
   s.setProperty('flex-wrap', 'wrap', 'important');
-  s.setProperty('width', '100%', 'important');
+  s.setProperty('width', 'var(--input-width)', 'important'); /* 👈 Changed to set var(--input-width) */
   s.setProperty('line-height', 'normal', 'important');
   s.setProperty('justify-content', justify, 'important');
   Promise.resolve().then(() => { applying = false; });

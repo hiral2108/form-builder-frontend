@@ -16,9 +16,7 @@
       </div>
 
       <!-- Actual Monthly / Yearly Toggle (When Loaded) -->
-      <div
-        v-else
-        class="inline-flex items-center gap-3 bg-white rounded-full border border-slate-200 p-1 shadow-sm">
+      <div v-else class="inline-flex items-center gap-3 bg-white rounded-full border border-slate-200 p-1 shadow-sm">
         <button
           type="button"
           @click="togglePlanType('monthly')"
@@ -45,52 +43,51 @@
     </header>
 
     <!-- 1. Skeleton Cards (While Loading) -->
-   <!-- 1. Skeleton Cards (Exact 1:1 Height & Spacing) -->
-<div v-if="isPlanLoading" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto mb-12">
-  <div
-    v-for="n in 2"
-    :key="'skeleton-' + n"
-    class="bg-white rounded-2xl p-6 flex flex-col border border-slate-200 shadow-sm animate-pulse">
-    
-    <!-- Top Pill Badge Skeleton -->
-    <div class="mb-1">
-      <div class="h-6 w-16 bg-slate-200 rounded-full"></div>
+    <!-- 1. Skeleton Cards (Exact 1:1 Height & Spacing) -->
+    <div v-if="isPlanLoading" class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto mb-12">
+      <div
+        v-for="n in 2"
+        :key="'skeleton-' + n"
+        class="bg-white rounded-2xl p-6 flex flex-col border border-slate-200 shadow-sm animate-pulse">
+        <!-- Top Pill Badge Skeleton -->
+        <div class="mb-1">
+          <div class="h-6 w-16 bg-slate-200 rounded-full"></div>
+        </div>
+
+        <!-- Title Skeleton -->
+        <div class="h-7 w-28 bg-slate-200 rounded mt-3"></div>
+
+        <!-- Description Skeleton (Exact min-h-[40px]) -->
+        <div class="space-y-1.5 mt-1 min-h-[40px] flex flex-col justify-center">
+          <div class="h-3.5 w-4/5 bg-slate-100 rounded"></div>
+          <div class="h-3.5 w-3/5 bg-slate-100 rounded"></div>
+        </div>
+
+        <!-- Price Skeleton -->
+        <div class="mt-4 mb-1">
+          <div class="h-10 w-32 bg-slate-200 rounded"></div>
+        </div>
+
+        <!-- Subtext Skeleton (Exact min-h-[38px] mb-6) -->
+        <div class="min-h-[38px] mb-6 flex flex-col justify-center">
+          <div class="h-3 w-44 bg-slate-100 rounded"></div>
+        </div>
+
+        <!-- Button Skeleton (Exact 48px height mb-8) -->
+        <div class="h-11 w-full bg-slate-200 rounded-xl mb-8"></div>
+
+        <!-- Features Section Skeleton -->
+        <div class="space-y-3.5">
+          <div class="h-3 w-28 bg-slate-200 rounded mb-3"></div>
+          <ul class="space-y-3">
+            <li v-for="i in 7" :key="i" class="flex items-center gap-3">
+              <div class="w-5 h-5 bg-slate-200 rounded-full shrink-0"></div>
+              <div class="h-4 w-44 bg-slate-100 rounded"></div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-    
-    <!-- Title Skeleton -->
-    <div class="h-7 w-28 bg-slate-200 rounded mt-3"></div>
-    
-    <!-- Description Skeleton (Exact min-h-[40px]) -->
-    <div class="space-y-1.5 mt-1 min-h-[40px] flex flex-col justify-center">
-      <div class="h-3.5 w-4/5 bg-slate-100 rounded"></div>
-      <div class="h-3.5 w-3/5 bg-slate-100 rounded"></div>
-    </div>
-    
-    <!-- Price Skeleton -->
-    <div class="mt-4 mb-1">
-      <div class="h-10 w-32 bg-slate-200 rounded"></div>
-    </div>
-    
-    <!-- Subtext Skeleton (Exact min-h-[38px] mb-6) -->
-    <div class="min-h-[38px] mb-6 flex flex-col justify-center">
-      <div class="h-3 w-44 bg-slate-100 rounded"></div>
-    </div>
-    
-    <!-- Button Skeleton (Exact 48px height mb-8) -->
-    <div class="h-11 w-full bg-slate-200 rounded-xl mb-8"></div>
-    
-    <!-- Features Section Skeleton -->
-    <div class="space-y-3.5">
-      <div class="h-3 w-28 bg-slate-200 rounded mb-3"></div>
-      <ul class="space-y-3">
-        <li v-for="i in 7" :key="i" class="flex items-center gap-3">
-          <div class="w-5 h-5 bg-slate-200 rounded-full shrink-0"></div>
-          <div class="h-4 w-44 bg-slate-100 rounded"></div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
 
     <!-- 2. Actual Unified Pricing Cards (Free & Pro from API) -->
     <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto mb-12">
@@ -107,11 +104,8 @@
         <div v-if="isRecommended(plan.name)" class="absolute -top-3.5 left-1/2 -translate-x-1/2">
           <span
             class="inline-flex items-center gap-1 px-4 py-1 rounded-full bg-gradient-to-r from-teal-500 to-teal-600 text-white text-xs font-semibold shadow-md shadow-teal-500/30 whitespace-nowrap">
-            <img
-              v-svg-inline
-              src="@/assets/icons/submission-page/star-fill.svg"
-              alt="star"
-              class="h-3.5 w-3.5" />Most Popular
+            <img v-svg-inline src="@/assets/icons/submission-page/star-fill.svg" alt="star" class="h-3.5 w-3.5" />Most
+            Popular
           </span>
         </div>
 
@@ -223,113 +217,110 @@
         </a>
       </p>
     </section>
-     
   </div>
-  <FreePlanModal
-      :isShowModal="isShowFreePlanModal"
-      @closeModal="isShowFreePlanModal = false"
-    />
+  <FreePlanModal :isShowModal="isShowFreePlanModal" @closeModal="isShowFreePlanModal = false" />
+  <ProPlanModal :isShowModal="isShowProPlanModal" @closeModal="isShowProPlanModal = false" />
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import PlanService from "@/services/api/plan-services";
-import planFeaturesData from "@/data/planFeatures.json";
-import planFaqs from "@/data/planFaqs.json";
-import FreePlanModal from "@/components/modals/FreePlanModal.vue";
+  import { ref, onMounted } from "vue";
+  import PlanService from "@/services/api/plan-services";
+  import planFeaturesData from "@/data/planFeatures.json";
+  import planFaqs from "@/data/planFaqs.json";
+  import FreePlanModal from "@/components/modals/FreePlanModal.vue";
+  import ProPlanModal from "@/components/modals/ProPlanModal.vue";
 
-type PlanKey = "free" | "pro";
+  type PlanKey = "free" | "pro";
 
-const isPlanLoading = ref(true);
-const selectedPlanType = ref<"monthly" | "yearly">("monthly");
-const plans = ref<any[]>([]);
+  const isPlanLoading = ref(true);
+  const selectedPlanType = ref<"monthly" | "yearly">("monthly");
+  const plans = ref<any[]>([]);
 
-const isShowFreePlanModal = ref(true);
+  const isShowFreePlanModal = ref(true);
+  const isShowProPlanModal = ref(false);
 
-// 1. Fetch Plans from API
-const fetchPlans = async () => {
-  try {
-    isPlanLoading.value = true;
-    const response = await new PlanService().getPlanList();
-    if (response?.planData) {
-      plans.value = response.planData;
+  // 1. Fetch Plans from API
+  const fetchPlans = async () => {
+    try {
+      isPlanLoading.value = true;
+      const response = await new PlanService().getPlanList();
+      if (response?.planData) {
+        plans.value = response.planData;
+      }
+    } catch (error) {
+      console.error("Failed to fetch plan list:", error);
+    } finally {
+      isPlanLoading.value = false;
     }
-  } catch (error) {
-    console.error("Failed to fetch plan list:", error);
-  } finally {
-    isPlanLoading.value = false;
-  }
-};
+  };
 
-// 2. Helper functions
-const togglePlanType = (type: "monthly" | "yearly") => {
-  selectedPlanType.value = type;
-};
+  // 2. Helper functions
+  const togglePlanType = (type: "monthly" | "yearly") => {
+    selectedPlanType.value = type;
+  };
 
-const getPrice = (plan: any) => {
-  if (plan.name?.toLowerCase() === "free") return 0;
-  return selectedPlanType.value === "monthly" ? plan.month_price : plan.year_price;
-};
+  const getPrice = (plan: any) => {
+    if (plan.name?.toLowerCase() === "free") return 0;
+    return selectedPlanType.value === "monthly" ? plan.month_price : plan.year_price;
+  };
 
-const getDurationLabel = (plan: any) => {
-  if (plan.name?.toLowerCase() === "free") return "month";
-  return selectedPlanType.value === "monthly" ? "month" : "year";
-};
+  const getDurationLabel = (plan: any) => {
+    if (plan.name?.toLowerCase() === "free") return "month";
+    return selectedPlanType.value === "monthly" ? "month" : "year";
+  };
 
-const getPlanSubtext = (plan: any) => {
-  if (plan.name?.toLowerCase() === "free") return "Forever free. No credit card needed.";
-  return selectedPlanType.value === "monthly"
-    ? "Billed monthly. Cancel anytime."
-    : "Billed yearly. Cancel anytime.";
-};
+  const getPlanSubtext = (plan: any) => {
+    if (plan.name?.toLowerCase() === "free") return "Forever free. No credit card needed.";
+    return selectedPlanType.value === "monthly" ? "Billed monthly. Cancel anytime." : "Billed yearly. Cancel anytime.";
+  };
 
-const isRecommended = (name: string) => name?.toLowerCase() === "pro";
+  const isRecommended = (name: string) => name?.toLowerCase() === "pro";
 
-const getPlanLabel = (name: string) => {
-  if (name?.toLowerCase() === "free") {
-    return "Ideal for individuals and small businesses<br>just getting started.";
-  }
-  return "Full power of FormFlow with advanced targeting<br>and unlimited growth.";
-};
+  const getPlanLabel = (name: string) => {
+    if (name?.toLowerCase() === "free") {
+      return "Ideal for individuals and small businesses<br>just getting started.";
+    }
+    return "Full power of FormFlow with advanced targeting<br>and unlimited growth.";
+  };
 
-const isPlanDisabled = (plan: any) => {
-  return plan.name?.toLowerCase() === "free" && selectedPlanType.value === "yearly";
-};
+  const isPlanDisabled = (plan: any) => {
+    return plan.name?.toLowerCase() === "free" && selectedPlanType.value === "yearly";
+  };
 
-const getPlanButtonText = (plan: any) => {
-  if (plan.name?.toLowerCase() === "free" && selectedPlanType.value === "yearly") {
-    return "Not Available";
-  }
-  if (plan.name?.toLowerCase() === "free") return "Get Started Free";
-  return "Upgrade to Pro";
-};
+  const getPlanButtonText = (plan: any) => {
+    if (plan.name?.toLowerCase() === "free" && selectedPlanType.value === "yearly") {
+      return "Not Available";
+    }
+    if (plan.name?.toLowerCase() === "free") return "Get Started Free";
+    return "Upgrade to Pro";
+  };
 
-const getPlanButtonClass = (plan: any) => {
-  if (plan.name?.toLowerCase() === "free" && selectedPlanType.value === "yearly") {
-    return "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed opacity-70";
-  }
-  if (plan.name?.toLowerCase() === "free") {
-    return "border border-slate-300 text-slate-700 hover:bg-slate-50 cursor-pointer";
-  }
-  return "bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-600/20 hover:shadow-lg cursor-pointer";
-};
+  const getPlanButtonClass = (plan: any) => {
+    if (plan.name?.toLowerCase() === "free" && selectedPlanType.value === "yearly") {
+      return "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed opacity-70";
+    }
+    if (plan.name?.toLowerCase() === "free") {
+      return "border border-slate-300 text-slate-700 hover:bg-slate-50 cursor-pointer";
+    }
+    return "bg-teal-600 hover:bg-teal-700 text-white shadow-md shadow-teal-600/20 hover:shadow-lg cursor-pointer";
+  };
 
-const getPlanFeatures = (name: string) => {
-  const key = (name?.toLowerCase() || "free") as PlanKey;
-  return (planFeaturesData.PlanFeature as any)?.[key] || [];
-};
+  const getPlanFeatures = (name: string) => {
+    const key = (name?.toLowerCase() || "free") as PlanKey;
+    return (planFeaturesData.PlanFeature as any)?.[key] || [];
+  };
 
-const handlePlanClick = (plan: any) => {
-  if (isPlanDisabled(plan)) return;
-  
-  if (plan.name?.toLowerCase() === "free") {
-    isShowFreePlanModal.value = true;
-  } else {
-    // Pro plan action/redirect
-  }
-};
+  const handlePlanClick = (plan: any) => {
+    if (isPlanDisabled(plan)) return;
 
-onMounted(() => {
-  fetchPlans();
-});
+    if (plan.name?.toLowerCase() === "free") {
+      isShowFreePlanModal.value = true;
+    } else {
+      isShowProPlanModal.value = true; // 👈 Show Pro Plan Modal
+    }
+  };
+
+  onMounted(() => {
+    fetchPlans();
+  });
 </script>

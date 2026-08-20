@@ -111,15 +111,6 @@
               class="flex-1" 
             />
           </div>
-          <!-- Field Size -->
-          <div class="flex flex-wrap items-center gap-2">
-            <label class="text-sm font-semibold text-gray-700 w-full xs:w-28 sm:w-28 flex-shrink-0">Field Size</label>
-            <SelectField 
-              v-model="formStyleSetting.inputStyle.inputSize" 
-              :options="fieldSizeOptions" 
-              class="flex-1" 
-            />
-          </div>
           <!-- Box Shadow -->
           <div class="flex flex-col sm:flex-row sm:items-center gap-2 responsive-shadow-row">
             <label class="text-sm font-semibold text-gray-700 sm:w-28 flex-shrink-0 responsive-shadow-label">Box Shadow</label>
@@ -870,7 +861,6 @@ import {
   displayOptions,
   fontWeightOptions,
   fieldWidthOptions,
-  fieldSizeOptions,
   borderStyleOptions,
   alignOptions
 } from "@/data/formStyleOptions";

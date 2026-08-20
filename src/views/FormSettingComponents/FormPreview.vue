@@ -3,7 +3,6 @@
     :style="cssVars"
     class="gform-wrapper w-full h-full overflow-auto border border-slate-200 rounded-xl transition-colors duration-150">
     <div class="w-fit min-w-full">
-      
       <div class="gform-header-container">
         <h2 v-if="formStyleSetting.formInfo.formTitle" class="font-bold break-words leading-tight gform-title">
           {{ formStyleSetting.formInfo.formTitle }}
@@ -16,7 +15,6 @@
 
       <div class="gform-body-container">
         <div v-for="field in formFieldSetting.fields" :key="field.id">
-          
           <div
             v-if="['text', 'email', 'number', 'phone', 'url', 'password'].includes(field.type)"
             class="relative"
@@ -37,11 +35,11 @@
               :placeholder="field.placeholder"
               v-model="formData[field.id]"
               @keydown="handleKeyDown($event, field.type)"
-              :classes="field.type === 'password' && field.showPasswordIcon == 1 ? 'pr-10' : ''"
               :class="interactive ? '' : 'pointer-events-none'">
               <div
                 v-if="field.type === 'password' && field.showPasswordIcon == 1"
-                class="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center cursor-pointer pointer-events-auto"
+                class="absolute w-4 h-4 flex items-center justify-center cursor-pointer pointer-events-auto"
+                style="right: var(--input-padding-right); bottom: var(--input-padding-bottom)"
                 @click="togglePasswordVisibility(field.id)">
                 <img
                   :src="
@@ -49,7 +47,7 @@
                       ? '/src/assets/icons/submission-page/eye-line.svg'
                       : '/src/assets/icons/FormFields/EyesOff.svg'
                   "
-                  class="w-4 h-4  text-[#90a1b9] transition-opacity"/>
+                  class="w-4 h-4 opacity-50 transition-opacity" />
               </div>
             </InputField>
           </div>
@@ -58,7 +56,7 @@
             <template v-if="field.nameFormat === 'split'">
               <div class="grid grid-cols-2 gap-4 w-full" style="width: var(--input-width)">
                 <div class="relative w-full">
-                  <HelpTooltip :message="field.lastNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
+                  <HelpTooltip :message="field.firstNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
                   <InputField
                     :disable="!interactive"
                     :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
@@ -147,7 +145,7 @@
                 @click="toggleMultiselect(field.id)"
                 :class="[
                   interactive ? 'cursor-pointer' : 'pointer-events-none',
-                  'border border-slate-300 bg-white w-full rounded-xl py-2 px-3 gap-1 flex justify-between items-center text-sm custom-select-box',
+                  'border border-slate-300 bg-white w-full rounded-xl gap-1 flex justify-between items-center text-sm custom-select-box',
                 ]">
                 <span
                   class="truncate"
@@ -197,13 +195,7 @@
               class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1">
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
-            <div
-              class="flex flex-col gap-1 px-3 radio-checkbox-options-container"
-              :class="[
-                field.labelPlacement === 'center' ? 'items-center text-center' : '',
-                field.labelPlacement === 'right' ? 'items-end text-right' : '',
-                field.labelPlacement === 'left' || !field.labelPlacement ? 'items-start text-left' : ''
-              ]">
+            <div class="flex flex-col gap-1 radio-checkbox-options-container items-start text-left">
               <CustomDefaultRadio
                 v-for="(opt, idx) in field.options || []"
                 :key="opt"
@@ -225,13 +217,7 @@
               class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1">
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
-            <div
-              class="flex flex-col gap-1 px-3 radio-checkbox-options-container"
-              :class="[
-                field.labelPlacement === 'center' ? 'items-center text-center' : '',
-                field.labelPlacement === 'right' ? 'items-end text-right' : '',
-                field.labelPlacement === 'left' || !field.labelPlacement ? 'items-start text-left' : ''
-              ]">
+            <div class="flex flex-col gap-1 radio-checkbox-options-container items-start text-left">
               <CustomDefaultCheckbox
                 v-for="opt in field.options || []"
                 :key="opt"
@@ -240,7 +226,7 @@
                 @update:modelValue="formData[field.id + '_' + opt] = $event"
                 :class="interactive ? '' : 'pointer-events-none'"
                 size="sm"
-                labelClass="text-sm py-0.5" />
+                labelClass="text-sm text-gray-700 py-0.5" />
             </div>
           </div>
 
@@ -258,18 +244,18 @@
                 type="date"
                 v-model="formData[field.id]"
                 :class="[interactive ? '' : 'pointer-events-none', !formData[field.id] ? 'date-empty' : 'date-filled']"
-                class=" rounded-lg border border-slate-200 text-sm bg-slate-50/30 gform-input" />
-
+                class="rounded-lg border border-slate-200 text-sm bg-slate-50/30 gform-input" />
               <span
                 v-if="!formData[field.id]"
-                class="absolute left-4 top-1/2 -translate-y-1/2 text-sm bg-transparent pointer-events-none pr-10 gform-placeholder">
+                class="absolute text-sm bg-transparent pointer-events-none gform-placeholder"
+                style="bottom: var(--input-padding-bottom)">
                 {{ field.placeholder || "dd-mm-yyyy" }}
               </span>
               <img
                 v-svg-inline
                 src="@/assets/icons/FormFields/Calender.svg"
                 class="w-4 h-4 text-slate-400 pointer-events-none"
-                style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%)" />
+                style="position: absolute; bottom: var(--input-padding-bottom)" />
             </div>
           </div>
 
@@ -287,17 +273,18 @@
                 type="time"
                 v-model="formData[field.id]"
                 :class="[interactive ? '' : 'pointer-events-none', !formData[field.id] ? 'date-empty' : 'date-filled']"
-                class="w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 gform-input" />
+                class="w-full rounded-lg border border-slate-200 text-sm bg-slate-50/30 gform-input" />
               <span
                 v-if="!formData[field.id]"
-                class="absolute left-4 top-1/2 -translate-y-1/2 text-sm bg-transparent pointer-events-none pr-10 gform-placeholder">
+                class="absolute text-sm bg-transparent pointer-events-none gform-placeholder"
+                style="bottom: var(--input-padding-bottom)">
                 {{ field.placeholder || "Select Time" }}
               </span>
               <img
                 v-svg-inline
                 src="@/assets/icons/FormFields/timer.svg"
                 class="w-4 h-4 text-slate-400 pointer-events-none"
-                style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%)" />
+                style="position: absolute; bottom: var(--input-padding-bottom)" />
             </div>
           </div>
 
@@ -310,7 +297,7 @@
               {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
             </label>
             <div
-              class="border-2 border-dashed border-slate-200 rounded-xl !h-auto !py-5 px-4 flex flex-col items-center justify-center bg-slate-50/50 gform-input">
+              class="border-2 px-4 border-dashed border-slate-200 rounded-xl !h-auto flex flex-col items-center justify-center bg-slate-50/50 gform-input">
               <img
                 v-svg-inline
                 src="@/assets/icons/FormFields/Upload.svg"
@@ -321,7 +308,6 @@
         </div>
       </div>
 
-      <!-- 3. Footer Part: Submit Button -->
       <div
         v-if="formFieldSetting.fields && formFieldSetting.fields.length > 0"
         class="gform-footer-container"
@@ -334,13 +320,12 @@
           {{ formFieldSetting.submitButtonText || "Submit" }}
         </button>
       </div>
-
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, onMounted, onUnmounted } from "vue";
+  import { ref, computed, onMounted, onUnmounted, watch } from "vue";
   import { formSetting } from "@/composable/useFormSettings";
   import { useFormStyle } from "@/composable/useFormStyle";
   import { useFormFieldsBuilder } from "@/composable/useFormFieldBuilder";
@@ -356,7 +341,7 @@
 
   const { formFieldSetting, formStyleSetting } = formSetting();
   const { cssVars } = useFormStyle();
-  const { submitButtonClass, labelPositionClass, optionStyle } = useFormFieldsBuilder();
+  const { submitButtonClass, labelPositionClass } = useFormFieldsBuilder();
 
   const formData = ref<Record<string, any>>({});
   const showPassword = ref<Record<string, boolean>>({});
@@ -433,6 +418,29 @@
     }
   };
 
+    // Synchronize default values from settings into preview form state
+  watch(
+    () => formFieldSetting.value.fields,
+    (fields) => {
+      if (!fields) return;
+      fields.forEach((field) => {
+        if (formData.value[field.id] === undefined) {
+          if (field.type === 'name' && field.nameFormat === 'split') {
+            if (formData.value[field.id + '_firstName'] === undefined) {
+              formData.value[field.id + '_firstName'] = field.firstNameDefaultValue || '';
+            }
+            if (formData.value[field.id + '_lastName'] === undefined) {
+              formData.value[field.id + '_lastName'] = field.lastNameDefaultValue || '';
+            }
+          } else {
+            formData.value[field.id] = field.defaultValue || '';
+          }
+        }
+      });
+    },
+    { deep: true, immediate: true }
+  );
+
   onMounted(() => {
     document.addEventListener("click", handleClickOutside);
   });
@@ -443,29 +451,6 @@
 </script>
 
 <style scoped>
-  input[type="date"]::-webkit-calendar-picker-indicator,
-  input[type="time"]::-webkit-calendar-picker-indicator {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-  }
-  /* 2. Hide native text when empty and not focused */
-  input.date-empty:not(:focus)::-webkit-datetime-edit {
-    color: transparent !important;
-  }
-  input.date-filled::-webkit-datetime-edit,
-  input:focus::-webkit-datetime-edit {
-    color: var(--input-text-color) !important;
-  }
-  /* 3. Fix text overlap: Hide placeholder span when clicked / focused */
-  input:focus ~ .gform-placeholder {
-    display: none !important;
-  }
-
   :deep(.custom-select-box) {
     display: flex !important;
     align-items: center !important;

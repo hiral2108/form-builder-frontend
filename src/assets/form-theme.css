@@ -1,3 +1,4 @@
+/* Customizer style variables */
 :root {
   --form-bg-color: #ffffff;
 
@@ -54,7 +55,7 @@
   --form-title-margin-right: 0px;
   --form-title-margin-bottom: 0px;
   --form-title-margin-left: 20px;
-  /* Description defaults */
+
   --form-desc-color: #5f6368;
   --form-desc-font-size: 14px;
   --form-desc-align: left;
@@ -68,24 +69,37 @@
   --form-desc-margin-left: 0px;
 }
 
+/* Form background container settings */
 .gform-wrapper {
   background-color: var(--form-bg-color);
   box-sizing: border-box !important;
 }
 
+/* Margin and padding settings for the form preview container */
 .gform-wrapper:not(.editor-mode) .gform-body-container {
   padding-left: var(--input-margin-left) !important;
   padding-right: var(--input-margin-right) !important;
-  padding-top: 0 !important; /* Changed to 0 */
-  padding-bottom: 0 !important; /* Changed to 0 */
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
   box-sizing: border-box !important;
 }
-/* Apply top and bottom margins to the outer field wrapper div (label + input together) */
-.gform-wrapper .gform-body-container > div {
+.gform-wrapper:not(.editor-mode) .gform-body-container > div {
   margin-top: var(--input-margin-top) !important;
   margin-bottom: var(--input-margin-bottom) !important;
 }
+/* Resets padding and margins for the submit button in editor view */
+.gform-wrapper.editor-mode > div:has(.gform-submit-btn) {
+  padding: 16px !important;
+  box-sizing: border-box !important;
+}
+.gform-wrapper.editor-mode .gform-submit-btn {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-left: var(--button-margin-left) !important;
+  margin-right: var(--button-margin-right) !important;
+}
 
+/* Text styles for form headers, inputs, textareas, and select labels */
 .gform-wrapper .gform-label,
 .gform-wrapper .input-field label,
 .gform-wrapper .textarea-field label,
@@ -95,12 +109,12 @@
   font-weight: var(--label-font-weight) !important;
 }
 
+/* Shared sizes, paddings, borders, colors, and fonts for all inputs, textareas, and custom selects */
 .gform-wrapper .gform-input,
-.gform-wrapper .input-field input,
 .gform-wrapper .textarea-field textarea,
-.gform-wrapper .custom-select-box {
-  width: var(--input-width) !important;
-  height: var(--input-height) !important;
+.gform-wrapper .custom-select-box,
+.gform-wrapper .input-field input {
+  height: calc(var(--input-padding-top) + var(--input-padding-bottom) + var(--input-font-size) + 6px) !important;
   background-color: var(--input-bg-color) !important;
   color: var(--input-text-color) !important;
   border-color: var(--input-border-color) !important;
@@ -111,11 +125,27 @@
   font-weight: var(--input-font-weight) !important;
   box-shadow: var(--input-box-shadow) !important;
   padding: var(--input-padding-top) var(--input-padding-right) var(--input-padding-bottom) var(--input-padding-left) !important;
+  box-sizing: border-box !important;
+}
+.gform-wrapper .gform-input,
+.gform-wrapper .textarea-field textarea,
+.gform-wrapper .custom-select-box,
+.gform-wrapper .input-field .relative {
+  width: var(--input-width) !important;
+  max-width: 100% !important;
+}
+.gform-wrapper .input-field input {
+  width: 100% !important;
 }
 
+/* Height and padding specifications for textareas */
 .gform-wrapper .textarea-field textarea {
   height: auto !important;
+  min-height: 80px !important;
+  padding-top: var(--input-padding-top) !important;
 }
+
+/* Colors and fonts for custom and native placeholders */
 .gform-wrapper .gform-input::placeholder,
 .gform-wrapper .input-field input::placeholder,
 .gform-wrapper .textarea-field textarea::placeholder,
@@ -123,8 +153,21 @@
   color: var(--input-placeholder-color) !important;
   font-size: var(--input-font-size) !important;
   font-weight: var(--input-font-weight) !important;
+
+  /* Forces placeholders to truncate with ellipsis */
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+/* Forces standard input values to truncate with ellipsis */
+.gform-wrapper .gform-input,
+.gform-wrapper .input-field input {
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
 }
 
+/* Dimension, shadow, alignment, and color styles for the main submit button */
 .gform-wrapper .gform-submit-btn {
   background-color: var(--button-bg-color) !important;
   color: var(--button-text-color) !important;
@@ -139,6 +182,29 @@
   margin: var(--button-margin-top) var(--button-margin-right) var(--button-margin-bottom) var(--button-margin-left) !important;
 }
 
+/* Margin, alignment, and font sizes for the form title */
+.gform-title {
+  color: var(--form-title-color) !important;
+  font-size: var(--form-title-font-size) !important;
+  text-align: var(--form-title-align) !important;
+  padding: var(--form-title-padding-top) var(--form-title-padding-right) var(--form-title-padding-bottom)
+    var(--form-title-padding-left) !important;
+  margin: var(--form-title-margin-top) var(--form-title-margin-right) var(--form-title-margin-bottom)
+    var(--form-title-margin-left) !important;
+}
+
+/* Margin, alignment, and font sizes for the form description text */
+.gform-desc {
+  color: var(--form-desc-color) !important;
+  font-size: var(--form-desc-font-size) !important;
+  text-align: var(--form-desc-align) !important;
+  padding: var(--form-desc-padding-top) var(--form-desc-padding-right) var(--form-desc-padding-bottom)
+    var(--form-desc-padding-left) !important;
+  margin: var(--form-desc-margin-top) var(--form-desc-margin-right) var(--form-desc-margin-bottom)
+    var(--form-desc-margin-left) !important;
+}
+
+/* Colors, dimensions, and tooltips for floating CTA widgets */
 .gform-cta-widget {
   background-color: var(--widget-bg-color) !important;
   width: var(--widget-button-size) !important;
@@ -152,25 +218,7 @@
   color: var(--widget-tooltip-text-color) !important;
 }
 
-.gform-title {
-  color: var(--form-title-color) !important;
-  font-size: var(--form-title-font-size) !important;
-  text-align: var(--form-title-align) !important;
-  padding: var(--form-title-padding-top) var(--form-title-padding-right) var(--form-title-padding-bottom)
-    var(--form-title-padding-left) !important;
-  margin: var(--form-title-margin-top) var(--form-title-margin-right) var(--form-title-margin-bottom)
-    var(--form-title-margin-left) !important;
-}
-.gform-desc {
-  color: var(--form-desc-color) !important;
-  font-size: var(--form-desc-font-size) !important;
-  text-align: var(--form-desc-align) !important;
-  padding: var(--form-desc-padding-top) var(--form-desc-padding-right) var(--form-desc-padding-bottom)
-    var(--form-desc-padding-left) !important;
-  margin: var(--form-desc-margin-top) var(--form-desc-margin-right) var(--form-desc-margin-bottom)
-    var(--form-desc-margin-left) !important;
-}
-
+/* Forces input fields inside layouts to expand to 100% width of their grid column wrappers */
 .gform-wrapper .grid .input-field,
 .gform-wrapper .grid .input-field input {
   width: 100% !important;
@@ -178,58 +226,148 @@
   min-width: 0 !important;
 }
 
-.gform-wrapper .textarea-field textarea {
-  height: auto !important;
-  min-height: 80px !important;
-}
-
-.gform-wrapper .textarea-field textarea {
-  padding-top: var(--input-padding-top) !important;
-}
-
+/* Color and border rules for selected custom radio and checkbox toggles */
 .gform-wrapper .discount-type-radio-toggle input[type="radio"]:checked + label > span {
   border-color: var(--input-text-color) !important;
 }
 .gform-wrapper .discount-type-radio-toggle input[type="radio"]:checked + label > span > span {
   background-color: var(--input-text-color) !important;
 }
-/* 2. Selected Checkbox box background & border color */
 .gform-wrapper label input[type="checkbox"]:checked + div {
   background-color: var(--input-text-color) !important;
   border-color: var(--input-text-color) !important;
 }
-
 .gform-wrapper .discount-type-radio-toggle label {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
 
-.gform-wrapper .radio-checkbox-options-container {
-  padding-top: var(--input-padding-top) !important;
-  padding-right: var(--input-padding-right) !important;
-  padding-bottom: var(--input-padding-bottom) !important;
-  padding-left: var(--input-padding-left) !important;
-  margin-top: var(--input-margin-top) !important;
-  margin-bottom: var(--input-margin-bottom) !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+/* Overrides browser native date and time picker icon triggers, making them absolute and invisible */
+.gform-wrapper input[type="date"]::-webkit-calendar-picker-indicator,
+.gform-wrapper input[type="time"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
-/* Apply all margins (top, bottom, left, right) ONLY to the label + input content wrapper inside the card */
-.gform-wrapper.editor-mode > div[id^="field-"] > div.space-y-1\.5 {
-  margin-top: var(--input-margin-top) !important;
-  margin-bottom: var(--input-margin-bottom) !important;
-  margin-left: var(--input-margin-left) !important;
-  margin-right: var(--input-margin-right) !important;
+/* Sets value visibility for datepicker text when editing or filled */
+.gform-wrapper input.date-empty::-webkit-datetime-edit,
+.gform-wrapper input.date-empty::-webkit-datetime-edit-fields-wrapper,
+.gform-wrapper input.date-empty::-webkit-datetime-edit-day-field,
+.gform-wrapper input.date-empty::-webkit-datetime-edit-month-field,
+.gform-wrapper input.date-empty::-webkit-datetime-edit-year-field,
+.gform-wrapper input.date-empty::-webkit-datetime-edit-hour-field,
+.gform-wrapper input.date-empty::-webkit-datetime-edit-minute-field,
+.gform-wrapper input.date-empty::-webkit-datetime-edit-ampm-field {
+  color: transparent !important;
+  background: transparent !important;
 }
 
+/* Show the date text in the custom input text color only once a date is selected */
+.gform-wrapper input.date-filled::-webkit-datetime-edit {
+  color: var(--input-text-color) !important;
+}
+
+/* Forces specific width constraints for date, time, and password inputs */
 .gform-wrapper input[type="date"],
 .gform-wrapper input[type="time"],
 .gform-wrapper .input-field input[type="password"] {
   width: 100% !important;
 }
 
-.gform-wrapper .input-field .relative:has(input[type="password"]) {
-  width: var(--input-width) !important;
+/* Alignments and visibility rules for custom date and time placeholders */
+.gform-wrapper .absolute.gform-placeholder {
+  font-size: var(--input-font-size) !important;
+  font-weight: var(--input-font-weight) !important;
+  line-height: normal !important;
+  left: var(--input-padding-left) !important;
+
+  /* Ellipsis truncation rules */
+  display: block !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+
+  /* Dynamically limit width to keep a safe distance from the calendar/clock icons */
+  max-width: calc(100% - var(--input-padding-left) - 40px) !important;
+
+  top: calc(var(--input-padding-top) + (var(--input-font-size) / 2) + 3px) !important;
+  transform: translateY(-50%) !important;
+  bottom: auto !important;
+}
+
+/* Positions custom select/multiselect dropdown icons statically */
+.gform-wrapper .custom-select-box {
+  position: relative !important;
+  padding-right: 34px !important;
+}
+/* Truncates the text inside the select box */
+.gform-wrapper .custom-select-box span {
+  display: block !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+.gform-wrapper .custom-select-box svg {
+  position: absolute !important;
+  right: 14px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+.gform-wrapper .gform-input span {
+  display: block !important;
   max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Positions custom calendar and time SVG icons relative to input box bottom padding boundaries */
+.gform-wrapper input[type="date"] ~ svg,
+.gform-wrapper input[type="date"] ~ img,
+.gform-wrapper input[type="time"] ~ svg,
+.gform-wrapper input[type="time"] ~ img {
+  position: absolute !important;
+  right: 14px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  bottom: auto !important;
+}
+
+/* Positions the password show/hide eye icon container dynamically using settings */
+.gform-wrapper .input-field .relative > div {
+  position: absolute !important;
+  right: 14px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  bottom: auto !important;
+}
+/* Adds right side spacing to password field input when eye icon is rendered */
+.gform-wrapper .input-field .relative:has(div) input {
+  padding-right: calc(var(--input-padding-right) + 24px) !important;
+}
+
+.gform-wrapper.editor-mode > div[id^="field-"] > div:last-child {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-left: var(--input-margin-left) !important;
+  margin-right: var(--input-margin-right) !important;
+
+  /* Subtracts the left and right margins from the width to prevent overflow */
+  width: calc(var(--input-width) - (var(--input-margin-left) + var(--input-margin-right))) !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+input[type="number"] {
+  -moz-appearance: textfield !important;
 }

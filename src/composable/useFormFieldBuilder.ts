@@ -29,7 +29,7 @@ export function useFormFieldsBuilder() {
     const proFields = ["dropdown", "radio", "checkboxes", "datepicker", "timepicker", "fileupload", "multiselect"];
     return userStore.plan_id === 1 && proFields.includes(type);
   };
-  const { formFieldSetting, formStyleSetting } = formSetting();
+  const { formFieldSetting, formStyleSetting, validationErrors } = formSetting();
   const { cssVars } = useFormStyle();
 
   const isAdvanceSettingsOpen = ref(false);
@@ -206,7 +206,7 @@ export function useFormFieldsBuilder() {
       case "multiselect":
         label = "Multiselect Options";
         placeholder = "Select options...";
-        options = ["Option A", "Option B", "Option C"];
+        options = ["Option 1", "Option 2", "Option 3"];
         break;
       default:
         label = "New Field";
@@ -450,7 +450,7 @@ export function useFormFieldsBuilder() {
     const isSelected = formFieldSetting.value.selectedFieldId === "submit-button";
     const placement = formFieldSetting.value.submitButtonPlacement || "center";
 
-    const baseClasses = "w-full rounded-2xl border border-dashed transition-all duration-200 cursor-pointer flex";
+    const baseClasses = "w-full rounded-2xl border border-dashed transition-all duration-200 cursor-pointer flex px-4";
 
     const selectionClass = isSelected
       ? "border-teal-600 bg-slate-50 shadow-sm"
@@ -474,19 +474,6 @@ export function useFormFieldsBuilder() {
     const style = formStyleSetting.value.labelStyle;
     return {
       display: style.showLabel === "hide" ? "none" : "",
-    };
-  });
-
-  const optionStyle = computed(() => {
-    return {
-      paddingTop: "var(--input-padding-top)",
-      paddingRight: "var(--input-padding-right)",
-      paddingBottom: "var(--input-padding-bottom)",
-      paddingLeft: "var(--input-padding-left)",
-      marginTop: "var(--input-margin-top)",
-      marginRight: "var(--input-margin-right)",
-      marginBottom: "var(--input-margin-bottom)",
-      marginLeft: "var(--input-margin-left)",
     };
   });
 
@@ -543,6 +530,6 @@ export function useFormFieldsBuilder() {
     labelStyleObject,
     cssVars,
     isFieldLocked,
-    optionStyle,
+    validationErrors,
   };
 }

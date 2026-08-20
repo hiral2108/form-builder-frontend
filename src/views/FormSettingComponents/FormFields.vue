@@ -73,18 +73,14 @@
     <section
       class="lg:col-span-6 bg-white border border-slate-200 rounded-2xl shadow-sm h-[600px] lg:h-full lg:max-h-[calc(100vh-210px)] flex flex-col overflow-hidden">
       <div class="border-b border-slate-100 px-6 py-3 flex items-center justify-between flex-shrink-0">
-        <h3 class="font-semibold text-slate-800 text-md">Form Preview</h3>
+        <h3 class="font-semibold text-slate-800 text-md">Field Preview</h3>
         <span v-if="formFieldSetting.fields.length > 0" class="text-xs text-teal-600 font-medium"
           >Click on a field to edit it</span
         >
       </div>
 
-      <!-- overflow-x-hidden added here as a second safety net: even if a field's
-           content somehow exceeds its box, the panel itself will never grow a
-           horizontal scrollbar — vertical scrolling still works as before. -->
       <div class="p-5 overflow-y-auto overflow-x-hidden flex-1 scrollbar-thin">
         <form @submit.prevent :style="cssVars" class="space-y-5 gform-wrapper w-full editor-mode">
-          <!-- Loading Form Preview Skeleton -->
           <template v-if="isLoading">
             <div
               v-for="i in 3"
@@ -98,7 +94,6 @@
             </div>
           </template>
 
-          <!-- Real Loaded Fields State -->
           <template v-else>
             <div
               v-if="formFieldSetting.fields.length === 0"
@@ -186,11 +181,10 @@
                     :type="field.type"
                     :placeholder="field.placeholder"
                     :modelValue="field.defaultValue"
-                    :classes="field.type === 'password' && field.showPasswordIcon == 1 ? 'pr-10' : ''"
                     class="pointer-events-none">
                     <div
                       v-if="field.type === 'password' && field.showPasswordIcon == 1"
-                      class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
+                      class="absolute w-4 h-4 pointer-events-none flex items-center justify-center">
                       <img v-svg-inline src="@/assets/icons/FormFields/EyesOff.svg" class="w-4 h-4 text-slate-400" />
                     </div>
                   </InputField>
@@ -287,7 +281,7 @@
                   :style="labelStyleObject">
                   {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
                 </label>
-                <div class="flex flex-col gap-1 px-3" :style="optionStyle">
+                <div class="flex flex-col gap-1" >
                   <CustomDefaultRadio
                     v-for="(opt, idx) in field.options"
                     :key="opt"
@@ -308,7 +302,7 @@
                   :style="labelStyleObject">
                   {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
                 </label>
-                <div class="flex flex-col gap-1 px-3" :style="optionStyle">
+                <div class="flex flex-col gap-1">
                   <CustomDefaultCheckbox
                     v-for="opt in field.options"
                     :key="opt"
@@ -331,16 +325,16 @@
                   <input
                     disabled
                     type="date"
-                    class="gform-input px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
-                  <span
-                    class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10 gform-placeholder">
+                    class="gform-input rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
+                  <span style="bottom: var(--input-padding-bottom);"
+                    class="absolute text-sm text-slate-400 bg-transparent pointer-events-none gform-placeholder">
                     {{ field.placeholder }}
                   </span>
                   <img
                     v-svg-inline
                     src="@/assets/icons/FormFields/Calender.svg"
                     class="w-4 h-4 text-slate-400 pointer-events-none"
-                    style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%)" />
+                    style="position: absolute; bottom: var(--input-padding-bottom);" />
                 </div>
               </div>
 
@@ -356,16 +350,16 @@
                   <input
                     disabled
                     type="time"
-                    class="gform-input px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
-                  <span
-                    class="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 bg-transparent pointer-events-none pr-10 gform-placeholder">
+                    class="gform-input rounded-lg border border-slate-200 text-sm bg-slate-50/30 text-slate-400 pointer-events-none" />
+                  <span style="bottom: var(--input-padding-bottom);"
+                    class="absolute text-sm text-slate-400 bg-transparent pointer-events-none pr-10 gform-placeholder">
                     {{ field.placeholder || "Select Time" }}
                   </span>
                   <img
                     v-svg-inline
                     src="@/assets/icons/FormFields/timer.svg"
                     class="w-4 h-4 text-slate-400 pointer-events-none"
-                    style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%)" />
+                    style="position: absolute; bottom: var(--input-padding-bottom);" />
                 </div>
               </div>
 
@@ -394,7 +388,7 @@
               :class="submitButtonContainerClass"
               title="Click to edit button settings">
               <button disabled type="button" :class="[submitButtonClass, 'gform-submit-btn']">
-                {{ formFieldSetting.submitButtonText || "Submit" }}
+                {{ formFieldSetting.submitButtonText }}
               </button>
             </div>
           </template>
@@ -430,11 +424,15 @@
           <div v-if="formFieldSetting.selectedFieldId === 'submit-button'" class="space-y-4 my-5">
             <div>
               <InputField
-                type="text"
-                v-model="formFieldSetting.submitButtonText"
-                label="Button Text"
-                placeholder="Submit"
-                focusColor="teal" />
+              type="text"
+              v-model="formFieldSetting.submitButtonText"
+              label="Button Text"
+              placeholder="Submit"
+              fieldId="submit_button_text"
+              :required="true"
+              :hasError="!!validationErrors.submitButtonText"
+              :validationMessage="validationErrors.submitButtonText ? [{ $message: validationErrors.submitButtonText }] : []"
+              focusColor="teal" />
             </div>
 
             <div>
@@ -885,7 +883,7 @@
                   </template>
                   <template v-else>
                     <InputField
-                      type="text"
+                      :type="['number', 'phone'].includes(selectedField.type) ? 'number' : 'text'"
                       v-model="selectedField.defaultValue"
                       label="Default Value"
                       focusColor="teal" />
@@ -1134,8 +1132,8 @@
     canHaveMaxLength,
     labelStyleObject,
     cssVars,
-    optionStyle,
     isFieldLocked,
+     validationErrors,
   } = useFormFieldsBuilder();
   watch(isAdvanceSettingsOpen, (isOpen) => {
     if (isOpen) {

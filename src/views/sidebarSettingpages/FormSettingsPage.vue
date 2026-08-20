@@ -269,6 +269,32 @@
     }
     return obj;
   };
+     const validateFormFields = (): boolean => {
+    delete validationErrors.submitButtonText;
+    if (!formFieldSetting.value.submitButtonText || !formFieldSetting.value.submitButtonText.trim()) {
+      validationErrors.submitButtonText = "Button text is required";
+
+      // Redirect to Step 1 and focus on the input field
+      currentStep.value = 1;
+      formFieldSetting.value.selectedFieldId = 'submit-button';
+      nextTick(() => {
+        // 1. Scroll the settings panel to the button text input field
+        const el = document.getElementById("submit_button_text");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          (el as HTMLElement).focus?.();
+        }
+
+        // 2. Scroll the middle field preview container to the submit button card
+        const btnCard = document.querySelector(".gform-submit-btn");
+        if (btnCard) {
+          btnCard.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+      return false;
+    }
+    return true;
+  };
 
   const validateDisplayRules = (): boolean => {
     delete validationErrors.button_text;
@@ -470,6 +496,7 @@
 
   // Save Settings Submit Handler
   const saveFormSettings = async () => {
+     if (!validateFormFields()) return; 
     if (!validateDisplayRules()) return;
        Object.keys(validationErrors).forEach((k) => delete validationErrors[k]);
     if (!validateDisplayRules()) return;
@@ -526,14 +553,15 @@
   };
 
   const nextStep = () => {
+    if (currentStep.value === 1 && !validateFormFields()) return; // 👈 Validate Step 1
     if (currentStep.value === 3 && !validateDisplayRules()) return;
     if (currentStep.value < 5 && !isStepDisabled(currentStep.value + 1)) {
       currentStep.value++;
     }
   };
-
   // Step navigation validator
-const handleStepNavigation = (stepNumber: number) => {
+  const handleStepNavigation = (stepNumber: number) => {
+    if (currentStep.value === 1 && stepNumber > 1 && !validateFormFields()) return; // 👈 Validate Step 1
     if (stepNumber > 3 && !validateDisplayRules()) return;
     currentStep.value = stepNumber;
   };

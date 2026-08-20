@@ -1,106 +1,107 @@
 <template>
-  <div v-if="isShowModal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4">
-    <!-- Backdrop overlay with blur effect -->
-    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm" @click="closeModalWidget"></div>
-
-    <!-- Modal Card with a fresh teal-themed design and min height -->
-    <div class="relative bg-white rounded-[30px] shadow-2xl w-full max-w-[460px] p-6 transform transition-all flex flex-col items-center z-10 border border-slate-100 justify-between">
-      
-      <!-- Floating Top Badge with Teal/Emerald Gradient -->
-      <div class="absolute -top-10 w-20 h-20 rounded-full flex items-center justify-center z-20">
-        <!-- Inner gradient badge with leaf/seedling icon representing "Starter" -->
-        <div class="w-18 h-18 rounded-full bg-gradient-to-br from-teal-400 to-emerald-500 text-white flex items-center justify-center shadow-inner">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+  <div v-if="isShowModal" class="popup-modal" @keydown.esc="closeModalWidget">
+    <div
+      class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-[10009]"
+      @click="closeModalWidget"
+    >
+      <div 
+        class="bg-white relative flex flex-col w-full max-w-md max-h-[85vh] rounded-[24px] border border-gray-100 shadow-2xl overflow-visible mt-7 z-10"
+        @click.stop
+      >
+        <!-- Floating Top Badge with Teal Double Checkmark -->
+        <div class="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 bg-teal-50 border-4 border-white text-teal-600 rounded-full flex items-center justify-center shadow-md z-20">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="stroke-teal-600 stroke-[2.5] stroke-linecap-round stroke-linejoin-round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
           </svg>
         </div>
-      </div>
 
-      <!-- Close button -->
-      <button 
-        type="button" 
-        @click="closeModalWidget" 
-        class="absolute top-6 right-6 w-8 h-8 rounded-full bg-slate-50 text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-all cursor-pointer"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-
-      <!-- Content Header -->
-      <div class="w-full text-center mt-6">
-        <h3 class="text-2xl font-extrabold text-slate-800 tracking-tight leading-snug">
-          Starter Plan Activated!
-        </h3>
-        <p class="text-slate-400 text-sm mt-3 px-1 leading-relaxed font-medium">
-          Your account is now on the Free Starter plan. Explore the active quotas for your workspace:
-        </p>
-      </div>
-
-      <!-- Feature Card Container with Local Scroll inside features list -->
-      <div class="w-full bg-[#f4fbf9] border border-teal-50 rounded-2xl p-6 mt-6 space-y-4 shadow-sm shadow-teal-500/5 max-h-[45vh] overflow-y-auto">
-        <div v-for="(feature, idx) in freeFeatures" :key="idx" class="flex items-center gap-3.5">
-          <!-- Premium mint circle checkmark -->
-          <div class="w-6 h-6 rounded-full bg-emerald-100/70 text-emerald-600 flex items-center justify-center shrink-0 shadow-sm shadow-emerald-600/5">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5">
-              <polyline points="20 6 9 17 4 12"/>
+        <!-- Close Button -->
+        <div class="absolute top-5 right-5 z-10">
+          <button class="close-modal text-gray-400 hover:text-gray-600 transition-colors p-1.5 rounded-full hover:bg-gray-50 cursor-pointer" @click="closeModalWidget">
+            <svg width="18" height="18" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M10.578 8.81667L14.6968 4.7L15.8807 5.88334L11.762 10L15.8807 14.1167L14.6968 15.3L10.578 11.1833L6.45932 15.3L5.27539 14.1167L9.39412 10L5.27539 5.88334L6.45932 4.7L10.578 8.81667Z"
+                fill="currentColor" />
             </svg>
+          </button>
+        </div>
+
+        <!-- Content Header -->
+        <div class="px-6 pt-10 pb-4 shrink-0 bg-white rounded-t-[24px]">
+          <div class="flex flex-col items-center text-center">
+            <h3 class="text-2xl font-extrabold text-gray-900 mb-2 tracking-tight">Free Plan Activated!</h3>
+            <p class="text-sm font-semibold text-gray-400">Your account is now active on the Free Plan.</p>
           </div>
-          <span class="text-slate-700 font-semibold text-sm leading-none mt-0.5">{{ feature }}</span>
+        </div>
+
+        <!-- Main container now handles the scroll and height constraint -->
+        <div class="px-6 py-2 overflow-y-auto grow bg-white min-h-0 max-h-[40vh] scrollbar-thin">
+          <div class="w-full space-y-4 py-4 bg-white rounded-2xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.01)]">
+            <div v-for="(item, index) in freePlanFeatures" :key="index" class="flex items-center gap-3">
+              <!-- Checked Circle Icon in Teal -->
+              <div class="w-6 h-6 rounded-full bg-teal-50 text-teal-500 flex items-center justify-center flex-shrink-0">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="stroke-teal-600 stroke-[3.5] stroke-linecap-round stroke-linejoin-round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <p class="text-gray-600 text-left text-sm font-semibold">
+                {{ item.feature }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Go to Dashboard Action Button in Teal -->
+        <div class="px-6 pb-6 pt-4 border-t border-gray-100/60 shrink-0 bg-white rounded-b-[24px]">
+          <button
+            type="button"
+            @click="confirmFreePlan"
+            class="w-full block text-center bg-gradient-to-r from-teal-500 to-emerald-600 text-white font-bold py-3.5 px-6 rounded-xl cursor-pointer hover:shadow-lg hover:shadow-teal-500/20 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 whitespace-nowrap shadow-md shadow-teal-500/10"
+          >
+            Go to Dashboard
+          </button>
         </div>
       </div>
-
-      <!-- Go to Dashboard Action Button matching main brand color -->
-      <button
-        type="button"
-        @click="confirmFreePlan"
-        class="w-full mt-7 py-4 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-base transition-all duration-200 shadow-md hover:shadow-lg shadow-teal-600/10 hover:shadow-teal-600/25 cursor-pointer flex items-center justify-center"
-      >
-        Go to Dashboard
-      </button>
-
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from "vue";
+  import { onMounted, onUnmounted, computed } from "vue";
+  import planFeatures from "@/data/planFeatures.json";
 
-const props = defineProps({
-  isShowModal: Boolean
-});
+  defineProps({
+    isShowModal: Boolean,
+  });
 
-const emit = defineEmits(["closeModal", "confirmSelection"]);
+  const emit = defineEmits(["closeModal", "confirmSelection"]);
 
-const freeFeatures = [
-  "1 Active Form",
-  "1,000 Visitors / month",
-  "50 Submissions / month",
-  "Basic Form Customizations",
-  "Up to 8 Form Fields",
-];
+  // Dynamically filter features that belong to the free tier and are not pro features
+  const freePlanFeatures = computed(() => {
+    return planFeatures.PlanFeature.free.filter((item) => !item.is_pro);
+  });
 
-const closeModalWidget = () => {
-  emit("closeModal");
-};
+  const closeModalWidget = () => {
+    emit("closeModal");
+  };
 
-const confirmFreePlan = () => {
-  emit("confirmSelection");
-  closeModalWidget();
-};
-
-const handleKeydown = (event: KeyboardEvent) => {
-  if (event.key === "Escape" && props.isShowModal) {
+  const confirmFreePlan = () => {
+    emit("confirmSelection");
     closeModalWidget();
-  }
-};
+  };
 
-onMounted(() => {
-  window.addEventListener("keydown", handleKeydown);
-});
+  const handleKeydown = (event: KeyboardEvent) => {
+    if (event.key === "Escape") {
+      closeModalWidget();
+    }
+  };
 
-onUnmounted(() => {
-  window.removeEventListener("keydown", handleKeydown);
-});
+  onMounted(() => {
+    window.addEventListener("keydown", handleKeydown);
+  });
+
+  onUnmounted(() => {
+    window.removeEventListener("keydown", handleKeydown);
+  });
 </script>

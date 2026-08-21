@@ -16,11 +16,6 @@ const fieldWidthMap: Record<string, string> = {
   large: "95%",
 };
 
-const fieldSizeMap: Record<string, string> = {
-  small: "29px",
-  large: "46px",
-};
-
 const ctaButtonSizeMap: Record<string, string> = {
   "45": "45px",
   "54": "54px",
@@ -57,7 +52,6 @@ export function useFormStyle() {
     const btnShadow = `${btn.btnBoxShadowX ?? 0}px ${btn.btnBoxShadowY ?? 0}px ${btn.btnBoxShadowBlur ?? 0}px ${hexToRgba(btn.btnBoxShadowColor, btn.btnBoxShadowOpacity)}`;
 
     const widthStyle = fieldWidthMap[input.inputWidth] || "100%";
-    const heightStyle = fieldSizeMap[input.inputSize] || "auto";
 
     const title = formStyleSetting.value.formTitleStyle || {};
     const desc = formStyleSetting.value.formDescStyle || {};
@@ -70,7 +64,6 @@ export function useFormStyle() {
       "--label-font-weight": fontWeightMap[label.fontWeight] || "400",
 
       "--input-width": widthStyle,
-      "--input-height": heightStyle,
       "--input-bg-color": input.inputBgColor || "#FFFFFF",
       "--input-text-color": input.inputTextColor || "#1E293B",
       "--input-border-color": input.inputBorderColor || "#CCCCCC",

@@ -14,7 +14,6 @@ export interface LabelStyleType {
 
 export interface InputStyleType {
   inputWidth: string;
-  inputSize: string;
   inputBgColor: string;
   inputTextColor: string;
   inputBorderColor: string;
@@ -125,7 +124,6 @@ export const useFormStyleSettingStore = defineStore("formStyleSetting", {
       // Input Style
       inputStyle: {
         inputWidth: "default",
-        inputSize: "default",
         inputBgColor: "#ffffff",
         inputTextColor: "#1e293b",
         inputBorderColor: "#cccccc",

@@ -3,7 +3,7 @@
   <Listbox v-model="selectedValue">
     <div class="relative">
       <!-- Dropdown Button -->
-      <ListboxButton class="border border-solid! border-gray-300 bg-white w-full rounded-xl py-2.5 px-3 gap-1 flex justify-between items-center text-sm custom-select-box" :class="customClass">
+      <ListboxButton class="border cursor-pointer border-solid! border-gray-300 bg-white w-full rounded-xl py-2.5 px-3 gap-1 flex justify-between items-center text-sm custom-select-box" :class="customClass">
         {{ selectedTitle }}
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />

@@ -5,7 +5,7 @@ import { storeToRefs } from "pinia";
 export function useShopUser() {
   const userStore = useUserStore();
 
-  const { id, name, email, next_reset_date, visitors, plan_id, created_at } = storeToRefs(userStore);
+  const { id, name, email, next_reset_date, visitors, plan_id, created_at, plan_type } = storeToRefs(userStore);
 
   async function getCurrentUser(): Promise<void> {
     try {
@@ -16,6 +16,7 @@ export function useShopUser() {
       email.value = data.email;
       next_reset_date.value = data.next_reset_date;
       visitors.value = data.visitors;
+      plan_type.value = data.plan_type;
       plan_id.value = data.plan_id;
       created_at.value = data.created_at;
     } catch (err) {
@@ -31,6 +32,7 @@ export function useShopUser() {
     next_reset_date,
     visitors,
     plan_id,
+    plan_type,
     created_at,
 
     //actions

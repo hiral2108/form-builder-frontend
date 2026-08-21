@@ -4,6 +4,7 @@ export interface UserProfileResponse {
   email: string;
   next_reset_date: string;
   visitors: number;
+  plan_type: string;
   plan_id: number;
   created_at: string;
 }

@@ -218,8 +218,21 @@
       </p>
     </section>
   </div>
-  <FreePlanModal :isShowModal="isShowFreePlanModal" @closeModal="isShowFreePlanModal = false" />
+   <FreePlanModal :isShowModal="isShowFreePlanModal" @closeModal="isShowFreePlanModal = false" />
   <ProPlanModal :isShowModal="isShowProPlanModal" @closeModal="isShowProPlanModal = false" />
+  <DowngradePlanModal
+    :isShowModal="isShowDowngradeModal"
+    @closeModal="isShowDowngradeModal = false"
+  />
+  <UpgradePlanModal
+    :isShowModal="isShowUpgradeModal"
+    planName="Pro"
+    @closeModal="isShowUpgradeModal = false"
+  />
+    <CancelPlanModal
+      :isShowModal="isShowCancelPlanModal"
+      @closeModal="isShowCancelPlanModal = false"
+    />
 </template>
 
 <script setup lang="ts">
@@ -229,16 +242,24 @@
   import planFaqs from "@/data/planFaqs.json";
   import FreePlanModal from "@/components/modals/FreePlanModal.vue";
   import ProPlanModal from "@/components/modals/ProPlanModal.vue";
+  import DowngradePlanModal from "@/components/modals/DowngradePlanModal.vue";
+  import UpgradePlanModal from "@/components/modals/UpgradePlanModal.vue";
+  import CancelPlanModal from "@/components/modals/CancelPlanModal.vue";
+  import { useUserStore } from "@/stores/user";
 
   type PlanKey = "free" | "pro";
 
+  const userStore = useUserStore();
   const isPlanLoading = ref(true);
   const selectedPlanType = ref<"monthly" | "yearly">("monthly");
   const plans = ref<any[]>([]);
 
-  const isShowFreePlanModal = ref(true);
+  const isShowFreePlanModal = ref(false);
   const isShowProPlanModal = ref(false);
-
+  const isShowDowngradeModal = ref(false);
+  const isShowUpgradeModal = ref(false);
+  const isShowCancelPlanModal = ref(true);
+  
   // 1. Fetch Plans from API
   const fetchPlans = async () => {
     try {
@@ -283,11 +304,19 @@
     return "Full power of FormFlow with advanced targeting<br>and unlimited growth.";
   };
 
+  const isCurrentPlan = (plan: any): boolean => {
+    const planName = plan.name?.toLowerCase();
+    if (planName === "free" && userStore.plan_id === 1) return true;
+    if (planName === "pro" && userStore.plan_id === 2) return true;
+    return false;
+  };
   const isPlanDisabled = (plan: any) => {
+    if (isCurrentPlan(plan)) return true; // Disable if it's the current plan
     return plan.name?.toLowerCase() === "free" && selectedPlanType.value === "yearly";
   };
 
   const getPlanButtonText = (plan: any) => {
+    if (isCurrentPlan(plan)) return "Current Plan"; // Show current plan text
     if (plan.name?.toLowerCase() === "free" && selectedPlanType.value === "yearly") {
       return "Not Available";
     }
@@ -296,6 +325,9 @@
   };
 
   const getPlanButtonClass = (plan: any) => {
+    if (isCurrentPlan(plan)) {
+      return "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed opacity-75"; // Disabled styling for current plan
+    }
     if (plan.name?.toLowerCase() === "free" && selectedPlanType.value === "yearly") {
       return "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed opacity-70";
     }
@@ -312,11 +344,31 @@
 
   const handlePlanClick = (plan: any) => {
     if (isPlanDisabled(plan)) return;
-
-    if (plan.name?.toLowerCase() === "free") {
-      isShowFreePlanModal.value = true;
-    } else {
-      isShowProPlanModal.value = true; // 👈 Show Pro Plan Modal
+    
+    const selectedPlanName = plan.name?.toLowerCase();
+    
+    // CASE 1: First time user (plan_id === 0)
+    if (userStore.plan_id === 0) {
+      if (selectedPlanName === "free") {
+        isShowFreePlanModal.value = true;
+      } else if (selectedPlanName === "pro") {
+        isShowProPlanModal.value = true;
+      }
+    } 
+    // CASE 2: Existing user changing plans (plan_id > 0)
+    else {
+      const currentPlanId = userStore.plan_id;
+      const selectedPlanId = selectedPlanName === "free" ? 1 : 2;
+      
+      if (selectedPlanId === currentPlanId) return; // Prevent double clicks (button is disabled anyway)
+      
+      if (selectedPlanId > currentPlanId) {
+        // Upgrading (e.g. Free -> Pro)
+        isShowUpgradeModal.value = true;
+      } else {
+        // Downgrading (e.g. Pro -> Free)
+        isShowDowngradeModal.value = true;
+      }
     }
   };
 

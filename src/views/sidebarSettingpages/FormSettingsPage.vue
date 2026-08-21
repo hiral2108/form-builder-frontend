@@ -362,23 +362,6 @@
       if (!cleanBody) {
         validationErrors.email_body = "Email Body is required";
       }
-
-      if (!submissionSetting.value.emailSettings.replyTo || !submissionSetting.value.emailSettings.replyTo.trim()) {
-        validationErrors.email_reply_to = "Reply To is required";
-      } else {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(submissionSetting.value.emailSettings.replyTo.trim())) {
-          validationErrors.email_reply_to = "Please enter a valid email address";
-        }
-      }
-
-      if (!submissionSetting.value.emailSettings.bcc || !submissionSetting.value.emailSettings.bcc.trim()) {
-        validationErrors.email_bcc = "BCC is required";
-      }
-
-      if (!submissionSetting.value.emailSettings.cc || !submissionSetting.value.emailSettings.cc.trim()) {
-        validationErrors.email_cc = "CC is required";
-      }
     }
 
     // 3. If validation fails, redirect to Step 4, scroll and focus on first error field
@@ -388,9 +371,6 @@
       "email_send_to",
       "email_subject",
       "email_body",
-      "email_reply_to",
-      "email_bcc",
-      "email_cc",
     ];
     const hasStep4Errors = Object.keys(validationErrors).some((key) => step4Keys.includes(key));
     if (hasStep4Errors) {

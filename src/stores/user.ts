@@ -8,6 +8,7 @@ export const useUserStore = defineStore("user", {
     email: "",
     next_reset_date: "",
     visitors: 0,
+    plan_type: "",
     plan_id: 0,
     created_at: "",
   }),

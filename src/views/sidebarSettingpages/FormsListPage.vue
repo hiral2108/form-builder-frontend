@@ -35,7 +35,7 @@
             </div>
             <button
               type="button"
-              class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-10 text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10 animate-none"
+              class="submit-filter text-sm py-0.5 px-4 rounded-xl min-h-10 text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10 animate-none"
               @click="applyCustomFilter">
               Apply
             </button>
@@ -44,7 +44,7 @@
 
         <button
           @click="handleCreateClick"
-          class="px-4 py-2 min-h-10 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10">
+          class="px-4 py-2 min-h-10 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
             <path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path>
           </svg>
@@ -350,15 +350,13 @@
                 </td>
 
                 <td class="px-5 py-3.5 text-sm text-slate-600 text-center">
-                  {{ form.submissions.toLocaleString() }}
+                  {{ (form.submissions || 0).toLocaleString() }}
                 </td>
-
                 <td class="px-5 py-3.5 text-sm text-slate-600 text-center">
-                  {{ form.views.toLocaleString() }}
+                  {{ (form.views || 0).toLocaleString() }}
                 </td>
-
                 <td class="px-5 py-3.5 text-sm text-slate-600 text-center">
-                  {{ form.clicks.toLocaleString() }}
+                  {{ (form.clicks || 0).toLocaleString() }}
                 </td>
 
                 <td class="px-5 py-3.5 text-sm font-medium text-slate-600 text-center">
@@ -440,7 +438,7 @@
             Next
           </button>
         </div>
-         <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-end">
+        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-end">
           <div>
             <nav class="relative z-0 inline-flex rounded-lg shadow-sm -space-x-px" aria-label="Pagination">
               <!-- Previous Page -->
@@ -533,7 +531,7 @@
 
   const userStore = useUserStore();
 
-    // Filter States
+  // Filter States
   const selectedFilter = ref("last_7_days");
   const dateRange = ref<[string, string] | null>(null);
   const startDate = ref<string>("");
@@ -547,7 +545,7 @@
     last_7_days: "Last 7 days",
     last_30_days: "Last 30 days",
     this_month: "This month",
-    last_month: "Last month",
+    this_year: "This year",
     custom: "Custom",
   };
 
@@ -622,11 +620,11 @@
     await fetchFilteredForms(currentPage.value);
   };
 
- const handleDelete = async (id: any) => { // 👈 Added async
+  const handleDelete = async (id: any) => {
+    // 👈 Added async
     // 1. Call the API to fetch the updated list (this automatically sets isLoading = true and shows the skeleton)
     await fetchFilteredForms(currentPage.value);
   };
-
 
   // Fetch filtered list of forms from the API and map to frontend keys
   const fetchFilteredForms = async (page: number = 1) => {

@@ -65,12 +65,16 @@ const applyLabelFlexStyles = (label: HTMLElement) => {
       ? 'center'
       : 'flex-start';
 
-    const s = label.style;
+  // 👈 Detect if the label is inside the split name grid
+  const isInGrid = label.closest('.gform-split-name-grid');
+  const targetWidth = isInGrid ? '100%' : 'var(--input-width)';
+
+  const s = label.style;
   if (
     s.display === 'flex' &&
     s.alignItems === 'center' &&
     s.flexWrap === 'wrap' &&
-    s.width === 'var(--input-width)' && /* 👈 Changed to check var(--input-width) */
+    s.width === targetWidth &&
     s.lineHeight === 'normal' &&
     s.justifyContent === justify
   ) {
@@ -81,7 +85,7 @@ const applyLabelFlexStyles = (label: HTMLElement) => {
   s.setProperty('display', 'flex', 'important');
   s.setProperty('align-items', 'center', 'important');
   s.setProperty('flex-wrap', 'wrap', 'important');
-  s.setProperty('width', 'var(--input-width)', 'important'); /* 👈 Changed to set var(--input-width) */
+  s.setProperty('width', targetWidth, 'important'); // 👈 Set to 100% for grid labels
   s.setProperty('line-height', 'normal', 'important');
   s.setProperty('justify-content', justify, 'important');
   Promise.resolve().then(() => { applying = false; });

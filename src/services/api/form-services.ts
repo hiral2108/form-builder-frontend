@@ -26,4 +26,8 @@ export default class FormService {
   cloneWidget(payload: { title: string; widget_id: string }): Promise<CloneWidgetResponse> {
     return $axios.post(`clone_widget`, payload);
   }
+
+  getDashboardData(payload: { filter: string; start_date?: string; end_date?: string }): Promise<any> {
+    return $axios.get(`get_dashboard_data`, { params: payload });
+  }
 }

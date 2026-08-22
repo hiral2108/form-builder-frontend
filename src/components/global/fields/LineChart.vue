@@ -113,11 +113,7 @@ const chartOptions = ref<ChartOptions<'line'>>({
   },
   scales: {
     y: {
-      min: 0,
-      max: 1.0,
-      ticks: {
-        stepSize: 0.1,
-      },
+      beginAtZero: true, // Matches E:\Github\quick-discount-pop-up-frontend scaling
       grid: {
         color: '#e5e7eb'
       }

@@ -49,111 +49,195 @@
       </template>
     </div>
 
-    <!-- Visitors block container -->
-    <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 mb-6">
-      <div class="grid grid-cols-1 min-[600px]:grid-cols-2 min-[960px]:grid-cols-3 gap-6 max-[1230px]:gap-4">
-        
-        <!-- Column 1: Visitors This Cycle -->
-        <div class="flex items-center gap-4 max-[960px]:border-b max-[960px]:border-slate-200/60 max-[960px]:pb-4">
-          <div :style="{'--value': visitorRate + '%'}" :class="['chart x-60', {'disable': visitorRate >= 90 && visitorRate <= 100}]">
-            <p>{{ visitorRate }}%</p>
+        <!-- Template switch: Show Skeleton Loader when loading, otherwise show content -->
+    <template v-if="isLoading">
+      <!-- Visitors block container Skeleton -->
+      <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 mb-6 animate-pulse">
+        <div class="grid grid-cols-1 min-[600px]:grid-cols-2 min-[960px]:grid-cols-3 gap-6 max-[1230px]:gap-4">
+          <!-- Column 1: Visitors This Cycle Skeleton -->
+          <div class="flex items-center gap-4 max-[960px]:border-b max-[960px]:border-slate-200/60 max-[960px]:pb-4">
+            <div class="w-[50px] h-[50px] rounded-full bg-slate-200 flex-shrink-0"></div>
+            <div class="flex-1 space-y-2">
+              <div class="h-3 bg-slate-200 rounded w-32"></div>
+              <div class="h-6 bg-slate-200 rounded w-20"></div>
+            </div>
           </div>
-          <div class="flex-1">
-            <p class="text-sm font-medium text-slate-500 mb-1">Visitors This Cycle</p>
-            <div class="flex items-center gap-2">
-              <p class="text-2xl font-bold text-slate-800 mb-1">
-                {{ formattedUserVisitors }} 
-                <span class="text-slate-400 font-normal">/</span> 
-                <span class="text-slate-500">{{ formattedPlanVisitors }}</span>
-              </p>
+          <!-- Column 2: Next Reset Date Skeleton -->
+          <div class="flex items-center gap-4 border-l border-r border-slate-200/60 px-8 min-[960px]:max-[1100px]:px-4 min-[960px]:max-[1100px]:gap-3 max-[960px]:border-l-transparent max-[960px]:border-r-transparent max-[960px]:px-0 max-[960px]:border-b max-[960px]:pb-4 max-[600px]:border-b max-[600px]:pb-4 min-[600px]:max-[960px]:border-b min-[600px]:max-[960px]:pb-4">
+            <div class="w-12 h-12 bg-slate-200 rounded-xl flex-shrink-0"></div>
+            <div class="space-y-2">
+              <div class="h-3 bg-slate-200 rounded w-28"></div>
+              <div class="h-6 bg-slate-200 rounded w-24"></div>
+            </div>
+          </div>
+          <!-- Column 3: Forms Created Skeleton -->
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-slate-200 rounded-xl flex-shrink-0"></div>
+            <div class="space-y-2">
+              <div class="h-3 bg-slate-200 rounded w-28"></div>
+              <div class="h-6 bg-slate-200 rounded w-16"></div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Column 2: Next Reset Date -->
-        <div class="flex items-center gap-4 border-l border-r border-slate-200/60 px-8 min-[960px]:max-[1100px]:px-4 min-[960px]:max-[1100px]:gap-3 max-[960px]:border-l-transparent max-[960px]:border-r-transparent max-[960px]:px-0 max-[960px]:border-b max-[960px]:pb-4 max-[600px]:border-b max-[600px]:pb-4 min-[600px]:max-[960px]:border-b min-[600px]:max-[960px]:pb-4">
-          <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center flex-shrink-0">
-            <img v-svg-inline src="@/assets/icons/dashboardpage/reset_date.svg" class="w-6 h-6"/>
-          </div>
-          <div class="min-w-0">
-            <p class="text-sm font-medium text-slate-500 mb-1 whitespace-nowrap">Next Reset Date</p>
-            <p class="text-2xl font-bold text-slate-800 whitespace-nowrap min-[960px]:max-[1100px]:text-xl">{{ formattedResetDate }}</p>
+      <!-- Views / Clicks / Conversion Rate Cards Skeleton -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
+        <div v-for="i in 3" :key="i" class="bg-white rounded-xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 animate-pulse flex items-center gap-4">
+          <div class="w-12 h-12 bg-slate-200 rounded-xl flex-shrink-0"></div>
+          <div class="flex-1 space-y-2">
+            <div class="h-8 bg-slate-200 rounded w-24"></div>
+            <div class="h-3 bg-slate-200 rounded w-16"></div>
           </div>
         </div>
+      </div>
 
-        <!-- Column 3: Forms Created -->
-        <div class="flex items-center gap-4">
-          <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
-            <img v-svg-inline src="@/assets/icons/dashboardpage/widgets_created.svg" class="w-6 h-6"/>
+      <!-- Performance Analytics Chart Skeleton -->
+      <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-4 sm:p-6 mb-6 max-[600px]:hidden animate-pulse">
+        <!-- Title -->
+        <div class="h-5 bg-slate-200 rounded w-48 mb-5"></div>
+        <!-- Legend row -->
+        <div class="flex items-center justify-center gap-6 mb-4">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-3 bg-blue-100 rounded"></div>
+            <div class="h-3 w-16 bg-slate-200 rounded"></div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-3 bg-pink-100 rounded"></div>
+            <div class="h-3 w-16 bg-slate-200 rounded"></div>
+          </div>
+        </div>
+        <!-- Chart body -->
+        <div class="flex gap-2" style="height: 250px">
+          <!-- Y-axis labels -->
+          <div class="flex flex-col justify-between items-end pr-2 py-1 flex-shrink-0 w-7">
+            <div v-for="j in 7" :key="j" class="h-2.5 bg-slate-200 rounded w-5"></div>
+          </div>
+          <!-- Grid area -->
+          <div class="flex-1 relative">
+            <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+              <div v-for="j in 7" :key="j" class="w-full h-px bg-slate-100"></div>
+            </div>
+            <div class="absolute inset-0 flex justify-between pointer-events-none">
+              <div v-for="j in 8" :key="j" class="h-full w-px bg-slate-100"></div>
+            </div>
+          </div>
+        </div>
+        <!-- X-axis date labels -->
+        <div class="flex justify-between pl-9 mt-2">
+          <div v-for="j in 8" :key="j" class="h-2.5 bg-slate-200 rounded w-10"></div>
+        </div>
+      </div>
+    </template>
+
+    <template v-else>
+      <!-- Visitors block container -->
+      <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 mb-6">
+        <div class="grid grid-cols-1 min-[600px]:grid-cols-2 min-[960px]:grid-cols-3 gap-6 max-[1230px]:gap-4">
+          
+          <!-- Column 1: Visitors This Cycle -->
+          <div class="flex items-center gap-4 max-[960px]:border-b max-[960px]:border-slate-200/60 max-[960px]:pb-4">
+            <div :style="{'--value': visitorRate + '%'}" :class="['chart x-60', {'disable': visitorRate >= 90 && visitorRate <= 100}]">
+              <p>{{ visitorRate }}%</p>
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-medium text-slate-500 mb-1">Visitors This Cycle</p>
+              <div class="flex items-center gap-2">
+                <p class="text-2xl font-bold text-slate-800 mb-1">
+                  {{ formattedUserVisitors }} 
+                  <span class="text-slate-400 font-normal">/</span> 
+                  <span class="text-slate-500">{{ formattedPlanVisitors }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: Next Reset Date -->
+          <div class="flex items-center gap-4 border-l border-r border-slate-200/60 px-8 min-[960px]:max-[1100px]:px-4 min-[960px]:max-[1100px]:gap-3 max-[960px]:border-l-transparent max-[960px]:border-r-transparent max-[960px]:px-0 max-[960px]:border-b max-[960px]:pb-4 max-[600px]:border-b max-[600px]:pb-4 min-[600px]:max-[960px]:border-b min-[600px]:max-[960px]:pb-4">
+            <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center flex-shrink-0">
+              <img v-svg-inline src="@/assets/icons/dashboardpage/reset_date.svg" class="w-6 h-6"/>
+            </div>
+            <div class="min-w-0">
+              <p class="text-sm font-medium text-slate-500 mb-1 whitespace-nowrap">Next Reset Date</p>
+              <p class="text-2xl font-bold text-slate-800 whitespace-nowrap min-[960px]:max-[1100px]:text-xl">{{ formattedResetDate }}</p>
+            </div>
+          </div>
+
+          <!-- Column 3: Forms Created -->
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center flex-shrink-0">
+              <img v-svg-inline src="@/assets/icons/dashboardpage/widgets_created.svg" class="w-6 h-6"/>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-slate-500 mb-1">Forms Created</p>
+              <p class="text-2xl font-bold text-slate-800">{{ totalFormsCreated }} <span class="text-slate-400 font-normal">/</span> <span class="text-slate-500">∞</span></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- New Stats Card Grid (Visitors, Views, Conversion Rate) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
+
+        <!-- Total Views Card -->
+        <div class="bg-white rounded-xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 flex items-center gap-4 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-indigo-50 text-indigo-600 flex-shrink-0 text-xl">
+            <img v-svg-inline src="@/assets/icons/dashboardpage/views.svg" class="w-6 h-6"/>
           </div>
           <div>
-            <p class="text-sm font-medium text-slate-500 mb-1">Forms Created</p>
-            <p class="text-2xl font-bold text-slate-800">{{ totalFormsCreated }} <span class="text-slate-400 font-normal">/</span> <span class="text-slate-500">∞</span></p>
+            <p class="text-2xl font-bold text-slate-800 tracking-tight">{{ views.toLocaleString() }}</p>
+            <p class="text-sm font-semibold text-slate-500 tracking-wider">Total Views</p>
           </div>
         </div>
 
-      </div>
-    </div>
-
-    <!-- New Stats Card Grid (Visitors, Views, Conversion Rate) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
-
-      <!-- Total Views Card -->
-      <div class="bg-white rounded-xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 flex items-center gap-4 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-indigo-50 text-indigo-600 flex-shrink-0 text-xl">
-          <img v-svg-inline src="@/assets/icons/dashboardpage/views.svg" class="w-6 h-6"/>
+        <!-- Total Clicks Card -->
+        <div class="bg-white rounded-xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 flex items-center gap-4 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-emerald-50 text-emerald-600 flex-shrink-0 text-xl">
+            <img v-svg-inline src="@/assets/icons/dashboardpage/unique_clicks.svg" class="w-6 h-6"/>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-slate-800 tracking-tight">{{ clicks.toLocaleString() }}</p>
+            <p class="text-sm font-semibold text-slate-500 tracking-wider">Total Clicks</p>
+          </div>
         </div>
-        <div>
-          <p class="text-2xl font-bold text-slate-800 tracking-tight">{{ views.toLocaleString() }}</p>
-          <p class="text-sm font-semibold text-slate-500 tracking-wider">Total Views</p>
-        </div>
-      </div>
 
-      <!-- Total Clicks Card (Added between Views and Conversion Rate) -->
-      <div class="bg-white rounded-xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 flex items-center gap-4 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-emerald-50 text-emerald-600 flex-shrink-0 text-xl">
-          <img v-svg-inline src="@/assets/icons/dashboardpage/unique_clicks.svg" class="w-6 h-6"/>
-        </div>
-        <div>
-          <p class="text-2xl font-bold text-slate-800 tracking-tight">{{ clicks.toLocaleString() }}</p>
-          <p class="text-sm font-semibold text-slate-500 tracking-wider">Total Clicks</p>
+        <!-- Conversion Rate Card -->
+        <div class="bg-white rounded-xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 flex items-center gap-4 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
+          <div class="w-12 h-12 rounded-lg flex items-center justify-center bg-rose-50 text-rose-600 flex-shrink-0 text-xl">
+            <img v-svg-inline src="@/assets/icons/dashboardpage/conversion_rate.svg" class="w-6 h-6"/>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-slate-800 tracking-tight">{{ conversionRate }}</p>
+            <p class="text-sm font-semibold text-slate-500 tracking-wider">Conversion Rate</p>
+          </div>
         </div>
       </div>
 
-      <!-- Conversion Rate Card -->
-      <div class="bg-white rounded-xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 flex items-center gap-4 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300">
-        <div class="w-12 h-12 rounded-lg flex items-center justify-center bg-rose-50 text-rose-600 flex-shrink-0 text-xl">
-          <img v-svg-inline src="@/assets/icons/dashboardpage/conversion_rate.svg" class="w-6 h-6"/>
-        </div>
-        <div>
-          <p class="text-2xl font-bold text-slate-800 tracking-tight">{{ conversionRate }}</p>
-          <p class="text-sm font-semibold text-slate-500 tracking-wider">Conversion Rate</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
       <!-- Performance Analytics Chart Card -->
-    <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-4 sm:p-6 mb-6 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300 overflow-x-auto max-[600px]:hidden">
-      <div class="mb-4">
-        <h3 class="text-base font-bold text-slate-800 tracking-tight">Performance Analytics</h3>
-        <p class="text-xs text-slate-400 mt-0.5">Visual representation of views and form submissions over time.</p>
+      <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-4 sm:p-6 mb-6 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)] transition-all duration-300 overflow-x-auto max-[600px]:hidden">
+        <div class="mb-4">
+          <h3 class="text-base font-bold text-slate-800 tracking-tight">Performance Analytics</h3>
+          <p class="text-xs text-slate-400 mt-0.5">Visual representation of views and form submissions over time.</p>
+        </div>
+        <div class="w-full min-w-[500px] h-70 relative">
+          <LineChart
+            :dateList="dateData"
+            :viewData="viewData"
+            :clickData="clickData"
+          />
+        </div>
       </div>
-      <div class="w-full min-w-[500px] h-70 relative">
-        <LineChart
-          :dateList="dateData"
-          :viewData="viewData"
-          :clickData="clickData"
-        />
-      </div>
+    </template>
     </div>
-  <CreateFormModal :isShowModal="showCreateFormModal" @closeModal="showCreateFormModal = false" />
-  <UpdatePlanModal :isShowModal="showUpdatePlanModal" @closeModal="showUpdatePlanModal = false" />
+
+    <CreateFormModal :isShowModal="showCreateFormModal" @closeModal="showCreateFormModal = false" />
+    <UpdatePlanModal :isShowModal="showUpdatePlanModal" @closeModal="showUpdatePlanModal = false" />
 </template>
 
 <script setup lang="ts">
 
-import { inject, ref, computed, onMounted } from 'vue';
+import { inject, ref, computed, onMounted, watch } from 'vue';
 import CreateFormModal from "@/components/modals/CreateFormModal.vue";
 import LineChart from "@/components/global/fields/LineChart.vue";
 import SelectField from "@/components/global/fields/SelectField.vue";
@@ -167,42 +251,65 @@ const showCreateFormModal = ref(false);
 const showUpdatePlanModal = ref(false);
 const totalForms = ref(0);
 const userStore = useUserStore();
+const isLoading = ref(true);
 
-const visitorRate = ref(35);
-const formattedUserVisitors = ref("3,500");
-const formattedPlanVisitors = ref("10,000");
-const formattedResetDate = ref("09/09/2026");
+// Top Cards computed properties
+const planLimitMap: Record<number, number> = {
+  1: 1000,      // Free
+  2: 10000,     // Basic
+  3: 50000,     // Pro
+  4: 99999999,  // Custom/Unlimited
+};
+
+const planVisitorsLimit = computed(() => {
+  return planLimitMap[userStore.plan_id] || 10000;
+});
+
+const visitorRate = computed(() => {
+  const current = userStore.visitors || 0;
+  const limit = planVisitorsLimit.value;
+  if (limit <= 0) return 0;
+  
+  const pct = (current / limit) * 100;
+  // If it's a small decimal (like 0.02%), show 2 decimal places. Otherwise show a clean rounded number.
+  return pct > 0 && pct < 1 ? Number(pct.toFixed(2)) : Math.round(pct);
+});
+
+const formattedUserVisitors = computed(() => {
+  return (userStore.visitors || 0).toLocaleString();
+});
+
+const formattedPlanVisitors = computed(() => {
+  const limit = planVisitorsLimit.value;
+  return limit === 99999999 ? '∞' : limit.toLocaleString();
+});
+
+const formattedResetDate = computed(() => {
+  if (!userStore.next_reset_date) return "—";
+  const dateObj = new Date(userStore.next_reset_date);
+  if (!isNaN(dateObj.getTime())) {
+    const dd = String(dateObj.getDate()).padStart(2, '0');
+    const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const yyyy = dateObj.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+  }
+  return userStore.next_reset_date;
+});
+
 const totalFormsCreated = ref(0);
 
-const handleCreateClick = () => {
-  if (totalForms.value >= 1 && userStore.plan_id === 1) {
-    showUpdatePlanModal.value = true;
-  } else {
-    showCreateFormModal.value = true;
-  }
-};
-// Fetch total forms from API on load
-onMounted(async () => {
-  try {
-    const response = await new FormService().getFormsFilter({ time: "all_time", start_date: "", end_date: "" }, 1);
-    totalForms.value = response.totalWidget || 0;
-    totalFormsCreated.value = response.totalWidget || 0;
-  } catch (error) {
-    console.error("Failed to fetch forms for dashboard:", error);
-  }
-});
-
-const views = ref(24850);
-const clicks = ref(7425);
+// Performance Cards Refs
+const views = ref(0);
+const clicks = ref(0);
 const conversionRate = computed(() => {
-  // Calculates conversion rate: (Total Submissions / Total Views) * 100
-  const totalSubmissions = 7425; 
-  return ((totalSubmissions / views.value) * 100).toFixed(1) + "%";
+  if (views.value === 0) return "0.0%";
+  return ((clicks.value / views.value) * 100).toFixed(1) + "%";
 });
 
-const dateData = ref(["29, Jul", "30, Jul", "31, Jul", "01, Aug", "02, Aug", "03, Aug", "04, Aug", "05, Aug"]);
-const viewData = ref([1, 0, 0, 0, 0, 0, 0, 0]); // Blue starts at 1.0, drops to 0
-const clickData = ref([0, 1, 0, 0, 0, 0, 0, 0]); // Pink starts at 0, goes to 1.0 on 30 Jul, then 0
+// Chart Refs
+const dateData = ref<string[]>([]);
+const viewData = ref<number[]>([]);
+const clickData = ref<number[]>([]);
 
 // Filter States
 const selectedFilter = ref("last_7_days");
@@ -213,11 +320,66 @@ const filteredMenu = {
   last_7_days: "Last 7 days",
   last_30_days: "Last 30 days",
   this_month: "This month",
-  last_month: "Last month",
+  this_year: "This year",
   custom: "Custom",
 };
-const applyCustomFilter = () => {
+
+const handleCreateClick = () => {
+  if (totalForms.value >= 1 && userStore.plan_id === 1) {
+    showUpdatePlanModal.value = true;
+  } else {
+    showCreateFormModal.value = true;
+  }
+};
+
+// Fetch Stats from Backend
+const fetchDashboardStats = async () => {
+  try {
+    isLoading.value = true; // <-- Turn loader ON
+    const payload: any = { filter: selectedFilter.value };
+    if (selectedFilter.value === 'custom' && dateRange.value) {
+      payload.start_date = dateRange.value[0];
+      payload.end_date = dateRange.value[1];
+    }
+
+    const response = await new FormService().getDashboardData(payload);
+    if (response && response.status === 1) {
+      views.value = response.totalViews || 0;
+      clicks.value = response.totalClicks || 0;
+
+      dateData.value = response.dateList || [];
+      viewData.value = response.viewData || [];
+      clickData.value = response.clickData || [];
+    }
+  } catch (error) {
+    console.error("Failed to fetch stats for dashboard:", error);
+  } finally {
+    isLoading.value = false; // <-- Turn loader OFF when done (success or fail)
+  }
+};
+
+onMounted(async () => {
+  try {
+    const response = await new FormService().getFormsFilter({ time: "all_time", start_date: "", end_date: "" }, 1);
+    totalForms.value = response.totalWidget || 0;
+  } catch (error) {
+    console.error("Failed to fetch forms for dashboard:", error);
+  }
+  
+  await fetchDashboardStats();
+});
+
+// Watch standard filter selector changes
+watch(selectedFilter, async (newVal) => {
+  if (newVal !== 'custom') {
+    await fetchDashboardStats();
+  }
+});
+
+// Watch date picker changes
+const applyCustomFilter = async () => {
   if (!dateRange.value) return;
+  await fetchDashboardStats();
 };
 </script>
 

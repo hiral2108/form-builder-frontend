@@ -54,12 +54,12 @@
 
           <div v-else-if="field.type === 'name'" style="width: var(--input-width)">
             <template v-if="field.nameFormat === 'split'">
-              <div class="grid grid-cols-2 gap-4 w-full" style="width: var(--input-width)">
+              <div class="grid grid-cols-2 gap-1 w-full gform-split-name-grid" style="width: var(--input-width)">
                 <div class="relative w-full">
                   <HelpTooltip :message="field.firstNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
                   <InputField
                     :disable="!interactive"
-                    :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
+                    :required="field.firstNameRequired == 1 && formStyleSetting.labelStyle.showLabel === 'show'"
                     :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.firstNameLabel : ''"
                     :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
                     type="text"
@@ -71,7 +71,7 @@
                   <HelpTooltip :message="field.lastNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
                   <InputField
                     :disable="!interactive"
-                    :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
+                    :required="field.lastNameRequired == 1 && formStyleSetting.labelStyle.showLabel === 'show'"
                     :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.lastNameLabel : ''"
                     :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
                     type="text"

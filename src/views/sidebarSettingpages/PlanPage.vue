@@ -258,7 +258,7 @@
   const isShowProPlanModal = ref(false);
   const isShowDowngradeModal = ref(false);
   const isShowUpgradeModal = ref(false);
-  const isShowCancelPlanModal = ref(true);
+  const isShowCancelPlanModal = ref(false);
   
   // 1. Fetch Plans from API
   const fetchPlans = async () => {

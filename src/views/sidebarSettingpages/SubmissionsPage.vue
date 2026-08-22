@@ -436,10 +436,19 @@
       const response = await new SubmissionService().getLeadsFilter(payload, page);
 
       let rawList: LeadItem[] = [];
+      let lastPage = 1;
+      let currPage = 1;
       if (response && response.data) {
-        rawList = response.data.data || []; // 👈 Accessing response.data.data
-        totalPage.value = response.data.last_page || 1;
-        currentPage.value = response.data.current_page || 1;
+        rawList = response.data.data || []; 
+        lastPage = response.data.last_page || 1;
+        currPage = response.data.current_page || 1;
+        totalPage.value = lastPage;
+        currentPage.value = currPage;
+      }
+
+       if (page > lastPage && lastPage >= 1) {
+        await fetchSubmissions(lastPage);
+        return;
       }
 
       // Map backend response properties safely into component state
@@ -507,14 +516,17 @@
   };
   // Confirm delete single submission with simulated delay
   const confirmDeleteLead = async () => {
-    if (deleteLeadId.value === null) return;
-    try {
-      isDeleting.value = true;
-      const response = await new SubmissionService().removeLeads({ id: [deleteLeadId.value] });
-      submissions.value = submissions.value.filter((sub) => sub.id !== deleteLeadId.value);
-      selectedSubmissionIds.value = selectedSubmissionIds.value.filter((id) => id !== deleteLeadId.value);
-      toast.success(response.message); // 👈 Use dynamic message
-    } catch (error) {
+  if (deleteLeadId.value === null) return;
+  try {
+    isDeleting.value = true;
+    const response = await new SubmissionService().removeLeads({ id: [deleteLeadId.value] });
+    selectedSubmissionIds.value = selectedSubmissionIds.value.filter((id) => id !== deleteLeadId.value);
+    
+    // 👈 Refetch submissions (this will recalculate total page counts and show the skeleton loader)
+    await fetchSubmissions(currentPage.value);
+    
+    toast.success(response.message || "Submission deleted successfully");
+  } catch (error) {
       console.error(error);
       toast.error("Failed to delete submission");
     } finally {
@@ -525,13 +537,16 @@
 
   // Confirm bulk delete selected submissions with simulated delay
   const confirmDeleteBulkLead = async () => {
-    try {
-      isDeleting.value = true;
-      const response = await new SubmissionService().removeLeads({ id: selectedSubmissionIds.value });
-      submissions.value = submissions.value.filter((sub) => !selectedSubmissionIds.value.includes(sub.id));
-      selectedSubmissionIds.value = [];
-      toast.success(response.message); // 👈 Use dynamic message
-    } catch (error) {
+  try {
+    isDeleting.value = true;
+    const response = await new SubmissionService().removeLeads({ id: selectedSubmissionIds.value });
+    selectedSubmissionIds.value = [];
+    
+    // 👈 Refetch submissions
+    await fetchSubmissions(currentPage.value);
+    
+    toast.success(response.message || "Selected submissions deleted successfully");
+  } catch (error) {
       console.error(error);
       toast.error("Failed to delete selected submissions");
     } finally {
@@ -547,7 +562,12 @@
       const response = await new SubmissionService().removeAllLead();
       submissions.value = [];
       selectedSubmissionIds.value = [];
-      toast.success(response.message); // 👈 Use dynamic message
+      
+      // 👈 Add these two lines to hide pagination layout when list is cleared
+      totalPage.value = 1;
+      currentPage.value = 1;
+      
+      toast.success(response.message);
     } catch (error) {
       console.error(error);
       toast.error("Failed to clear submissions");

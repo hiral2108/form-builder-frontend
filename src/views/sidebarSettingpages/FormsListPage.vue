@@ -35,7 +35,7 @@
             </div>
             <button
               type="button"
-              class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-10   text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10 animate-none"
+              class="submit-filter text-sm py-0.5 px-4 rounded-xl min-h-10 text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10 animate-none"
               @click="applyCustomFilter">
               Apply
             </button>
@@ -44,7 +44,7 @@
 
         <button
           @click="handleCreateClick"
-          class="px-4 py-2 min-h-10 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10">
+          class="px-4 py-2 min-h-10 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
             <path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path>
           </svg>
@@ -104,8 +104,6 @@
       </div>
     </template>
 
-    <!-- Content Area: Skeleton OR Empty State OR Table List -->
-    <!-- 1. EMPTY STATE SCREEN (If loading finished and no items found) -->
     <div
       v-if="!isLoading && formsList.length === 0"
       class="flex flex-col items-center justify-center relative select-none pt-10">
@@ -254,28 +252,28 @@
         <table class="w-full">
           <thead>
             <tr class="border-b border-slate-200 bg-slate-50">
-              <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[8%]">
+              <th class="text-left px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[8%]">
                 Status
               </th>
-              <th class="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[28%]">
+              <th class="text-left px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[28%]">
                 Title
               </th>
-              <th class="text-center px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[10%]">
+              <th class="text-center px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[10%]">
                 Submissions
               </th>
-              <th class="text-center px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[10%]">
+              <th class="text-center px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[10%]">
                 View
               </th>
-              <th class="text-center px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[10%]">
+              <th class="text-center px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[10%]">
                 Click
               </th>
-              <th class="text-center px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[10%]">
+              <th class="text-center px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[10%]">
                 Click Rate
               </th>
-              <th class="text-center px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[11%]">
+              <th class="text-center px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[11%]">
                 Created
               </th>
-              <th class="text-center px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[13%]">
+              <th class="text-center px-5 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider w-[13%]">
                 Actions
               </th>
             </tr>
@@ -352,15 +350,13 @@
                 </td>
 
                 <td class="px-5 py-3.5 text-sm text-slate-600 text-center">
-                  {{ form.submissions.toLocaleString() }}
+                  {{ (form.submissions || 0).toLocaleString() }}
                 </td>
-
                 <td class="px-5 py-3.5 text-sm text-slate-600 text-center">
-                  {{ form.views.toLocaleString() }}
+                  {{ (form.views || 0).toLocaleString() }}
                 </td>
-
                 <td class="px-5 py-3.5 text-sm text-slate-600 text-center">
-                  {{ form.clicks.toLocaleString() }}
+                  {{ (form.clicks || 0).toLocaleString() }}
                 </td>
 
                 <td class="px-5 py-3.5 text-sm font-medium text-slate-600 text-center">
@@ -424,6 +420,68 @@
           </tbody>
         </table>
       </div>
+
+      <div
+        v-if="totalPage > 1 && !isLoading"
+        class="px-6 py-4 bg-white border-t border-slate-100 flex items-center justify-between">
+        <div class="flex-1 flex justify-between sm:hidden">
+          <button
+            @click="changePage(currentPage - 1)"
+            :disabled="currentPage === 1"
+            class="relative inline-flex items-center px-4 py-2 border border-slate-300 text-sm font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+            Previous
+          </button>
+          <button
+            @click="changePage(currentPage + 1)"
+            :disabled="currentPage === totalPage"
+            class="ml-3 relative inline-flex items-center px-4 py-2 border border-slate-300 text-sm font-medium rounded-lg text-slate-700 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+            Next
+          </button>
+        </div>
+        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-end">
+          <div>
+            <nav class="relative z-0 inline-flex rounded-lg shadow-sm -space-x-px" aria-label="Pagination">
+              <!-- Previous Page -->
+              <button
+                @click="changePage(currentPage - 1)"
+                :disabled="currentPage === 1"
+                class="relative inline-flex items-center px-2 py-2 rounded-l-lg border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer h-[38px] w-9 justify-center">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fill-rule="evenodd"
+                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+              <!-- Dynamic Pages -->
+              <button
+                v-for="page in totalPage"
+                :key="page"
+                @click="changePage(page)"
+                :class="[
+                  page === currentPage
+                    ? 'z-10 bg-teal-50 border-teal-500 text-teal-600 font-semibold'
+                    : 'bg-white border-slate-300 text-slate-500 hover:bg-slate-50',
+                  'relative inline-flex items-center px-4 py-2 border text-sm font-medium cursor-pointer h-[38px]',
+                ]">
+                {{ page }}
+              </button>
+              <!-- Next Page -->
+              <button
+                @click="changePage(currentPage + 1)"
+                :disabled="currentPage === totalPage"
+                class="relative inline-flex items-center px-2 py-2 rounded-r-lg border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer h-[38px] w-9 justify-center">
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </nav>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <RenameFormModal
@@ -447,9 +505,7 @@
     :isShowModal="showCreateFormModal"
     @closeModal="showCreateFormModal = false"
     @confirmCreate="handleCreateForm" />
-  <UpdatePlanModal
-    :isShowModal="showUpdatePlanModal"
-    @closeModal="showUpdatePlanModal = false" />
+  <UpdatePlanModal :isShowModal="showUpdatePlanModal" @closeModal="showUpdatePlanModal = false" />
 </template>
 
 <script setup lang="ts">
@@ -462,7 +518,7 @@
   import CloneFormModal from "@/components/modals/CloneFormModal.vue";
   import DeleteFormModal from "@/components/modals/DeleteFormModal.vue";
   import CreateFormModal from "@/components/modals/CreateFormModal.vue";
-  import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue"; 
+  import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue";
   import { useUserStore } from "@/stores/user.ts";
 
   // Modal triggers and tracking state
@@ -470,11 +526,36 @@
   const showCloneModal = ref(false);
   const showDeleteModal = ref(false);
   const showCreateFormModal = ref(false);
-  const showUpdatePlanModal = ref(false); 
+  const showUpdatePlanModal = ref(false);
   const selectedForm = ref<any>(null);
-  
-  const userStore = useUserStore(); 
-  
+
+  const userStore = useUserStore();
+
+  // Filter States
+  const selectedFilter = ref("last_7_days");
+  const dateRange = ref<[string, string] | null>(null);
+  const startDate = ref<string>("");
+  const endDate = ref<string>("");
+  const currentPage = ref(1);
+  const totalPage = ref(1);
+
+  const filteredMenu = {
+    today: "Today",
+    yesterday: "Yesterday",
+    last_7_days: "Last 7 days",
+    last_30_days: "Last 30 days",
+    this_month: "This month",
+    this_year: "This year",
+    custom: "Custom",
+  };
+
+  const formsList = ref<any[]>([]);
+  const isLoading = ref(true);
+  const isMetricLoading = ref(false);
+  const totalForms = ref(0);
+  const activeForms = ref(0);
+  const inactiveForms = ref(0);
+
   // Triggers either Creation modal or Upgrade Plan modal
   const handleCreateClick = () => {
     if (totalForms.value >= 1 && userStore.plan_id === 1) {
@@ -539,39 +620,11 @@
     await fetchFilteredForms(currentPage.value);
   };
 
-  // Updates local array and stats count after successful deletion in modal
-  const handleDelete = (id: any) => {
-    formsList.value = formsList.value.filter((f) => f.id !== id);
-
-    // Update local stats counters
-    totalForms.value = formsList.value.length;
-    activeForms.value = formsList.value.filter((f) => f.status === "active").length;
-    inactiveForms.value = formsList.value.filter((f) => f.status === "draft").length;
+  const handleDelete = async (id: any) => {
+    // 👈 Added async
+    // 1. Call the API to fetch the updated list (this automatically sets isLoading = true and shows the skeleton)
+    await fetchFilteredForms(currentPage.value);
   };
-  // Filter States
-  const selectedFilter = ref("last_7_days");
-  const dateRange = ref<[string, string] | null>(null);
-  const startDate = ref<string>("");
-  const endDate = ref<string>("");
-  const currentPage = ref(1);
-  const totalPage = ref(1);
-
-  const filteredMenu = {
-    today: "Today",
-    yesterday: "Yesterday",
-    last_7_days: "Last 7 days",
-    last_30_days: "Last 30 days",
-    this_month: "This month",
-    last_month: "Last month",
-    custom: "Custom",
-  };
-
-  const formsList = ref<any[]>([]);
-  const isLoading = ref(true);
-  const isMetricLoading = ref(false);
-  const totalForms = ref(0);
-  const activeForms = ref(0);
-  const inactiveForms = ref(0);
 
   // Fetch filtered list of forms from the API and map to frontend keys
   const fetchFilteredForms = async (page: number = 1) => {
@@ -643,16 +696,11 @@
     await fetchFilteredForms(1);
   };
 
-  // Watch for dropdown selection change to load data immediately (except for custom ranges)
-  watch(selectedFilter, async (newVal: string) => {
-    if (newVal !== "custom") {
-      await fetchFilteredForms(1);
+  const changePage = (page: number) => {
+    if (page >= 1 && page <= totalPage.value) {
+      fetchFilteredForms(page); // 👈 Always show skeleton loader
     }
-  });
-
-  onMounted(() => {
-    fetchFilteredForms(1);
-  });
+  };
 
   // Toggle status instantly in UI and call status API in the background
   const handleStatusChange = async (form: any, newStatus: string) => {
@@ -680,6 +728,17 @@
       isMetricLoading.value = false; // Turn off metric placeholders
     }
   };
+
+  // Watch for dropdown selection change to load data immediately (except for custom ranges)
+  watch(selectedFilter, async (newVal: string) => {
+    if (newVal !== "custom") {
+      await fetchFilteredForms(1);
+    }
+  });
+
+  onMounted(() => {
+    fetchFilteredForms(1);
+  });
 </script>
 
 <style scoped>

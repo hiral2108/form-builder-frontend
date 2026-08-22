@@ -41,7 +41,7 @@
           <input
             v-model="searchQuery"
             type="text"
-            class="px-4 py-2 border border-slate-200 rounded-lg text-sm text-slate-700 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 h-[38px] w-60"
+            class="px-4 py-2 border border-slate-200 rounded-xl text-sm text-slate-700 placeholder-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 h-[38px] w-60"
             placeholder="Search forms..." />
         </div>
       </div>
@@ -49,7 +49,7 @@
       <!-- Apply Button -->
       <button
         type="button"
-        class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-[38px] text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-800 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10 h-[38px]"
+        class="submit-filter text-sm py-0.5 px-4 rounded-xl min-h-[38px] text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-800 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10 h-[38px]"
         @click="applyCustomFilter">
         Apply
       </button>
@@ -58,20 +58,13 @@
     <!-- Table Container -->
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
       <!-- 1. EMPTY STATE -->
-      <div v-if="filteredSubmissions.length === 0 && !isLoading" class="py-16 text-center">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          class="w-16 h-16 text-slate-300 mx-auto mb-4">
-          <path
-            d="M22 12.999V20a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-7.001A5 5 0 0 1 6.999 8H17a5 5 0 0 1 5 4.999ZM19 13H5v6h14v-6Zm-6.5-6h-1c-.552 0-1-.448-1-1V2h3v4c0 .552-.448 1-1 1Z"></path>
-        </svg>
-        <p class="text-base font-bold text-slate-700">No submissions found</p>
+      <div v-if="filteredSubmissions.length === 0 && !isLoading">
+        <EmptySubmissions
+          title="No submissions found"
+          description="Your form hasn't received any responses yet. Share your form to start collecting data!" />
       </div>
 
       <!-- 2. SKELETON LOADER -->
-            <!-- 2. SKELETON LOADER -->
       <div v-else-if="isLoading" class="overflow-x-auto animate-pulse">
         <table class="w-full">
           <thead class="bg-slate-50 border-b border-slate-200">
@@ -94,12 +87,13 @@
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100">
-            <tr v-for="i in 10" :key="i"> <!-- 👈 Loops 10 times to match your actual table rows -->
+            <tr v-for="i in 10" :key="i">
+              <!-- 👈 Loops 10 times to match your actual table rows -->
               <!-- Checkbox -->
               <td class="py-4 px-6 text-center">
                 <div class="h-5 w-5 bg-slate-200 rounded-md mx-auto"></div>
               </td>
-              
+
               <!-- Form Name -->
               <td class="py-4 px-6 text-center">
                 <div class="h-4 w-24 bg-slate-200 rounded-lg mx-auto"></div>
@@ -217,16 +211,24 @@
         v-if="filteredSubmissions.length > 0 && !isLoading"
         class="border-t border-solid border-slate-100 p-4 flex items-center justify-between gap-2.5 flex-wrap">
         <div class="flex items-center gap-2.5 flex-wrap">
-           <button
+          <button
             @click="downloadCSV"
             :disabled="isDownloadingCsv"
             class="text-sm py-2 px-4 rounded-lg text-white bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-800 transition-colors cursor-pointer font-semibold shadow-sm shadow-teal-600/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
             <!-- Spinner SVG -->
-            <svg v-if="isDownloadingCsv" class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg
+              v-if="isDownloadingCsv"
+              class="animate-spin h-4 w-4 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            {{ isDownloadingCsv ? 'Downloading...' : 'Download CSV' }}
+            {{ isDownloadingCsv ? "Downloading..." : "Download CSV" }}
           </button>
           <button
             @click="isDeleteBulkModalOpen = true"
@@ -365,6 +367,7 @@
   import DeleteBulkFormLead from "@/components/modals/DeleteBulkFormLead.vue";
   import DeleteAllFormLead from "@/components/modals/DeleteAllFormLead.vue";
   import SubmissionService from "@/services/submission-services";
+  import EmptySubmissions from "@/components/global/EmptySubmissions.vue";
   import type { LeadItem, LeadFilterPayload } from "@/types/submission";
 
   const toast = useToast();
@@ -503,56 +506,56 @@
     isDeleteModalOpen.value = true;
   };
   // Confirm delete single submission with simulated delay
-const confirmDeleteLead = async () => {
-  if (deleteLeadId.value === null) return;
-  try {
-    isDeleting.value = true;
-    const response = await new SubmissionService().removeLeads({ id: [deleteLeadId.value] });
-    submissions.value = submissions.value.filter((sub) => sub.id !== deleteLeadId.value);
-    selectedSubmissionIds.value = selectedSubmissionIds.value.filter((id) => id !== deleteLeadId.value);
-    toast.success(response.message ); // 👈 Use dynamic message
-  } catch (error) {
-    console.error(error);
-    toast.error("Failed to delete submission");
-  } finally {
-    isDeleting.value = false;
-    isDeleteModalOpen.value = false;
-  }
-};
+  const confirmDeleteLead = async () => {
+    if (deleteLeadId.value === null) return;
+    try {
+      isDeleting.value = true;
+      const response = await new SubmissionService().removeLeads({ id: [deleteLeadId.value] });
+      submissions.value = submissions.value.filter((sub) => sub.id !== deleteLeadId.value);
+      selectedSubmissionIds.value = selectedSubmissionIds.value.filter((id) => id !== deleteLeadId.value);
+      toast.success(response.message); // 👈 Use dynamic message
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete submission");
+    } finally {
+      isDeleting.value = false;
+      isDeleteModalOpen.value = false;
+    }
+  };
 
   // Confirm bulk delete selected submissions with simulated delay
-const confirmDeleteBulkLead = async () => {
-  try {
-    isDeleting.value = true;
-    const response = await new SubmissionService().removeLeads({ id: selectedSubmissionIds.value });
-    submissions.value = submissions.value.filter((sub) => !selectedSubmissionIds.value.includes(sub.id));
-    selectedSubmissionIds.value = [];
-    toast.success(response.message); // 👈 Use dynamic message
-  } catch (error) {
-    console.error(error);
-    toast.error("Failed to delete selected submissions");
-  } finally {
-    isDeleting.value = false;
-    isDeleteBulkModalOpen.value = false;
-  }
-};
+  const confirmDeleteBulkLead = async () => {
+    try {
+      isDeleting.value = true;
+      const response = await new SubmissionService().removeLeads({ id: selectedSubmissionIds.value });
+      submissions.value = submissions.value.filter((sub) => !selectedSubmissionIds.value.includes(sub.id));
+      selectedSubmissionIds.value = [];
+      toast.success(response.message); // 👈 Use dynamic message
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete selected submissions");
+    } finally {
+      isDeleting.value = false;
+      isDeleteBulkModalOpen.value = false;
+    }
+  };
 
   // Confirm delete all submissions with simulated delay
   const confirmDeleteAllLeads = async () => {
-  try {
-    isDeleting.value = true;
-    const response = await new SubmissionService().removeAllLead();
-    submissions.value = [];
-    selectedSubmissionIds.value = [];
-    toast.success(response.message ); // 👈 Use dynamic message
-  } catch (error) {
-    console.error(error);
-    toast.error("Failed to clear submissions");
-  } finally {
-    isDeleting.value = false;
-    isDeleteAllModalOpen.value = false;
-  }
-};
+    try {
+      isDeleting.value = true;
+      const response = await new SubmissionService().removeAllLead();
+      submissions.value = [];
+      selectedSubmissionIds.value = [];
+      toast.success(response.message); // 👈 Use dynamic message
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to clear submissions");
+    } finally {
+      isDeleting.value = false;
+      isDeleteAllModalOpen.value = false;
+    }
+  };
 
   // Checkbox individual select
   const toggleSelectRow = (checked: any, id: number) => {
@@ -577,32 +580,32 @@ const confirmDeleteBulkLead = async () => {
   };
 
   const downloadCSV = async () => {
-  try {
-    isDownloadingCsv.value = true; 
-    const startDateVal = dateRange.value && dateRange.value[0] ? dateRange.value[0] : "";
-    const endDateVal = dateRange.value && dateRange.value[1] ? dateRange.value[1] : "";
-    const payload = {
-      time: selectedFilter.value,
-      start_date: selectedFilter.value === "custom" ? startDateVal : "",
-      end_date: selectedFilter.value === "custom" ? endDateVal : "",
-      search: searchQuery.value,
-    };
-    const responseBlob = await new SubmissionService().exportLeadsCsv(payload);
-    const url = window.URL.createObjectURL(new Blob([responseBlob]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", `submissions_${Date.now()}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    toast.success("CSV file downloaded successfully");
-  } catch (error) {
-    console.error("Failed to export CSV:", error);
-    toast.error("Failed to export CSV");
-  } finally {
-    isDownloadingCsv.value = false; 
-  }
-};
+    try {
+      isDownloadingCsv.value = true;
+      const startDateVal = dateRange.value && dateRange.value[0] ? dateRange.value[0] : "";
+      const endDateVal = dateRange.value && dateRange.value[1] ? dateRange.value[1] : "";
+      const payload = {
+        time: selectedFilter.value,
+        start_date: selectedFilter.value === "custom" ? startDateVal : "",
+        end_date: selectedFilter.value === "custom" ? endDateVal : "",
+        search: searchQuery.value,
+      };
+      const responseBlob = await new SubmissionService().exportLeadsCsv(payload);
+      const url = window.URL.createObjectURL(new Blob([responseBlob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `submissions_${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast.success("CSV file downloaded successfully");
+    } catch (error) {
+      console.error("Failed to export CSV:", error);
+      toast.error("Failed to export CSV");
+    } finally {
+      isDownloadingCsv.value = false;
+    }
+  };
 
   // Load initial submissions data on mount
   onMounted(() => {

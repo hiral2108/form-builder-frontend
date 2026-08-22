@@ -193,7 +193,7 @@
 
               <div class="space-y-1.5" v-else-if="field.type === 'name'" style="width: var(--input-width)">
                  <template v-if="field.nameFormat === 'split'">
-                  <div class="grid grid-cols-2 gap-3 w-full">
+                   <div class="grid grid-cols-2 gap-1 w-full gform-split-name-grid" style="width: var(--input-width)">
                     <div class="relative w-full">
                       <HelpTooltip :message="field.firstNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
                       <InputField

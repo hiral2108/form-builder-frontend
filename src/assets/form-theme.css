@@ -226,6 +226,14 @@
   min-width: 0 !important;
 }
 
+.gform-wrapper .gform-split-name-grid .input-field,
+.gform-wrapper .gform-split-name-grid .input-field .relative,
+.gform-wrapper .gform-split-name-grid .input-field input {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
 /* Color and border rules for selected custom radio and checkbox toggles */
 .gform-wrapper .discount-type-radio-toggle input[type="radio"]:checked + label > span {
   border-color: var(--input-text-color) !important;

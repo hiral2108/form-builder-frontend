@@ -289,7 +289,7 @@
               <div class="grid grid-cols-12 gap-3 items-center">
                 <div class="col-span-6 min-w-50">
                   <div class="relative">
-                    <label class="block text-sm font-medium text-gray-700 mb-2" for="date_rule_timezone"
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="date_rule_timezone"
                       >Timezone</label
                     >
                     <UTCSelectField :options="UTCTimes" v-model="dateTimeSetting.timezone" />
@@ -301,106 +301,7 @@
                   class="p-4 bg-gray-50 rounded-xl date-time-rule"
                   v-for="(dateRule, key) in dateTimeSetting.rule_setting"
                   :key="dateRule.id">
-                  <!-- <div
-                    class="grid grid-cols-1 min-[600px]:grid-cols-2 min-[900px]:grid-cols-[repeat(4,minmax(0,1fr))_auto] gap-3 items-end w-full min-w-0">
-                    <div>
-                      <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_start_date_${key}`"
-                        >Start Date</label
-                      >
-                      <div class="calender-input relative">
-                        <el-date-picker
-                          v-model="dateRule.start_date"
-                          :id="`date_rule_start_date_${key}`"
-                          type="date"
-                          placeholder="Start date"
-                          :disabled-date="disabledStartDateFactory(key)"
-                          @change="onStartDateChange(key, $event)"
-                          class="w-full"
-                          clearable />
-                        <p
-                          v-if="validationErrors[`date_rule_start_date_${dateRule.id}`]"
-                          class="text-xs text-red-500 mt-1">
-                          {{ validationErrors[`date_rule_start_date_${dateRule.id}`] }}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_end_date_${key}`"
-                        >End Date</label
-                      >
-                      <div class="calender-input relative">
-                        <el-date-picker
-                          v-model="dateRule.end_date"
-                          :id="`date_rule_end_date_${key}`"
-                          type="date"
-                          placeholder="End date"
-                          :disabled-date="disabledEndDateFactory(key)"
-                          @change="onEndDateChange(key, $event)"
-                          class="w-full"
-                          clearable />
-                        <p
-                          v-if="validationErrors[`date_rule_end_date_${dateRule.id}`]"
-                          class="text-xs text-red-500 mt-1">
-                          {{ validationErrors[`date_rule_end_date_${dateRule.id}`] }}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_start_time_${key}`"
-                        >Start Time</label
-                      >
-                      <div class="relative">
-                        <el-time-select
-                          v-model="dateRule.start_time"
-                          :placeholder="'Start'"
-                          :start="'00:00'"
-                          :step="'00:15'"
-                          :end="'23:59'"
-                          format="HH:mm"
-                          @change="onDateStartChange(key, $event)"
-                          :clearable="false"
-                          :editable="false"
-                          class="w-full" />
-                        <span
-                          class="w-[18px] h-[18px] absolute top-1/2 transform -translate-y-1/2 right-1.5 pointer-events-none">
-                          <img v-svg-inline src="@/assets/icons/trigger-targeting/clock.svg" alt="Clock" />
-                        </span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label class="block text-sm font-medium text-slate-700 mb-2" :for="`date_rule_end_time_${key}`"
-                        >End Time</label
-                      >
-                      <div class="relative">
-                        <el-time-select
-                          v-model="dateRule.end_time"
-                          placeholder="End"
-                          :start="dateRule.start_time || '00:00'"
-                          :end="'23:59'"
-                          :step="TIME_SELECT_STEP"
-                          @change="onDateEndChange(key, $event)"
-                          :clearable="false"
-                          :editable="false"
-                          class="w-full" />
-                        <span
-                          class="w-[18px] h-[18px] absolute top-1/2 transform -translate-y-1/2 right-1.5 pointer-events-none">
-                          <img v-svg-inline src="@/assets/icons/trigger-targeting/clock.svg" alt="Clock" />
-                        </span>
-                      </div>
-                    </div>
-
-                    <div class="flex min-[900px]:justify-end">
-                      <button
-                        type="button"
-                        @click="removeDateRule(dateRule.id)"
-                        class="w-full min-[900px]:w-[42px] h-[42px] bg-red-100 text-red-700 rounded-xl hover:bg-red-100 transition-colors flex items-center justify-center cursor-pointer">
-                        <img v-svg-inline src="@/assets/icons/form-list/delete.svg" alt="" class="text-lg" />
-                      </button>
-                    </div>
-                  </div> -->
+                  
                   <div
                     class="grid grid-cols-1 min-[750px]:max-[1024px]:grid-cols-2 min-[1325px]:grid-cols-2 gap-3 w-full min-w-0">
                     <!-- 1. Dates Group (Start & End Date in one div) -->
@@ -570,7 +471,7 @@
               <div class="grid grid-cols-12 gap-3 items-center">
                 <div class="col-span-6 min-w-50">
                   <div class="relative">
-                    <label class="block text-sm font-medium text-gray-700 mb-2" for="day_rule_timezone">Timezone</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" for="day_rule_timezone">Timezone</label>
                     <UTCSelectField :options="UTCTimes" v-model="dayHourSetting.timezone" />
                   </div>
                 </div>

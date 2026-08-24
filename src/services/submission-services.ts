@@ -15,7 +15,7 @@ export default class SubmissionService {
 
   // Delete all submissions/leads
   removeAllLead(): Promise<RemoveLeadResponse> {
-    return $axios.get(`remove_all_lead`);
+    return $axios.delete(`remove_all_lead`);
   }
 
   // Export submissions/leads to CSV

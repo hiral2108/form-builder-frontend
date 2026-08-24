@@ -17,9 +17,9 @@
           <img v-else-if="icon == 'password'" v-svg-inline src="@/assets/icons/auth/password.svg" />
           <img v-else-if="icon == 'user'" v-svg-inline src="@/assets/icons/auth/username.svg" />
         </div>
-        <input
+          <input
           :disabled="disable"
-          :value="value"
+          :value="modelValue ?? value"
           :type="type"
           :id="getFieldID"
           :readonly="readonly"
@@ -29,7 +29,7 @@
           :class="[
             {
               'border-red-500 bg-red-50': hasError,
-              rtl: isRTL(String(value)),
+              rtl: isRTL(String(modelValue ?? value)),
             },
             classes,
           ]"
@@ -55,13 +55,13 @@
 import { computed, ref } from 'vue'
 import { isRTL } from '@/utils'
 import { v4 as uuidv4 } from 'uuid'
-
-const emit = defineEmits(['input', 'blur', 'togglePassword', 'focusin', 'keydown', 'focusout'])
+const emit = defineEmits(['update:modelValue', 'input', 'blur', 'togglePassword', 'focusin', 'keydown', 'focusout'])
 const props = withDefaults(
-  defineProps<{
+ defineProps<{
     label?: string
     labelClass?: string
     value?: string | number
+    modelValue?: string | number
     type: string
     hasError?: boolean
     fieldId?: string
@@ -103,6 +103,7 @@ const focusOutHandler = () => {
 const onChange = (e: Event) => {
   const target = e.target as HTMLInputElement
   emit('input', target.value)
+  emit('update:modelValue', target.value)
 }
 
 const onBlur = () => {

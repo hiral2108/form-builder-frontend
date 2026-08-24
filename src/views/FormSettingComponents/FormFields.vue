@@ -174,7 +174,7 @@
                   <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                   <InputField
                     disable
-                    :required="field.required"
+                    :required="!!field.required"
                     :label="field.label"
                     :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
                     :label-style="labelStyleObject"
@@ -227,7 +227,7 @@
                     <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                     <InputField
                       disable
-                      :required="field.required"
+                      :required="!!field.required"
                       :label="field.label"
                       :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
                       :label-style="labelStyleObject"
@@ -242,7 +242,7 @@
               <div class="space-y-1.5 relative" v-else-if="field.type === 'textarea'" style="width: var(--input-width)">
                 <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <TextareaField
-                  :required="field.required"
+                  :required="!!field.required"
                   :label="field.label"
                   :label-class="labelPositionClass(field.labelPlacement) + ' block w-full'"
                   :label-style="labelStyleObject"

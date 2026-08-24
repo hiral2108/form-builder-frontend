@@ -116,6 +116,7 @@
                 <label class="text-sm font-semibold text-gray-700 w-full sm:w-28 sm:flex-shrink-0">Name</label>
                 <InputField
                   v-model="submissionSetting.emailSettings.name"
+                  type="text"
                   focusColor="teal"
                   placeholder="Enter name"
                   fieldId="email_name"
@@ -145,6 +146,7 @@
                 <label class="text-sm font-semibold text-gray-700 w-full sm:w-28 sm:flex-shrink-0">Subject</label>
                 <InputField
                   v-model="submissionSetting.emailSettings.subject"
+                  type="text"
                   focusColor="teal"
                   placeholder="Enter email subject"
                   fieldId="email_subject"
@@ -256,6 +258,7 @@
                 <label class="text-sm font-semibold text-gray-700 w-full sm:w-28 sm:flex-shrink-0">BCC</label>
                 <InputField
                   v-model="submissionSetting.emailSettings.bcc"
+                  type="text"
                   focusColor="teal"
                   placeholder="Enter BCC email(s)"
                   fieldId="email_bcc"
@@ -270,6 +273,7 @@
                 <label class="text-sm font-semibold text-gray-700 w-full sm:w-28 sm:flex-shrink-0">CC</label>
                 <InputField
                   v-model="submissionSetting.emailSettings.cc"
+                  type="text"
                   focusColor="teal"
                   placeholder="Enter CC email(s)"
                   fieldId="email_cc"

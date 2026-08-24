@@ -66,7 +66,7 @@ export function formSetting() {
     const merged = structuredClone(toRaw(fallback)) as any;
     for (const key of Object.keys(value as any)) {
       const val = (value as any)[key];
-      if (val !== null && val !== undefined && val !== "" && !isEmpty(val)) {
+      if (val !== null && val !== undefined && !isEmpty(val)) {
         merged[key] = val;
       }
     }

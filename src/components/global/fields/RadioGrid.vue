@@ -17,7 +17,7 @@
           :value="getOptionValue(opt, idx)"
           :checked="getOptionValue(opt, idx) === modelValue"
           :disabled="isDisabled(opt)"
-          @change="onChange(opt)"
+          @change="onChange(opt, idx)"
         />
 
         <!-- The visible tile (label tied to input via for=) -->
@@ -30,10 +30,10 @@
                 ? 'cursor-not-allowed opacity-50'
                 : 'cursor-pointer hover:scale-105',
               tileBaseClass,
-              isSelected(opt) ? selectedClass : unselectedClass
+              isSelected(opt, idx) ? selectedClass : unselectedClass
             ]"
             role="radio"
-            :aria-checked="isSelected(opt)"
+            :aria-checked="isSelected(opt, idx)"
             :aria-disabled="isDisabled(opt)"
           >
             <!-- slot for custom rendering -->
@@ -169,13 +169,12 @@ function tileId(opt: Option, idx: number) {
   return `${groupId}-item-${String(getOptionKey(opt, idx))}`;
 }
 
-function isSelected(opt: Option) {
-  return getOptionValue(opt, 0) === props.modelValue;
+function isSelected(opt: Option, idx: number) { 
+  return getOptionValue(opt, idx) === props.modelValue;
 }
-
-function onChange(opt: Option) {
+function onChange(opt: Option, idx: number) { 
   if (isDisabled(opt)) return;
-  emit('update:modelValue', getOptionValue(opt, 0));
+  emit('update:modelValue', getOptionValue(opt, idx));
 }
 
 function isDisabled(opt: Option): boolean {

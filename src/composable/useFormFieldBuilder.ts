@@ -20,6 +20,7 @@ import { formSetting } from "@/composable/useFormSettings";
 import { useFormFieldSettingStore, type FormFieldType } from "@/stores/formFieldStore";
 import { useFormStyle } from "@/composable/useFormStyle";
 import { useUserStore } from "@/stores/user.ts";
+import { v4 as uuidv4 } from "uuid";
 
 export function useFormFieldsBuilder() {
   const FormFieldSettingStore = useFormFieldSettingStore();
@@ -91,7 +92,7 @@ export function useFormFieldsBuilder() {
 
   const addField = (type: string) => {
     if (isFieldLocked(type)) return;
-    const id = Date.now().toString();
+    const id = uuidv4();
     let label = "";
     let placeholder = "";
     let options: string[] | undefined = undefined;
@@ -277,7 +278,7 @@ export function useFormFieldsBuilder() {
 
       const newField: FormFieldType = {
         ...copiedField,
-        id: Date.now().toString(),
+        id: uuidv4(),
         label: `${copiedField.label} (Copy)`,
       };
 

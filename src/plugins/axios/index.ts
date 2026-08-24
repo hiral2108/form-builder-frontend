@@ -43,7 +43,14 @@ $axios.interceptors.response.use(
       window.location.href = "/login";
     }
 
-    if ([301, 302].includes(code) && "redirect_url" in data) {
+    // if ([301, 302].includes(code) && "redirect_url" in data) {
+    //   const a: any = document.createElement("a");
+    //   a.target = data.target || "_blank";
+    //   a.href = data.redirect_url;
+    //   a.click();
+    // }
+
+    if ([301, 302].includes(code) && data && typeof data === "object" && "redirect_url" in data) {
       const a: any = document.createElement("a");
       a.target = data.target || "_blank";
       a.href = data.redirect_url;

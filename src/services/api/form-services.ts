@@ -1,5 +1,13 @@
 import { $axios } from "@/plugins/axios";
-import type { NewForm, FormListResponse, WidgetStatusResponse, RenameFormResponse, RemoveFormResponse, CloneWidgetResponse } from "@/types/form.ts";
+import type {
+  NewForm,
+  FormListResponse,
+  WidgetStatusResponse,
+  RenameFormResponse,
+  RemoveFormResponse,
+  CloneWidgetResponse,
+  DashboardDataResponse,
+} from "@/types/form.ts";
 
 export default class FormService {
   createForm(payload: { title: string }): Promise<NewForm> {
@@ -7,7 +15,9 @@ export default class FormService {
   }
 
   getFormsFilter(
-    payload: { start_date: string; end_date: string; time: string },page: number = 1): Promise<FormListResponse> {
+    payload: { start_date: string; end_date: string; time: string },
+    page: number = 1
+  ): Promise<FormListResponse> {
     return $axios.post(`get_form_list?page=${page}`, payload);
   }
 
@@ -22,12 +32,16 @@ export default class FormService {
   removeForm(payload: { widget_id: string }): Promise<RemoveFormResponse> {
     return $axios.post(`remove_widget`, payload);
   }
-  
+
   cloneWidget(payload: { title: string; widget_id: string }): Promise<CloneWidgetResponse> {
     return $axios.post(`clone_widget`, payload);
   }
 
-  getDashboardData(payload: { filter: string; start_date?: string; end_date?: string }): Promise<any> {
+  getDashboardData(payload: {
+    filter: string;
+    start_date?: string;
+    end_date?: string;
+  }): Promise<DashboardDataResponse> {
     return $axios.get(`get_dashboard_data`, { params: payload });
   }
 }

@@ -1,15 +1,15 @@
-import type { FormFieldSettingType } from '@/stores/formFieldStore';
-import type { FormStyleSettingType } from '@/stores/formStyleStore';
-import type { DisplayRuleSettingType } from '@/stores/DisplayRuleStore';
-import type { SubmissionSettingType } from '@/stores/submissionStore';
-import type { TimeDelaySettingStoreType } from '@/stores/timeDelaySetting';
-import type { ScrollBasedSettingStoreType } from '@/stores/scrollBasedSetting';
+import type { FormFieldSettingType } from "@/stores/formFieldStore";
+import type { FormStyleSettingType } from "@/stores/formStyleStore";
+import type { DisplayRuleSettingType } from "@/stores/DisplayRuleStore";
+import type { SubmissionSettingType } from "@/stores/submissionStore";
+import type { TimeDelaySettingStoreType } from "@/stores/timeDelaySetting";
+import type { ScrollBasedSettingStoreType } from "@/stores/scrollBasedSetting";
 import type {
   PageRuleSettings,
   DateRuleSettings,
   DayHourRuleSettings,
-  CountryRuleSetting
-} from '@/types/widgetSetting';
+  CountryRuleSetting,
+} from "@/types/widgetSetting";
 
 export interface NewForm {
   message: string;
@@ -54,6 +54,16 @@ export interface SaveWidgetResponse {
   message: string;
 }
 
+export interface DashboardDataResponse {
+  status: number;
+  totalViews: number;
+  totalClicks: number;
+  dateList: string[];
+  viewData: number[];
+  clickData: number[];
+  message?: string;
+}
+
 export interface SaveWidgetSettingPayload {
   form_field_setting: FormFieldSettingType;
   form_style_setting: FormStyleSettingType;
@@ -81,7 +91,7 @@ export interface WidgetDataResponse {
     day_hour_setting: DayHourRuleSettings;
     country_rule_setting: CountryRuleSetting;
     widget_id?: string;
-  }
+  };
 }
 
 export interface UploadImageResponse {

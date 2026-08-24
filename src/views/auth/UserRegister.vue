@@ -4,7 +4,7 @@
       <div class="text-center mb-8">
         <div
           class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-r from-teal-500 to-teal-600 text-white mb-4 shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40">
-         <img v-svg-inline src="@/assets/icons/settingpage/file-list-3-line.svg" class="text-white w-6 h-6"/>
+          <img v-svg-inline src="@/assets/icons/settingpage/file-list-3-line.svg" class="text-white w-6 h-6" />
         </div>
         <h1 class="text-2xl font-bold text-slate-800">Create your account</h1>
         <p class="text-slate-500 mt-1 text-sm">Start building forms in minutes</p>
@@ -143,17 +143,17 @@
         name: form.name,
         email: form.email,
         password: form.password,
-        src: "Shopify",
+        src: "",
       };
       const { access_token, message } = await new AuthService().register(payload);
       sessionStorage.setItem("authToken", access_token);
       showSuccessMessage(message);
       await getCurrentUser();
-      isLoading.value = false;
       return router.push("/dashboard");
     } catch (error: any) {
-      console.log(error.response.data.message);
+      console.log(error?.response?.data?.message || error.message || error);
       showErrorMessage(error);
+    } finally {
       isLoading.value = false;
     }
   };

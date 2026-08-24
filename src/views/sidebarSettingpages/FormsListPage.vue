@@ -520,6 +520,7 @@
   import CreateFormModal from "@/components/modals/CreateFormModal.vue";
   import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue";
   import { useUserStore } from "@/stores/user.ts";
+  import { showErrorMessage } from "@/utils";
 
   // Modal triggers and tracking state
   const showRenameModal = ref(false);
@@ -646,14 +647,21 @@
       const response = await new FormService().getFormsFilter(payload, page);
 
       let rawList: any[] = [];
+      let lastPage = 1;
       if (Array.isArray(response.widgetList)) {
         rawList = response.widgetList;
         totalPage.value = 1;
         currentPage.value = 1;
       } else if (response.widgetList) {
         rawList = (response.widgetList as any).data || [];
-        totalPage.value = (response.widgetList as any).last_page || 1;
+        lastPage = (response.widgetList as any).last_page || 1;
+        totalPage.value = lastPage;
         currentPage.value = (response.widgetList as any).current_page || 1;
+      }
+
+       if (page > lastPage && lastPage >= 1) {
+        await fetchFilteredForms(lastPage);
+        return;
       }
 
       // Map backend model properties to the property names expected by the template
@@ -704,7 +712,10 @@
 
   // Toggle status instantly in UI and call status API in the background
   const handleStatusChange = async (form: any, newStatus: string) => {
-    // 1. Instantly flip the switch in the UI
+    // 1. Store the previous status so we can revert if the API call fails
+    const oldStatus = form.status;
+
+    // 2. Instantly flip the switch in the UI (optimistic update)
     form.status = newStatus;
 
     const payload = {
@@ -721,9 +732,16 @@
         totalForms.value = response.totalWidget ?? totalForms.value;
         activeForms.value = response.activeWidget ?? activeForms.value;
         inactiveForms.value = response.inActiveWidget ?? inactiveForms.value;
+      } else {
+        // API responded with an error status (revert the toggle)
+        form.status = oldStatus;
+        showErrorMessage(response.message || "Failed to update form status.");
       }
     } catch (error) {
+      // Network error or server crash (revert the toggle)
+      form.status = oldStatus;
       console.error("Failed to change form status:", error);
+      showErrorMessage(error);
     } finally {
       isMetricLoading.value = false; // Turn off metric placeholders
     }

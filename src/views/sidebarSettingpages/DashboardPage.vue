@@ -5,7 +5,7 @@
       <h2 class="text-xl font-bold text-slate-800 tracking-tight">Welcome to {{ appName }}</h2>
       <button 
         @click="handleCreateClick"
-        class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10 max-[380px]:w-full max-[380px]:justify-center"
+        class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10 max-[380px]:w-full max-[380px]:justify-center"
       >
         <img v-svg-inline src="@/assets/icons/dashboardpage/add-line.svg" class="w-5 h-5"/>
         <span>Create Form</span>
@@ -41,7 +41,7 @@
         </div>
         <button 
           type="button" 
-          class="submit-filter text-sm py-0.5 px-4 rounded-lg min-h-10 text-white bg-teal-600 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10" 
+          class="submit-filter text-sm py-0.5 px-4 rounded-xl min-h-10 text-white bg-teal-600 hover:bg-teal-700 cursor-pointer flex-shrink-0 transition-colors font-semibold shadow-sm shadow-teal-600/10" 
           @click="applyCustomFilter"
         >
           Apply

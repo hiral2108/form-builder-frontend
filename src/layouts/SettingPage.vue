@@ -130,7 +130,11 @@
             </div>
 
             <router-view v-slot="{ Component }">
-              <component :is="Component" :is-collapsible="isCollapsed" />
+              <!-- Bind step navigation props dynamically only on FormSettingsPage to avoid console warnings on other routes -->
+              <component 
+                :is="Component" 
+                v-bind="route.name === 'FormSettingsPage' ? { isCollapsible: isCollapsed, isSidebarHidden: isSidebarHidden } : {}" 
+              />
             </router-view>
           </div>
         </div>
@@ -155,6 +159,7 @@
   const userCollapsedChoice = ref(false);
   const isMobile = ref(false);
   const isMobileSidebarOpen = ref(false);
+  const windowWidth = ref(window.innerWidth); 
 
   const appName = inject("appName");
 
@@ -176,6 +181,7 @@
 
   const handleResize = () => {
     isMobile.value = window.innerWidth < 1024;
+    windowWidth.value = window.innerWidth; // Keep windowWidth reactive on resize
     if (route.name === "FormSettingsPage") {
       isCollapsed.value = true;
     } else if (isMobile.value) {
@@ -184,6 +190,11 @@
       isCollapsed.value = userCollapsedChoice.value;
     }
   };
+  
+  // Computed property to check if the sidebar should hide
+  const isSidebarHidden = computed(() => {
+    return route.name === "FormSettingsPage" && windowWidth.value < 1320;
+  });
   const navItems = [
     {
       label: "Dashboard",

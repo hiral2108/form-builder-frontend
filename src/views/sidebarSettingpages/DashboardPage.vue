@@ -342,7 +342,7 @@ const fetchDashboardStats = async () => {
       payload.end_date = dateRange.value[1];
     }
 
-    const response = await new FormService().getDashboardData(payload);
+  const response = await new FormService().getDashboardData(payload);
     if (response && response.status === 1) {
       views.value = response.totalViews || 0;
       clicks.value = response.totalClicks || 0;
@@ -350,6 +350,9 @@ const fetchDashboardStats = async () => {
       dateData.value = response.dateList || [];
       viewData.value = response.viewData || [];
       clickData.value = response.clickData || [];
+      
+      totalFormsCreated.value = response.total_forms || 0;
+      totalForms.value = response.total_forms || 0;
     }
   } catch (error) {
     console.error("Failed to fetch stats for dashboard:", error);

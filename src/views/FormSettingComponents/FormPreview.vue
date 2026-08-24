@@ -22,7 +22,7 @@
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <InputField
               :disable="!interactive"
-              :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
+              :required="!!field.required && formStyleSetting.labelStyle.showLabel === 'show'"
               :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.label : ''"
               :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
               :type="
@@ -86,7 +86,7 @@
                 <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
                 <InputField
                   :disable="!interactive"
-                  :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
+                  :required="!!field.required && formStyleSetting.labelStyle.showLabel === 'show'"
                   :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.label : ''"
                   :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
                   type="text"
@@ -101,7 +101,7 @@
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <TextareaField
               :disable="!interactive"
-              :required="field.required && formStyleSetting.labelStyle.showLabel === 'show'"
+              :required="!!field.required && formStyleSetting.labelStyle.showLabel === 'show'"
               :label="formStyleSetting.labelStyle.showLabel === 'show' ? field.label : ''"
               :labelClass="labelPositionClass(field.labelPlacement) + ' block w-full'"
               :placeholder="field.placeholder"

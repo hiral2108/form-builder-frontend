@@ -39,6 +39,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
+defineOptions({
+  inheritAttrs: false
+});
+
 defineProps<{
   message?: string;
 }>();

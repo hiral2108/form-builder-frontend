@@ -787,6 +787,9 @@
     fetchCountryList,
   } = targetingSetting();
 
+  void dropdownRef;
+  void searchInputRef;
+
   const UTCTimes = ref<Array<{ title: string; value: string }>>([]);
   const TIME_SELECT_STEP = "00:15";
 

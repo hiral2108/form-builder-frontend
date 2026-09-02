@@ -70,12 +70,14 @@
 <script setup lang="ts">
   import { onMounted, onUnmounted, computed } from "vue";
   import planFeatures from "@/data/planFeatures.json";
+  import { useRouter } from "vue-router";
 
   defineProps({
     isShowModal: Boolean,
   });
 
   const emit = defineEmits(["closeModal", "confirmSelection"]);
+  const router = useRouter();
 
   // Dynamically filter features that belong to the free tier and are not pro features
   const freePlanFeatures = computed(() => {
@@ -89,6 +91,7 @@
   const confirmFreePlan = () => {
     emit("confirmSelection");
     closeModalWidget();
+    router.push("/dashboard");
   };
 
   const handleKeydown = (event: KeyboardEvent) => {

@@ -11,5 +11,8 @@ export const useUserStore = defineStore("user", {
     plan_type: "",
     plan_id: 0,
     created_at: "",
+    shop_url: "",
+    shop_owner_name: "",
+    host: ""
   }),
 });

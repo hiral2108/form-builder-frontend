@@ -366,7 +366,7 @@
   import DeleteFormLead from "@/components/modals/DeleteFormLead.vue";
   import DeleteBulkFormLead from "@/components/modals/DeleteBulkFormLead.vue";
   import DeleteAllFormLead from "@/components/modals/DeleteAllFormLead.vue";
-  import SubmissionService from "@/services/submission-services";
+  import SubmissionService from "@/services/api/submission-services";
   import EmptySubmissions from "@/components/global/EmptySubmissions.vue";
   import type { LeadItem, LeadFilterPayload } from "@/types/submission";
 

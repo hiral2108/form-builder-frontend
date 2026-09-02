@@ -16,7 +16,7 @@
       </div>
 
       <!-- Actual Monthly / Yearly Toggle (When Loaded) -->
-      <div v-else class="inline-flex items-center gap-3 bg-white rounded-full border border-slate-200 p-1 shadow-sm">
+      <div v-else class="inline-flex items-center gap-1 bg-white rounded-full border border-slate-200 p-1 shadow-sm">
         <button
           type="button"
           @click="togglePlanType('monthly')"
@@ -212,16 +212,23 @@
     <section class="text-center">
       <p class="text-sm text-slate-600">
         Still have questions?
-        <a href="javascript:void(0)" class="text-teal-600 hover:text-teal-700 font-semibold ml-1">
+        <a href="javascript:void(0)" @click.prevent="openChatBox" class="text-teal-600 hover:text-teal-700 font-semibold ml-1">
           Contact our support team
         </a>
       </p>
     </section>
   </div>
-   <FreePlanModal :isShowModal="isShowFreePlanModal" @closeModal="isShowFreePlanModal = false" />
-  <ProPlanModal :isShowModal="isShowProPlanModal" @closeModal="isShowProPlanModal = false" />
+   <FreePlanModal
+     :isShowModal="isShowFreePlanModal"
+     @closeModal="isShowFreePlanModal = false"
+   />
+  <ProPlanModal
+    :isShowModal="isShowProPlanModal"
+    @closeModal="isShowProPlanModal = false"
+  />
   <DowngradePlanModal
     :isShowModal="isShowDowngradeModal"
+    @confirmSelection="confirmDowngradePlan"
     @closeModal="isShowDowngradeModal = false"
   />
   <UpgradePlanModal
@@ -236,7 +243,8 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from "vue";
+  import { ref, onMounted, watch } from "vue";
+  import confetti from "canvas-confetti";
   import PlanService from "@/services/api/plan-services";
   import planFeaturesData from "@/data/planFeatures.json";
   import planFaqs from "@/data/planFaqs.json";
@@ -246,20 +254,37 @@
   import UpgradePlanModal from "@/components/modals/UpgradePlanModal.vue";
   import CancelPlanModal from "@/components/modals/CancelPlanModal.vue";
   import { useUserStore } from "@/stores/user";
+  import { showErrorMessage } from "@/utils";
 
   type PlanKey = "free" | "pro";
 
   const userStore = useUserStore();
   const isPlanLoading = ref(true);
-  const selectedPlanType = ref<"monthly" | "yearly">("monthly");
+  const selectedPlanType = ref<"monthly" | "yearly">(
+    userStore.plan_type?.toLowerCase() === "yearly" ? "yearly" : "monthly"
+  );
   const plans = ref<any[]>([]);
+
+  watch(
+    () => userStore.plan_type,
+    (newPlanType) => {
+      if (newPlanType) {
+        selectedPlanType.value = newPlanType.toLowerCase() === "yearly" ? "yearly" : "monthly";
+      }
+    }
+  );
 
   const isShowFreePlanModal = ref(false);
   const isShowProPlanModal = ref(false);
   const isShowDowngradeModal = ref(false);
   const isShowUpgradeModal = ref(false);
   const isShowCancelPlanModal = ref(false);
-  
+
+  // The plan a confirmation modal is currently open for
+  const pendingPlan = ref<any>(null);
+  // The plan_id currently being submitted (drives per-button "Processing..." state)
+  const submittingPlanId = ref<number | null>(null);
+
   // 1. Fetch Plans from API
   const fetchPlans = async () => {
     try {
@@ -304,24 +329,49 @@
     return "Full power of FormFlow with advanced targeting<br>and unlimited growth.";
   };
 
-  const isCurrentPlan = (plan: any): boolean => {
-    const planName = plan.name?.toLowerCase();
-    if (planName === "free" && userStore.plan_id === 1) return true;
-    if (planName === "pro" && userStore.plan_id === 2) return true;
-    return false;
+  // Resolve a plan's id dynamically from the fetched plan list instead of hardcoding 1/2
+  const getPlanIdByName = (name: string): number | undefined => {
+    return plans.value.find((p) => p.name?.toLowerCase() === name?.toLowerCase())?.id;
   };
+
+  // "monthly"/"Monthly" and "yearly"/"Yearly" should compare equal regardless of case
+  const isSameBillingCycle = (a?: string | null, b?: string | null) => {
+    return (a || "").toLowerCase() === (b || "").toLowerCase();
+  };
+
+  const isCurrentPlan = (plan: any): boolean => {
+    const targetPlanId = getPlanIdByName(plan.name);
+    if (targetPlanId !== userStore.plan_id) return false;
+    // Free plan has no billing cycle to switch between
+    if (plan.name?.toLowerCase() === "free") return true;
+    return isSameBillingCycle(selectedPlanType.value, userStore.plan_type);
+  };
+
   const isPlanDisabled = (plan: any) => {
-    if (isCurrentPlan(plan)) return true; // Disable if it's the current plan
+    if (submittingPlanId.value !== null) return true; // Block clicks while a change is in flight
+    if (isCurrentPlan(plan)) return true; // Disable if it's the current plan + cycle
     return plan.name?.toLowerCase() === "free" && selectedPlanType.value === "yearly";
   };
 
   const getPlanButtonText = (plan: any) => {
-    if (isCurrentPlan(plan)) return "Current Plan"; // Show current plan text
+    const targetPlanId = getPlanIdByName(plan.name);
+
+    if (submittingPlanId.value === targetPlanId) return "Processing...";
+    if (isCurrentPlan(plan)) return "Current Plan";
     if (plan.name?.toLowerCase() === "free" && selectedPlanType.value === "yearly") {
       return "Not Available";
     }
+
+    const currentPlanId = userStore.plan_id;
+    if (currentPlanId && targetPlanId === currentPlanId) {
+      // Same tier, different billing cycle
+      return "Change Your Plan";
+    }
     if (plan.name?.toLowerCase() === "free") return "Get Started Free";
-    return "Upgrade to Pro";
+    if (currentPlanId && targetPlanId !== undefined && targetPlanId < currentPlanId) {
+      return `Downgrade to ${plan.name}`;
+    }
+    return `Upgrade to ${plan.name}`;
   };
 
   const getPlanButtonClass = (plan: any) => {
@@ -342,37 +392,136 @@
     return (planFeaturesData.PlanFeature as any)?.[key] || [];
   };
 
+  const triggerFireworks = () => {
+    confetti({ particleCount: 250, spread: 360, zIndex: 111111 });
+  };
+
+  // Selecting a plan applies it immediately — no "are you sure?" gate.
+  // Modals (except downgrade) are shown afterward as a success/welcome message.
   const handlePlanClick = (plan: any) => {
     if (isPlanDisabled(plan)) return;
-    
-    const selectedPlanName = plan.name?.toLowerCase();
-    
-    // CASE 1: First time user (plan_id === 0)
-    if (userStore.plan_id === 0) {
-      if (selectedPlanName === "free") {
+
+    pendingPlan.value = plan;
+    const targetPlanId = getPlanIdByName(plan.name);
+    const currentPlanId = userStore.plan_id;
+    const isFirstPlan = currentPlanId === 0;
+
+    // When downgrading from Pro/paid plan (plan_id > 1) to Free (targetPlanId === 1), show confirmation modal
+    if (currentPlanId > 1 && targetPlanId === 1) {
+      isShowDowngradeModal.value = true;
+      return;
+    }
+
+    if (targetPlanId === 1) {
+      addFreePlan(isFirstPlan);
+      return;
+    }
+
+    // Paid tier (Pro): kicks off Shopify checkout immediately.
+    // The modal is shown after a successful return from checkout.
+    submitPlanCheckout(plan, isFirstPlan);
+  };
+
+  const confirmDowngradePlan = () => {
+    addFreePlan(false);
+  };
+
+  // Applies immediately (no Shopify checkout redirect needed for the free tier)
+  const addFreePlan = async (showModalAfter: boolean) => {
+    const plan = pendingPlan.value;
+    if (!plan) return;
+
+    try {
+      submittingPlanId.value = 1;
+      await new PlanService().changePlan({
+        plan_id: 1,
+        plan_type: selectedPlanType.value,
+        plan_name: plan.name,
+      });
+
+      await fetchPlans();
+      userStore.plan_id = 1;
+      userStore.plan_type = selectedPlanType.value === "yearly" ? "Yearly" : "Monthly";
+      // triggerFireworks();
+      // showSuccessMessage("You're now on the Free plan!");
+      if (showModalAfter) {
         isShowFreePlanModal.value = true;
-      } else if (selectedPlanName === "pro") {
-        isShowProPlanModal.value = true;
+        triggerFireworks();
       }
-    } 
-    // CASE 2: Existing user changing plans (plan_id > 0)
-    else {
-      const currentPlanId = userStore.plan_id;
-      const selectedPlanId = selectedPlanName === "free" ? 1 : 2;
-      
-      if (selectedPlanId === currentPlanId) return; // Prevent double clicks (button is disabled anyway)
-      
-      if (selectedPlanId > currentPlanId) {
-        // Upgrading (e.g. Free -> Pro)
-        isShowUpgradeModal.value = true;
+    } catch (e) {
+      showErrorMessage(e);
+    } finally {
+      submittingPlanId.value = null;
+      pendingPlan.value = null;
+    }
+  };
+
+  // Kicks off a Shopify recurring charge and redirects to the confirmation page.
+  // Completion (activation) happens on return, via /plan/annual or /plan/month —
+  // isFirstPlan is stashed in sessionStorage so PlanPage knows which modal to
+  // show once it lands back here.
+  const submitPlanCheckout = async (plan: any, isFirstPlan: boolean) => {
+    const targetPlanId = getPlanIdByName(plan.name);
+    if (!targetPlanId) return;
+
+    try {
+      submittingPlanId.value = targetPlanId;
+
+      const res = await new PlanService().changePlan({
+        plan_id: targetPlanId,
+        plan_type: selectedPlanType.value,
+        plan_name: plan.name,
+      });
+
+      if (res?.confirmationUrl) {
+        sessionStorage.setItem("checkoutInProgress", isFirstPlan ? "pro" : "upgrade");
+        sessionStorage.removeItem("planModalPending");
+        const redirectTo = res.confirmationUrl;
+        window.top ? (window.top.location.href = redirectTo) : (window.location.href = redirectTo);
       } else {
-        // Downgrading (e.g. Pro -> Free)
-        isShowDowngradeModal.value = true;
+        showErrorMessage(res?.message || "Unable to start checkout for this plan.");
+        submittingPlanId.value = null;
       }
+    } catch (e) {
+      showErrorMessage(e);
+      submittingPlanId.value = null;
+    } finally {
+      pendingPlan.value = null;
+    }
+  };
+
+  const openChatBox = () => {
+    if (window.$crisp) {
+      window.$crisp.push(["set", "message:text", [""]]);
+      window.$crisp.push(["do", "chat:open"]);
     }
   };
 
   onMounted(() => {
     fetchPlans();
+
+    // If user hit browser back arrow from Shopify charge screen without completing
+    const inProgress = sessionStorage.getItem("checkoutInProgress");
+    if (inProgress) {
+      sessionStorage.removeItem("checkoutInProgress");
+      sessionStorage.removeItem("planModalPending");
+      isShowCancelPlanModal.value = true;
+      return;
+    }
+
+    // Landed back here after a successful or cancelled Shopify checkout
+    const pendingModal = sessionStorage.getItem("planModalPending");
+    if (pendingModal === "pro") {
+      isShowProPlanModal.value = true;
+      // triggerFireworks();
+    } else if (pendingModal === "upgrade") {
+      isShowUpgradeModal.value = true;
+      // triggerFireworks();
+    } else if (pendingModal === "cancel") {
+      isShowCancelPlanModal.value = true;
+    }
+    if (pendingModal) {
+      sessionStorage.removeItem("planModalPending");
+    }
   });
 </script>

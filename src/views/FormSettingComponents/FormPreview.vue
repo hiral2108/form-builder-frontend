@@ -282,7 +282,7 @@
               </span>
               <img
                 v-svg-inline
-                src="@/assets/icons/FormFields/timer.svg"
+                src="@/assets/icons/FormFields/Timer.svg"
                 class="w-4 h-4 text-slate-400 pointer-events-none"
                 style="position: absolute; bottom: var(--input-padding-bottom)" />
             </div>

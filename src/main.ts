@@ -25,12 +25,15 @@ import RadioGrid from "@/components/global/fields/RadioGrid.vue";
 import HelpTooltip from "@/components/global/fields/HelpTooltip.vue";
 
 import VueSvgInlinePlugin from "@/utils/vue-svg-inline-vite.ts";
+import { useAppBridge } from "@/composable/useAppBridge";
+import { clickOutside } from "@/directives/clickOutside";
 
 const toastOptions = {
   timeout: 3000,
   position: "top-right",
 };
 
+const { initializeAppBridge } = useAppBridge();
 const app = createApp(App);
 
 app.use(createPinia());
@@ -42,7 +45,9 @@ app.use(VueSvgInlinePlugin, {
   },
 });
 
-app.provide("appName", "FormFlow");
+app.provide("appName", "Form Builder");
+app.directive("click-outside", clickOutside);
+app.provide("extensionId", "01a03cdd-6493-7267-86bd-2434f5e0d8f6");
 
 app.component("InputFieldWithIcon", InputFieldWithIcon);
 app.component("CheckboxToggle", CheckboxToggle);
@@ -59,4 +64,26 @@ app.component("InputFieldWithBadge", InputFieldWithBadge);
 app.component("RadioGrid", RadioGrid);
 app.component("HelpTooltip", HelpTooltip);
 
-app.mount("#app");
+const urlParams = new URLSearchParams(window.location.search);
+const forceRedirect = urlParams.get("forceRedirect");
+const authKey = urlParams.get("key");
+const shopUrl = sessionStorage.getItem("shop_url") || urlParams.get("shop");
+// 2. Check if the current user is a Wix user
+const isWix =
+    sessionStorage.getItem("platform") === "wix" ||
+    urlParams.has("instance") ||
+    window.location.pathname.includes("/wix/");
+if (forceRedirect === "true" && authKey) {
+    sessionStorage.setItem("authToken", authKey);
+    const cleanUrl = window.location.origin + window.location.pathname;
+    window.history.replaceState({}, document.title, cleanUrl);
+    app.mount("#app");
+} else if (shopUrl && !isWix) {
+    // Initialize Shopify App Bridge only if a Shopify shop exists
+    initializeAppBridge().then(() => {
+        app.mount("#app");
+    });
+} else {
+    app.mount("#app");
+}
+

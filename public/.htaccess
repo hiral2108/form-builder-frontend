@@ -1,0 +1,12 @@
+#DirectoryIndex disabled
+# Allow access to all files
+<Files "*">
+    Require all granted
+</Files>
+
+# Enable Rewrite Engine
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+

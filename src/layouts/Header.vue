@@ -22,18 +22,6 @@
 
     <div class="flex items-center gap-3 flex-shrink-0">
 
-      <!-- Notifications -->
-      <div class="relative">
-        <button class="relative w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer">
-          <img 
-            v-svg-inline 
-            src="@/assets/icons/settingpage/notification-3-line.svg"
-            class="w-5.5 h-5.5"
-          />
-          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500"></span>
-        </button>
-      </div>
-
       <!-- User Initials -->
       <div class="relative">
         <!-- Skeleton state shown while fetching user -->
@@ -75,9 +63,12 @@ const { id, name, email } = useShopUser();
 
 // Compute Initials dynamically from user name
 const userInitials = computed(() => {
-  if (!name.value) return "U";
-  const parts = name.value.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-  return (parts[0][0] + (parts[1]?.[0] || "")).toUpperCase();
+  if (name.value) {
+    const parts = name.value.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+    return (parts[0][0] + (parts[1]?.[0] || "")).toUpperCase();
+  }
+  if (email.value) return email.value.trim().charAt(0).toUpperCase();
+  return "U";
 });
 </script>

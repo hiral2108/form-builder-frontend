@@ -9,7 +9,7 @@
       <aside
         class="setting-sidebar fixed top-0 left-0 h-full z-40 flex flex-col bg-white text-slate-800 transition-all duration-300 ease-in-out w-60 lg:translate-x-0"
         :class="[
-          { 'collapse-sidebar': isCollapsed },
+          { 'collapse-sidebar': isCollapsed, hidden: plan_id == 0  },
           isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
         ]">
         <div class="h-16 flex items-center px-6 justify-between app-icon">
@@ -105,7 +105,7 @@
 
       <main
         class="flex-1 flex flex-col relative h-screen transition-all duration-300 bg-white overflow-x-hidden"
-        :class="[isMobile ? '' : isCollapsed ? 'pl-20' : 'pl-60']">
+        :class="[plan_id == 0 ? 'pl-5' : isMobile ? '' : isCollapsed ? 'pl-20' : 'pl-60']">
         <Header
           @toggle-mobile-sidebar="isMobileSidebarOpen = !isMobileSidebarOpen"
           :title="pageTitle"
@@ -163,13 +163,16 @@
 
   const appName = inject("appName");
 
-  const { name, email, getCurrentUser, id } = useShopUser();
+  const { name, email, getCurrentUser, id, plan_id } = useShopUser();
 
   const userInitials = computed(() => {
-    if (!name.value) return "U";
-    const parts = name.value.trim().split(/\s+/);
-    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-    return (parts[0][0] + (parts[1]?.[0] || "")).toUpperCase();
+    if (name.value) {
+      const parts = name.value.trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+      return (parts[0][0] + (parts[1]?.[0] || "")).toUpperCase();
+    }
+    if (email.value) return email.value.trim().charAt(0).toUpperCase();
+    return "U";
   });
 
   const activeLink = ref(String(route.name || ""));
@@ -195,7 +198,7 @@
   const isSidebarHidden = computed(() => {
     return route.name === "FormSettingsPage" && windowWidth.value < 1320;
   });
-  const navItems = [
+  const navItems = computed(() => [
     {
       label: "Dashboard",
       routeName: "DashboardPage",
@@ -215,12 +218,12 @@
       icon: submissionNav,
     },
     {
-      label: "Change Your Plan",
+      label: plan_id.value == 1 || plan_id.value == 0 ? "Upgrade to Pro" : "Change your Plan",
       routeName: "PlanPage",
       path: "/plan",
       icon: PlanPageIcon,
     },
-  ];
+  ]);
   const pageMeta: Record<string, { title: string; subtitle?: string }> = {
     DashboardPage: { title: "Dashboard", subtitle: "Build, manage, and track all your forms." },
     FormsPage: { title: "Forms", subtitle: "Manage your active and draft forms in one place." },

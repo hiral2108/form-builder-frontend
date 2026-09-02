@@ -62,6 +62,8 @@ export interface DashboardDataResponse {
   viewData: number[];
   clickData: number[];
   message?: string;
+  total_forms?: number;
+  planData?: any;
 }
 
 export interface SaveWidgetSettingPayload {

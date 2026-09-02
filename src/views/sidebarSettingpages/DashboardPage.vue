@@ -11,6 +11,9 @@
         <span>Create Form</span>
       </button>
     </div>
+
+    <InstallationNotice :host="userStore.host" :appName="appName" :extensionId="extensionId" />
+
     <!-- Dashboard Filter Bar -->
     <div class="flex items-end gap-3 flex-wrap mb-6 dashboard-filter">
       <!-- Filter Select with Calendar Icon -->
@@ -131,6 +134,43 @@
     </template>
 
     <template v-else>
+      <div
+        class="bg-gradient-to-r from-teal-50 to-teal-100 border border-teal-200 rounded-2xl p-4 shadow-sm mb-6"
+        v-show="plans && userStore.visitors >= plans.visitors">
+        <div class="flex flex-col min-[640px]:flex-row items-start min-[640px]:items-center justify-between gap-4">
+          <div class="flex items-start gap-4 flex-1">
+            <div class="w-12 h-12 bg-teal-200 rounded-xl flex items-center justify-center flex-shrink-0">
+              <img v-svg-inline src="@/assets/icons/dashboardpage/info.svg" alt="Info" />
+            </div>
+            <div class="flex-1">
+              <h4 class="text-base font-semibold text-gray-900 mb-2">Visitor Limit Reached</h4>
+              <p class="text-sm text-gray-700 leading-relaxed">
+                Your Form Builder are currently not displaying on your website because you've reached your
+                monthly visitor limit. The feature will automatically reactivate on
+                <strong class="font-bold text-gray-900">{{ formattedResetDate }}</strong
+                >, or you can
+                <router-link
+                  to="/plan"
+                  class="text-teal-600 hover:text-teal-700 font-semibold underline cursor-pointer">
+                  upgrade your plan
+                </router-link>
+                or
+                <button
+                  class="text-teal-600 hover:text-teal-700 font-semibold underline cursor-pointer"
+                  @click="openCrispChat">
+                  contact support
+                </button>
+                for immediate assistance.
+              </p>
+            </div>
+          </div>
+          <router-link
+            to="/plan"
+            class="px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-xl font-semibold text-sm transition-all duration-200 shadow-lg shadow-teal-200 hover:shadow-xl cursor-pointer whitespace-nowrap flex-shrink-0 w-full min-[640px]:w-auto flex-shrink-0 text-center">
+            Check Our Plans
+          </router-link>
+        </div>
+      </div>
       <!-- Visitors block container -->
       <div class="bg-white rounded-2xl border border-slate-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.02)] p-5 mb-6">
         <div class="grid grid-cols-1 min-[600px]:grid-cols-2 min-[960px]:grid-cols-3 gap-6 max-[1230px]:gap-4">
@@ -149,6 +189,7 @@
                   <span class="text-slate-500">{{ formattedPlanVisitors }}</span>
                 </p>
               </div>
+
             </div>
           </div>
 
@@ -245,13 +286,16 @@ import { ElDatePicker } from "element-plus";
 import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue"; 
 import FormService from "@/services/api/form-services"; 
 import { useUserStore } from "@/stores/user.ts";
+import InstallationNotice from "@/components/global/InstallationNotice.vue";
 
-const appName = inject("appName");
+const extensionId = inject<string>("extensionId", "");
+const appName = inject<string>("appName", "");
 const showCreateFormModal = ref(false);
 const showUpdatePlanModal = ref(false);
 const totalForms = ref(0);
 const userStore = useUserStore();
 const isLoading = ref(true);
+const plans = ref<any>(null);
 
 // Top Cards computed properties
 const planLimitMap: Record<number, number> = {
@@ -353,6 +397,8 @@ const fetchDashboardStats = async () => {
       
       totalFormsCreated.value = response.total_forms || 0;
       totalForms.value = response.total_forms || 0;
+
+      plans.value = response.planData || null;
     }
   } catch (error) {
     console.error("Failed to fetch stats for dashboard:", error);
@@ -383,6 +429,20 @@ watch(selectedFilter, async (newVal) => {
 const applyCustomFilter = async () => {
   if (!dateRange.value) return;
   await fetchDashboardStats();
+};
+
+const openCrispChat = () => {
+  if (!window.$crisp) return;
+
+  window.$crisp.push([
+    "set",
+    "message:text",
+    ["Hey Kim,\n\nI have reached monthly visitor limitation for Form Builder App. Can you please reset it?"],
+  ]);
+
+  setTimeout(() => {
+    window.$crisp!.push(["do", "chat:open"]);
+  }, 150);
 };
 </script>
 

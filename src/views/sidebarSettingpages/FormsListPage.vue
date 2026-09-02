@@ -1,5 +1,8 @@
 <template>
   <div class="w-full">
+
+    <InstallationNotice :host="userStore.host" :appName="appName" :extensionId="extensionId" />
+
     <!-- Forms List Filter Bar & Stats Grid (Only visible when forms exist or loading) -->
     <template v-if="isLoading || formsList.length > 0">
       <div class="flex items-center justify-between gap-3 flex-wrap mb-6">
@@ -509,7 +512,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch, onMounted } from "vue";
+  import { ref, watch, onMounted, inject } from "vue";
   import FormService from "@/services/api/form-services";
   import SelectField from "@/components/global/fields/SelectField.vue";
   import CheckboxToggle from "@/components/global/fields/CheckboxToggle.vue";
@@ -521,6 +524,7 @@
   import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue";
   import { useUserStore } from "@/stores/user.ts";
   import { showErrorMessage } from "@/utils";
+  import InstallationNotice from "@/components/global/InstallationNotice.vue";
 
   // Modal triggers and tracking state
   const showRenameModal = ref(false);
@@ -531,6 +535,8 @@
   const selectedForm = ref<any>(null);
 
   const userStore = useUserStore();
+  const extensionId = inject<string>("extensionId", "");
+  const appName = inject<string>("appName", "");
 
   // Filter States
   const selectedFilter = ref("last_7_days");
@@ -621,7 +627,7 @@
     await fetchFilteredForms(currentPage.value);
   };
 
-  const handleDelete = async (id: any) => {
+  const handleDelete = async () => {
     // 👈 Added async
     // 1. Call the API to fetch the updated list (this automatically sets isLoading = true and shows the skeleton)
     await fetchFilteredForms(currentPage.value);

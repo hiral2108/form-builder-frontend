@@ -9,7 +9,7 @@ interface CrispUserData {
 
 export function loadCrisp(user: CrispUserData) {
   if (!user.email && !user.nickname) {
-    console.warn("[Crisp] Skipping load — no user data yet");
+    // Expected on early mount before the account/user data has loaded — not worth a warning.
     return;
   }
 

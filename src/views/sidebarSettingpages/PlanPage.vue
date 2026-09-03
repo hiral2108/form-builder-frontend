@@ -433,11 +433,16 @@
 
     try {
       submittingPlanId.value = 1;
-      await new PlanService().changePlan({
+      const res = await new PlanService().changePlan({
         plan_id: 1,
         plan_type: selectedPlanType.value,
         plan_name: plan.name,
       });
+
+      if (res?.status !== 1) {
+        showErrorMessage(res?.message || "Unable to switch to the Free plan.");
+        return;
+      }
 
       await fetchPlans();
       userStore.plan_id = 1;

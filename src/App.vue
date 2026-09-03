@@ -45,12 +45,14 @@ onMounted(async () => {
     appReady.value = true
   }, 1000) // ✅ Replace with actual readiness logic
 
-  const params = new URLSearchParams(window.location.search)
-  const shop =
-      sessionStorage.getItem('shop_url') ||
-      params.get('shop')
+  // Only look this up once the account actually exists (proven by having an
+  // authToken) — using the URL's `shop` param alone fires this before the
+  // install flow (ShopifyInstall.vue -> addUser) has created the merchant
+  // record yet, which always 404s during that brief window.
+  const authToken = sessionStorage.getItem('authToken') || localStorage.getItem('authToken')
+  const shop = sessionStorage.getItem('shop_url') || localStorage.getItem('shop_url')
 
-  if (!shop) return
+  if (!authToken || !shop) return
 
   try {
     const { data } = await axios.get(
@@ -61,7 +63,7 @@ onMounted(async () => {
       loadCrisp(data)
     }
   } catch (e) {
-    console.error('Failed to load Crisp user data')
+    // Non-critical: Crisp is a support-chat widget, not worth alarming console noise.
   }
 })
 </script>

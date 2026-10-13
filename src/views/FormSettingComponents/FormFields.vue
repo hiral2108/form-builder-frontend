@@ -492,7 +492,7 @@
               </div>
             </div>
           </div>
-          <div v-else-if="selectedField" class="space-y-4 my-5">
+          <div v-else-if="selectedFieldOrNull" class="space-y-4 my-5">
             <template v-if="selectedField.type === 'name'">
               <RadioTypeSelector
                 v-model="selectedField.nameFormat"
@@ -1057,7 +1057,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from "vue";
+  import { computed, ref, watch } from "vue";
   import DeleteFieldConfirmModal from "@/components/modals/DeleteFieldConfirmModal.vue";
   import UpdatePlanModal from "@/components/modals/UpdatePlanModal.vue";
   import { useFormFieldsBuilder } from "@/composable/useFormFieldBuilder";
@@ -1091,7 +1091,7 @@
   const {
     fieldLibrary,
     formFieldSetting,
-    selectedField,
+    selectedField: selectedFieldOrNull,
     selectField,
     isDeleteModalOpen,
     fieldToDeleteLabel,
@@ -1129,6 +1129,9 @@
     isFieldLocked,
      validationErrors,
   } = useFormFieldsBuilder();
+  // The template only renders the field settings once selectedFieldOrNull is set,
+  // but vue-tsc loses that narrowing inside v-model handlers, so expose a non-null view.
+  const selectedField = computed(() => selectedFieldOrNull.value as NonNullable<typeof selectedFieldOrNull.value>);
   watch(isAdvanceSettingsOpen, (isOpen) => {
     if (isOpen) {
       isFirstNameSettingsOpen.value = false;

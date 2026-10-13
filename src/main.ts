@@ -47,7 +47,7 @@ app.use(VueSvgInlinePlugin, {
 
 app.provide("appName", "Form Builder");
 app.directive("click-outside", clickOutside);
-app.provide("extensionId", "01a03cdd-6493-7267-86bd-2434f5e0d8f6");
+app.provide("extensionId", "01a12fe7-d355-7198-95b1-da70039ce2b9");
 
 app.component("InputFieldWithIcon", InputFieldWithIcon);
 app.component("CheckboxToggle", CheckboxToggle);

@@ -5,35 +5,25 @@
       :class="isCollapsible ? 'lg:pl-20' : 'lg:pl-60'">
       <div class="w-full px-4 lg:px-6 flex items-center justify-between">
         <div class="flex items-center gap-4">
-          <router-link
-            to="/forms"
+          <router-link to="/forms"
             class="inline-flex items-center text-base font-semibold text-slate-600 hover:text-teal-600 transition-all duration-150 ease-linear group">
             <span
               class="mr-1.5 flex items-center justify-center h-8 w-8 rounded-full bg-teal-100 group-hover:bg-teal-600 transition-all duration-150 p-2">
-              <img
-                v-svg-inline
-                src="@/assets/icons/form-settings/arrow-left-with-line.svg"
-                alt="Back to List"
+              <img v-svg-inline src="@/assets/icons/form-settings/arrow-left-with-line.svg" alt="Back to List"
                 class="h-full w-full stroke-current stroke-2 text-teal-700 group-hover:text-white transition-all duration-150" />
             </span>
             <span class="max-[570px]:hidden font-medium">Back to List</span>
           </router-link>
         </div>
         <div class="flex items-center gap-2">
-          <button
-            type="button"
-            @click="prevStep"
-            :disabled="currentStep === 1"
+          <button type="button" @click="prevStep" :disabled="currentStep === 1"
             class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 font-medium rounded-lg text-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
             <span class="flex items-center justify-center">
               <img v-svg-inline src="@/assets/icons/settingpage/arrow-left-s-line.svg" alt="Back" class="w-5 h-5" />
             </span>
             <span class="max-[570px]:hidden font-medium">Back</span>
           </button>
-          <button
-            type="button"
-            @click="nextStep"
-            :disabled="currentStep === 5 || isStepDisabled(currentStep + 1)"
+          <button type="button" @click="nextStep" :disabled="currentStep === 5 || isStepDisabled(currentStep + 1)"
             class="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 font-medium rounded-lg text-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
             <span class="max-[570px]:hidden font-medium">Next</span>
             <span class="flex items-center justify-center">
@@ -42,16 +32,12 @@
           </button>
 
           <div class="relative">
-            <div
-              class="inline-flex rounded-lg overflow-hidden bg-teal-600 shadow-md"
+            <div class="inline-flex rounded-lg overflow-hidden bg-teal-600 shadow-md"
               :class="{ 'opacity-75': isLoading }">
-              <button
-                type="button"
-                :disabled="isLoading"
-                @click="
-                  isRedirectToDashboard = false;
-                  saveFormSettings();
-                "
+              <button type="button" :disabled="isLoading" @click="
+                isRedirectToDashboard = false;
+              saveFormSettings();
+              "
                 class="text-white hover:bg-teal-700 cursor-pointer transition-colors flex items-center save-changes px-4 py-2 font-semibold text-sm disabled:cursor-not-allowed">
                 <span class="flex items-center gap-2">
                   <span class="max-[420px]:hidden">Save Changes</span>
@@ -60,15 +46,9 @@
                 </span>
               </button>
 
-              <button
-                type="button"
-                :disabled="isLoading"
-                @click.stop="toggleSaveDropdown"
+              <button type="button" :disabled="isLoading" @click.stop="toggleSaveDropdown"
                 class="px-3 py-2 border-l border-teal-500 flex items-center justify-center hover:bg-teal-700 cursor-pointer save-dropdown-icon disabled:cursor-not-allowed">
-                <img
-                  v-svg-inline
-                  src="@/assets/icons/form-settings/arrow-down-s-line.svg"
-                  alt="Save button dropdown"
+                <img v-svg-inline src="@/assets/icons/form-settings/arrow-down-s-line.svg" alt="Save button dropdown"
                   class="w-5 h-5 text-white" />
               </button>
             </div>
@@ -76,17 +56,13 @@
             <div
               class="dropdown-content absolute right-0 top-full shadow-lg bg-white border border-gray-200 rounded-lg text-center w-max mt-1 z-50"
               v-show="showSaveDropdown">
-              <button
-                type="button"
-                :disabled="isLoading"
-                @click="
-                  isRedirectToDashboard = true;
-                  saveFormSettings();
-                "
+              <button type="button" :disabled="isLoading" @click="
+                isRedirectToDashboard = true;
+              saveFormSettings();
+              "
                 class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 rounded-lg cursor-pointer w-full text-left disabled:opacity-50 disabled:cursor-not-allowed">
                 Save &amp; View Dashboard
-                <ButtonLoader
-                  v-if="isLoading && isRedirectToDashboard === true"
+                <ButtonLoader v-if="isLoading && isRedirectToDashboard === true"
                   :classes="['border-gray-700! border-b-transparent!']" />
               </button>
             </div>
@@ -96,14 +72,11 @@
     </header>
 
     <div class="bg-slate-50 sticky top-0 z-30 transition-all duration-300 ease-in-out">
-      <div class="max-w-7xl mx-auto">
-        <nav class="flex gap-2 xl:gap-8">
-          <button
-            v-for="step in steps"
-            :key="step.number"
-            :disabled="isStepDisabled(step.number)"
+      <div class="max-w-7xl mx-auto px-2 sm:px-4">
+        <nav class="flex items-center gap-1 sm:gap-1.5 lg:gap-2 xl:gap-3.5 overflow-x-auto no-scrollbar">
+          <button v-for="step in steps" :key="step.number" :disabled="isStepDisabled(step.number)"
             @click="!isStepDisabled(step.number) && handleStepNavigation(step.number)"
-            class="p-3 xl:p-4 border-b-2 font-semibold text-md transition-all whitespace-nowrap flex items-center gap-2"
+            class="px-2 py-3 sm:px-2.5 sm:py-3.5 xl:px-3 border-b-2 font-semibold text-xs xl:text-sm transition-all whitespace-nowrap flex items-center gap-1.5 sm:gap-2 flex-shrink-0"
             :class="[
               isStepDisabled(step.number)
                 ? 'border-transparent text-slate-300 opacity-50 cursor-default'
@@ -112,7 +85,7 @@
                   : 'border-transparent text-slate-500 hover:text-slate-700 cursor-pointer',
             ]">
             <span
-              class="w-8 h-8 lg:w-6 lg:h-6 rounded-full flex items-center justify-center text-sm lg:text-xs transition-all duration-150"
+              class="w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs transition-all duration-150"
               :class="[
                 isStepDisabled(step.number)
                   ? 'bg-slate-100 text-slate-400'
@@ -122,15 +95,19 @@
               ]">
               {{ step.number }}
             </span>
-            <span class="hidden lg:inline">{{ step.title }}</span>
+            <!-- Title with dynamic active class -->
+            <span
+              class="step-title"
+              :class="{ 'is-active-step': currentStep === step.number }">
+              {{ step.title }}
+            </span>
           </button>
         </nav>
       </div>
     </div>
 
     <main class="flex-1 pt-6 max-w-7xl mx-auto w-full overflow-visible relative min-h-[335px]">
-      <div
-        v-if="isWidgetDataLoading && currentStep !== 1"
+      <div v-if="isWidgetDataLoading && currentStep !== 1"
         class="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-[1.5px] z-50">
         <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-600"></div>
       </div>
@@ -145,423 +122,456 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed, watch, nextTick } from "vue";
-  import { useRoute, useRouter } from "vue-router";
-  import { useToast } from "vue-toastification";
-  import FormFields from "@/views/FormSettingComponents/FormFields.vue";
-  import FormStyle from "@/views/FormSettingComponents/FormStyle.vue";
-  import DisplayRules from "@/views/FormSettingComponents/DisplayRules.vue";
-  import MessageAndNotification from "@/views/FormSettingComponents/MessageAndNotification.vue";
-  import TriggerAndTargeting from "@/views/FormSettingComponents/TriggerAndTargeting.vue";
+import { ref, computed, watch, nextTick } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
+import FormFields from "@/views/FormSettingComponents/FormFields.vue";
+import FormStyle from "@/views/FormSettingComponents/FormStyle.vue";
+import DisplayRules from "@/views/FormSettingComponents/DisplayRules.vue";
+import MessageAndNotification from "@/views/FormSettingComponents/MessageAndNotification.vue";
+import TriggerAndTargeting from "@/views/FormSettingComponents/TriggerAndTargeting.vue";
 
-  import FormSettingService from "@/services/api/form-setting-services";
-  import { formSetting } from "@/composable/useFormSettings";
-  import type { SaveWidgetSettingPayload } from "@/types/form";
+import FormSettingService from "@/services/api/form-setting-services";
+import { formSetting } from "@/composable/useFormSettings";
+import type { SaveWidgetSettingPayload } from "@/types/form";
 
-  defineProps<{
-    isCollapsible: boolean;
-  }>();
+defineProps<{
+  isCollapsible: boolean;
+}>();
 
-  const route = useRoute();
-  const router = useRouter();
-  const toast = useToast();
+const route = useRoute();
+const router = useRouter();
+const toast = useToast();
 
-  // Local States
-  const currentStep = ref(1);
-  const isLoading = ref(false);
-  const isRedirectToDashboard = ref(false);
-  const showSaveDropdown = ref(false);
+// Local States
+const currentStep = ref(1);
+const isLoading = ref(false);
+const isRedirectToDashboard = ref(false);
+const showSaveDropdown = ref(false);
 
-  const toggleSaveDropdown = () => {
-    showSaveDropdown.value = !showSaveDropdown.value;
-  };
+const toggleSaveDropdown = () => {
+  showSaveDropdown.value = !showSaveDropdown.value;
+};
 
-  const steps = [
-    { number: 1, title: "Form Fields" },
-    { number: 2, title: "Form Styles" },
-    { number: 3, title: "Display Rules" },
-    { number: 4, title: "Message & Notifications" },
-    { number: 5, title: "Trigger & Targeting" },
-  ];
+const steps = [
+  { number: 1, title: "Form Fields" },
+  { number: 2, title: "Form Styles" },
+  { number: 3, title: "Display Rules" },
+  { number: 4, title: "Message & Notifications" },
+  { number: 5, title: "Trigger & Targeting" },
+];
 
-  // Destructure Pinia stores, status loading indicators and fetch action from composable
-  const {
-    formFieldSetting,
-    formStyleSetting,
-    displayRuleSetting,
-    submissionSetting,
-    timeDelaySetting,
-    scrollBasedSetting,
-    pageRuleSetting,
-    dateTimeSetting,
-    dayHourSetting,
-    countryTargeting,
-    validationErrors,
-    isWidgetDataLoading,
-    fetchWidgetSetting,
-  } = formSetting();
+// Destructure Pinia stores, status loading indicators and fetch action from composable
+const {
+  formFieldSetting,
+  formStyleSetting,
+  displayRuleSetting,
+  submissionSetting,
+  timeDelaySetting,
+  scrollBasedSetting,
+  pageRuleSetting,
+  dateTimeSetting,
+  dayHourSetting,
+  countryTargeting,
+  validationErrors,
+  isWidgetDataLoading,
+  deviceSetting,
+  fetchWidgetSetting,
+} = formSetting();
 
-  const hasVisibleFields = computed(() => {
-    const fields = formFieldSetting.value?.fields || [];
-    return fields.some((field: any) => field.type !== "hidden");
-  });
+const hasVisibleFields = computed(() => {
+  const fields = formFieldSetting.value?.fields || [];
+  return fields.some((field: any) => field.type !== "hidden");
+});
 
-  const isStepDisabled = (stepNumber: number) => {
-    return stepNumber > 1 && !hasVisibleFields.value;
-  };
+const isStepDisabled = (stepNumber: number) => {
+  return stepNumber > 1 && !hasVisibleFields.value;
+};
 
-  // Auto return to Step 1 if all fields are removed
-  watch(hasVisibleFields, (hasFields) => {
-    if (!hasFields && currentStep.value > 1) {
-      currentStep.value = 1;
+// Auto return to Step 1 if all fields are removed
+watch(hasVisibleFields, (hasFields) => {
+  if (!hasFields && currentStep.value > 1) {
+    currentStep.value = 1;
+  }
+});
+
+// Deep color object format converter (to RGBA string)
+const convertColorsDeep = (obj: any): any => {
+  if (!obj) return obj;
+  if (obj instanceof Date) return obj;
+
+  if (
+    typeof obj === "object" &&
+    obj.r !== undefined &&
+    obj.g !== undefined &&
+    obj.b !== undefined &&
+    obj.a !== undefined
+  ) {
+    return `rgba(${obj.r},${obj.g},${obj.b},${obj.a})`;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => convertColorsDeep(item));
+  }
+
+  if (typeof obj === "object") {
+    const newObj: any = {};
+    for (const key in obj) {
+      newObj[key] = convertColorsDeep(obj[key]);
     }
-  });
+    return newObj;
+  }
+  return obj;
+};
 
-  // Deep color object format converter (to RGBA string)
-  const convertColorsDeep = (obj: any): any => {
-    if (!obj) return obj;
-    if (obj instanceof Date) return obj;
+// Deep Date object formatter (to YYYY-MM-DD)
+const formatDatesDeep = (obj: any): any => {
+  if (!obj) return obj;
+  if (obj instanceof Date) {
+    const year = obj.getFullYear();
+    const month = String(obj.getMonth() + 1).padStart(2, "0");
+    const day = String(obj.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
 
-    if (
-      typeof obj === "object" &&
-      obj.r !== undefined &&
-      obj.g !== undefined &&
-      obj.b !== undefined &&
-      obj.a !== undefined
-    ) {
-      return `rgba(${obj.r},${obj.g},${obj.b},${obj.a})`;
+  if (Array.isArray(obj)) {
+    return obj.map((item) => formatDatesDeep(item));
+  }
+
+  if (typeof obj === "object") {
+    const newObj: any = {};
+    for (const key in obj) {
+      newObj[key] = formatDatesDeep(obj[key]);
     }
+    return newObj;
+  }
+  return obj;
+};
+const validateFormFields = (): boolean => {
+  delete validationErrors.submitButtonText;
+  if (!formFieldSetting.value.submitButtonText || !formFieldSetting.value.submitButtonText.trim()) {
+    validationErrors.submitButtonText = "Button text is required";
 
-    if (Array.isArray(obj)) {
-      return obj.map((item) => convertColorsDeep(item));
-    }
-
-    if (typeof obj === "object") {
-      const newObj: any = {};
-      for (const key in obj) {
-        newObj[key] = convertColorsDeep(obj[key]);
+    // Redirect to Step 1 and focus on the input field
+    currentStep.value = 1;
+    formFieldSetting.value.selectedFieldId = 'submit-button';
+    nextTick(() => {
+      // 1. Scroll the settings panel to the button text input field
+      const el = document.getElementById("submit_button_text");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        (el as HTMLElement).focus?.();
       }
-      return newObj;
-    }
-    return obj;
-  };
 
-  // Deep Date object formatter (to YYYY-MM-DD)
-  const formatDatesDeep = (obj: any): any => {
-    if (!obj) return obj;
-    if (obj instanceof Date) {
-      const year = obj.getFullYear();
-      const month = String(obj.getMonth() + 1).padStart(2, "0");
-      const day = String(obj.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
-    }
-
-    if (Array.isArray(obj)) {
-      return obj.map((item) => formatDatesDeep(item));
-    }
-
-    if (typeof obj === "object") {
-      const newObj: any = {};
-      for (const key in obj) {
-        newObj[key] = formatDatesDeep(obj[key]);
+      // 2. Scroll the middle field preview container to the submit button card
+      const btnCard = document.querySelector(".gform-submit-btn");
+      if (btnCard) {
+        btnCard.scrollIntoView({ behavior: "smooth", block: "center" });
       }
-      return newObj;
-    }
-    return obj;
-  };
-     const validateFormFields = (): boolean => {
-    delete validationErrors.submitButtonText;
-    if (!formFieldSetting.value.submitButtonText || !formFieldSetting.value.submitButtonText.trim()) {
-      validationErrors.submitButtonText = "Button text is required";
+    });
+    return false;
+  }
+  return true;
+};
 
-      // Redirect to Step 1 and focus on the input field
-      currentStep.value = 1;
-      formFieldSetting.value.selectedFieldId = 'submit-button';
+const validateDisplayRules = (): boolean => {
+  delete validationErrors.button_text;
+  if (displayRuleSetting.value.form_type === "sticky") {
+    if (!displayRuleSetting.value.button_text || !displayRuleSetting.value.button_text.trim()) {
+      validationErrors.button_text = "Button text is required";
+
+      // Redirect to Step 3 and focus on the input field
+      currentStep.value = 3;
       nextTick(() => {
-        // 1. Scroll the settings panel to the button text input field
-        const el = document.getElementById("submit_button_text");
+        const el = document.getElementById("button_text");
         if (el) {
           el.scrollIntoView({ behavior: "smooth", block: "center" });
           (el as HTMLElement).focus?.();
         }
-
-        // 2. Scroll the middle field preview container to the submit button card
-        const btnCard = document.querySelector(".gform-submit-btn");
-        if (btnCard) {
-          btnCard.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
       });
       return false;
     }
-    return true;
-  };
+  }
+  return true;
+};
 
-  const validateDisplayRules = (): boolean => {
-    delete validationErrors.button_text;
-    if (displayRuleSetting.value.form_type === "sticky") {
-      if (!displayRuleSetting.value.button_text || !displayRuleSetting.value.button_text.trim()) {
-        validationErrors.button_text = "Button text is required";
+const validateMessageAndNotification = (): boolean => {
+  // Clear previous step 4 validation errors
+  delete validationErrors.custom_url;
+  delete validationErrors.email_name;
+  delete validationErrors.email_send_to;
+  delete validationErrors.email_subject;
+  delete validationErrors.email_body;
+  delete validationErrors.email_reply_to;
+  delete validationErrors.email_bcc;
+  delete validationErrors.email_cc;
 
-        // Redirect to Step 3 and focus on the input field
-        currentStep.value = 3;
-        nextTick(() => {
-          const el = document.getElementById("button_text");
-          if (el) {
-            el.scrollIntoView({ behavior: "smooth", block: "center" });
-            (el as HTMLElement).focus?.();
-          }
-        });
-        return false;
-      }
+  // 1. Custom URL validation (if option is selected)
+  if (submissionSetting.value.confirmationType === "custom_url") {
+    if (!submissionSetting.value.customUrl || !submissionSetting.value.customUrl.trim()) {
+      validationErrors.custom_url = "Custom URL is required";
     }
-    return true;
-  };
+  }
 
-  const validateMessageAndNotification = (): boolean => {
-    // Clear previous step 4 validation errors
-    delete validationErrors.custom_url;
-    delete validationErrors.email_name;
-    delete validationErrors.email_send_to;
-    delete validationErrors.email_subject;
-    delete validationErrors.email_body;
-    delete validationErrors.email_reply_to;
-    delete validationErrors.email_bcc;
-    delete validationErrors.email_cc;
-
-    // 1. Custom URL validation (if option is selected)
-    if (submissionSetting.value.confirmationType === "custom_url") {
-      if (!submissionSetting.value.customUrl || !submissionSetting.value.customUrl.trim()) {
-        validationErrors.custom_url = "Custom URL is required";
-      }
+  // 2. Email settings validation (only if Send Email toggle is active)
+  if (submissionSetting.value.sendEmail) {
+    if (!submissionSetting.value.emailSettings.name || !submissionSetting.value.emailSettings.name.trim()) {
+      validationErrors.email_name = "Name is required";
     }
 
-    // 2. Email settings validation (only if Send Email toggle is active)
-    if (submissionSetting.value.sendEmail) {
-      if (!submissionSetting.value.emailSettings.name || !submissionSetting.value.emailSettings.name.trim()) {
-        validationErrors.email_name = "Name is required";
-      }
-
-      if (
-        !submissionSetting.value.emailSettings.sendToEmail ||
-        !submissionSetting.value.emailSettings.sendToEmail.trim()
-      ) {
-        validationErrors.email_send_to = "Send to Email is required";
-      } else {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(submissionSetting.value.emailSettings.sendToEmail.trim())) {
-          validationErrors.email_send_to = "Please enter a valid email address";
-        }
-      }
-
-      if (!submissionSetting.value.emailSettings.subject || !submissionSetting.value.emailSettings.subject.trim()) {
-        validationErrors.email_subject = "Subject is required";
-      }
-
-      // Strip HTML tags to check if the Quill editor body has text
-      const cleanBody = (submissionSetting.value.emailSettings.emailBody || "").replace(/<[^>]*>/g, "").trim();
-      if (!cleanBody) {
-        validationErrors.email_body = "Email Body is required";
+    if (
+      !submissionSetting.value.emailSettings.sendToEmail ||
+      !submissionSetting.value.emailSettings.sendToEmail.trim()
+    ) {
+      validationErrors.email_send_to = "Send to Email is required";
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(submissionSetting.value.emailSettings.sendToEmail.trim())) {
+        validationErrors.email_send_to = "Please enter a valid email address";
       }
     }
 
-    // 3. If validation fails, redirect to Step 4, scroll and focus on first error field
-    const step4Keys = [
-      "custom_url",
-      "email_name",
-      "email_send_to",
-      "email_subject",
-      "email_body",
-    ];
-    const hasStep4Errors = Object.keys(validationErrors).some((key) => step4Keys.includes(key));
-    if (hasStep4Errors) {
-      currentStep.value = 4;
-      nextTick(() => {
-        const firstErrorKey = Object.keys(validationErrors).find((key) => step4Keys.includes(key));
-        if (firstErrorKey) {
-          const el = document.getElementById(firstErrorKey);
-          if (el) {
-            el.scrollIntoView({ behavior: "smooth", block: "center" });
-
-            // Focus element appropriately (Quill editor needs targeting inner editor pane)
-            if (firstErrorKey === "email_body") {
-              const quillEditor = el.querySelector(".ql-editor");
-              (quillEditor as HTMLElement)?.focus?.();
-            } else {
-              (el as HTMLElement).focus?.();
-            }
-          }
-        }
-      });
-      return false;
-    }
-    return true;
-  };
-
-  // Validation rules for triggers and targeting settings
-  const validateTriggersAndTargetingSettings = (): boolean => {
-    Object.keys(validationErrors).forEach((k) => delete validationErrors[k]);
-
-    // ⏱ Time delay
-    if (timeDelaySetting.value.is_time_delay === 1) {
-      const seconds = timeDelaySetting.value.seconds;
-      const raw = seconds as unknown as string | number | null | undefined;
-      if (
-        raw === null ||
-        raw === undefined ||
-        String(raw).trim() === "" ||
-        Number.isNaN(Number(raw)) ||
-        Number(raw) < 0
-      ) {
-        validationErrors.delay_duration = "Delay duration must be a valid number";
-      }
+    if (!submissionSetting.value.emailSettings.subject || !submissionSetting.value.emailSettings.subject.trim()) {
+      validationErrors.email_subject = "Subject is required";
     }
 
-    // 📜 Scroll trigger
-    if (scrollBasedSetting.value.is_scroll_trigger === 1) {
-      const scrollValue = scrollBasedSetting.value.scroll;
-      const raw = scrollValue as unknown as string | number | null | undefined;
-      if (
-        raw === null ||
-        raw === undefined ||
-        String(raw).trim() === "" ||
-        Number.isNaN(Number(raw)) ||
-        Number(raw) < 0 ||
-        Number(raw) > 100
-      ) {
-        validationErrors.page_scroll = "Scroll percentage must be between 0 and 100";
-      }
+    // Strip HTML tags to check if the Quill editor body has text
+    const cleanBody = (submissionSetting.value.emailSettings.emailBody || "").replace(/<[^>]*>/g, "").trim();
+    if (!cleanBody) {
+      validationErrors.email_body = "Email Body is required";
     }
+  }
 
-    // 📄 Page rules
-    if (pageRuleSetting.value.has_page_rule === 1) {
-      pageRuleSetting.value.rule_setting.forEach((rule) => {
-        if (!rule.rule_value?.trim()) {
-          validationErrors[`rule_value_${rule.id}`] = "Page rule value is required";
-        }
-      });
-    }
-
-    // 📅 Date & time rule
-    if (dateTimeSetting.value.has_date_rule === 1) {
-      dateTimeSetting.value.rule_setting.forEach((rule: any) => {
-        if (!rule.start_date) {
-          validationErrors[`date_rule_start_date_${rule.id}`] = "Start date is required";
-        }
-        if (!rule.end_date) {
-          validationErrors[`date_rule_end_date_${rule.id}`] = "End date is required";
-        }
-        if (rule.start_date && rule.end_date && new Date(rule.start_date) > new Date(rule.end_date)) {
-          validationErrors[`date_rule_end_date_${rule.id}`] = "End date must be after start date";
-        }
-      });
-    }
-
-    // If validation fails, jump to step 5 and focus on error
-    if (Object.keys(validationErrors).length > 0) {
-      currentStep.value = 5;
-
-      nextTick(() => {
-        const firstErrorKey = Object.keys(validationErrors)[0];
-        if (!firstErrorKey) return;
+  // 3. If validation fails, redirect to Step 4, scroll and focus on first error field
+  const step4Keys = [
+    "custom_url",
+    "email_name",
+    "email_send_to",
+    "email_subject",
+    "email_body",
+  ];
+  const hasStep4Errors = Object.keys(validationErrors).some((key) => step4Keys.includes(key));
+  if (hasStep4Errors) {
+    currentStep.value = 4;
+    nextTick(() => {
+      const firstErrorKey = Object.keys(validationErrors).find((key) => step4Keys.includes(key));
+      if (firstErrorKey) {
         const el = document.getElementById(firstErrorKey);
         if (el) {
           el.scrollIntoView({ behavior: "smooth", block: "center" });
-          (el as HTMLElement).focus?.();
+
+          // Focus element appropriately (Quill editor needs targeting inner editor pane)
+          if (firstErrorKey === "email_body") {
+            const quillEditor = el.querySelector(".ql-editor");
+            (quillEditor as HTMLElement)?.focus?.();
+          } else {
+            (el as HTMLElement).focus?.();
+          }
         }
-      });
-      return false;
+      }
+    });
+    return false;
+  }
+  return true;
+};
+
+// Validation rules for triggers and targeting settings
+const validateTriggersAndTargetingSettings = (): boolean => {
+  Object.keys(validationErrors).forEach((k) => delete validationErrors[k]);
+
+  // ⏱ Time delay
+  if (timeDelaySetting.value.is_time_delay === 1) {
+    const seconds = timeDelaySetting.value.seconds;
+    const raw = seconds as unknown as string | number | null | undefined;
+    if (
+      raw === null ||
+      raw === undefined ||
+      String(raw).trim() === "" ||
+      Number.isNaN(Number(raw)) ||
+      Number(raw) < 0
+    ) {
+      validationErrors.delay_duration = "Delay duration must be a valid number";
     }
-    return true;
-  };
+  }
 
-  // Save Settings Submit Handler
-  const saveFormSettings = async () => {
-     if (!validateFormFields()) return; 
-    if (!validateDisplayRules()) return;
-       Object.keys(validationErrors).forEach((k) => delete validationErrors[k]);
-    if (!validateDisplayRules()) return;
-    if (!validateMessageAndNotification()) return;
-    if (!validateTriggersAndTargetingSettings()) return;
+  // 📜 Scroll trigger
+  if (scrollBasedSetting.value.is_scroll_trigger === 1) {
+    const scrollValue = scrollBasedSetting.value.scroll;
+    const raw = scrollValue as unknown as string | number | null | undefined;
+    if (
+      raw === null ||
+      raw === undefined ||
+      String(raw).trim() === "" ||
+      Number.isNaN(Number(raw)) ||
+      Number(raw) < 0 ||
+      Number(raw) > 100
+    ) {
+      validationErrors.page_scroll = "Scroll percentage must be between 0 and 100";
+    }
+  }
 
-     isLoading.value = true;
-    if (!isRedirectToDashboard.value) {
+  // 📄 Page rules
+  if (pageRuleSetting.value.has_page_rule === 1) {
+    pageRuleSetting.value.rule_setting.forEach((rule) => {
+      if (!rule.rule_value?.trim()) {
+        validationErrors[`rule_value_${rule.id}`] = "Page rule value is required";
+      }
+    });
+  }
+
+  // 📅 Date & time rule
+  if (dateTimeSetting.value.has_date_rule === 1) {
+    dateTimeSetting.value.rule_setting.forEach((rule: any) => {
+      if (!rule.start_date) {
+        validationErrors[`date_rule_start_date_${rule.id}`] = "Start date is required";
+      }
+      if (!rule.end_date) {
+        validationErrors[`date_rule_end_date_${rule.id}`] = "End date is required";
+      }
+      if (rule.start_date && rule.end_date && new Date(rule.start_date) > new Date(rule.end_date)) {
+        validationErrors[`date_rule_end_date_${rule.id}`] = "End date must be after start date";
+      }
+    });
+  }
+
+  // If validation fails, jump to step 5 and focus on error
+  if (Object.keys(validationErrors).length > 0) {
+    currentStep.value = 5;
+
+    nextTick(() => {
+      const firstErrorKey = Object.keys(validationErrors)[0];
+      if (!firstErrorKey) return;
+      const el = document.getElementById(firstErrorKey);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        (el as HTMLElement).focus?.();
+      }
+    });
+    return false;
+  }
+  return true;
+};
+
+// Save Settings Submit Handler
+const saveFormSettings = async () => {
+  if (!validateFormFields()) return;
+  if (!validateDisplayRules()) return;
+  Object.keys(validationErrors).forEach((k) => delete validationErrors[k]);
+  if (!validateDisplayRules()) return;
+  if (!validateMessageAndNotification()) return;
+  if (!validateTriggersAndTargetingSettings()) return;
+
+  isLoading.value = true;
+  if (!isRedirectToDashboard.value) {
+    showSaveDropdown.value = false;
+  }
+
+  try {
+    const widgetId = String(route.params.uniqueId);
+
+    const payload: SaveWidgetSettingPayload = {
+      form_field_setting: formFieldSetting.value,
+      form_style_setting: formStyleSetting.value,
+      display_rule_setting: displayRuleSetting.value,
+      submission_setting: submissionSetting.value,
+      time_delay_setting: timeDelaySetting.value,
+      scroll_based_setting: scrollBasedSetting.value,
+      page_rule_setting: pageRuleSetting.value,
+      date_time_setting: formatDatesDeep(dateTimeSetting.value),
+      day_hour_setting: dayHourSetting.value,
+      country_rule_setting: countryTargeting.value,
+      devices: deviceSetting.value,
+      widget_id: widgetId,
+    };
+
+    const finalPayload = convertColorsDeep(payload);
+    const response = await new FormSettingService().savePopupSetting(finalPayload);
+
+    if (response.status === 1) {
+      toast.success(response.message || "Settings saved successfully!");
+      if (isRedirectToDashboard.value) {
+        router.push("/forms");
+      }
+    } else {
+      toast.error(response.message || "Failed to save settings");
+    }
+  } catch (error) {
+    toast.error("Failed to save settings");
+    console.error(error);
+  } finally {
+    setTimeout(() => {
+      isLoading.value = false;
       showSaveDropdown.value = false;
+    }, 1000);
+  }
+};
+
+// Navigation Steps
+const prevStep = () => {
+  if (currentStep.value > 1) currentStep.value--;
+};
+
+const nextStep = () => {
+  if (currentStep.value === 1 && !validateFormFields()) return; // 👈 Validate Step 1
+  if (currentStep.value === 3 && !validateDisplayRules()) return;
+  if (currentStep.value < 5 && !isStepDisabled(currentStep.value + 1)) {
+    currentStep.value++;
+  }
+};
+// Step navigation validator
+const handleStepNavigation = (stepNumber: number) => {
+  if (currentStep.value === 1 && stepNumber > 1 && !validateFormFields()) return; // 👈 Validate Step 1
+  if (stepNumber > 3 && !validateDisplayRules()) return;
+  currentStep.value = stepNumber;
+};
+
+// Watch for Route Param Changes to trigger fetching details on mounted
+watch(
+  () => route.params.uniqueId,
+  (id) => {
+    if (typeof id === "string") {
+      fetchWidgetSetting(id);
     }
-
-    try {
-      const widgetId = String(route.params.uniqueId);
-
-      const payload: SaveWidgetSettingPayload = {
-        form_field_setting: formFieldSetting.value,
-        form_style_setting: formStyleSetting.value,
-        display_rule_setting: displayRuleSetting.value,
-        submission_setting: submissionSetting.value,
-        time_delay_setting: timeDelaySetting.value,
-        scroll_based_setting: scrollBasedSetting.value,
-        page_rule_setting: pageRuleSetting.value,
-        date_time_setting: formatDatesDeep(dateTimeSetting.value),
-        day_hour_setting: dayHourSetting.value,
-        country_rule_setting: countryTargeting.value,
-        widget_id: widgetId,
-      };
-
-      const finalPayload = convertColorsDeep(payload);
-      const response = await new FormSettingService().savePopupSetting(finalPayload);
-
-      if (response.status === 1) {
-        toast.success(response.message || "Settings saved successfully!");
-        if (isRedirectToDashboard.value) {
-          router.push("/forms");
-        }
-      } else {
-        toast.error(response.message || "Failed to save settings");
-      }
-    } catch (error) {
-      toast.error("Failed to save settings");
-      console.error(error);
-    } finally {
-       setTimeout(() => {
-        isLoading.value = false;
-        showSaveDropdown.value = false;
-      }, 1000);
-    }
-  };
-
-  // Navigation Steps
-  const prevStep = () => {
-    if (currentStep.value > 1) currentStep.value--;
-  };
-
-  const nextStep = () => {
-    if (currentStep.value === 1 && !validateFormFields()) return; // 👈 Validate Step 1
-    if (currentStep.value === 3 && !validateDisplayRules()) return;
-    if (currentStep.value < 5 && !isStepDisabled(currentStep.value + 1)) {
-      currentStep.value++;
-    }
-  };
-  // Step navigation validator
-  const handleStepNavigation = (stepNumber: number) => {
-    if (currentStep.value === 1 && stepNumber > 1 && !validateFormFields()) return; // 👈 Validate Step 1
-    if (stepNumber > 3 && !validateDisplayRules()) return;
-    currentStep.value = stepNumber;
-  };
-
-  // Watch for Route Param Changes to trigger fetching details on mounted
-  watch(
-    () => route.params.uniqueId,
-    (id) => {
-      if (typeof id === "string") {
-        fetchWidgetSetting(id);
-      }
-    },
-    { immediate: true }
-  );
-  // Reset the layout scroll container to the top when the step changes
-  watch(currentStep, () => {
-    const scrollContainer = document.querySelector(".overflow-y-auto");
-    if (scrollContainer) {
-      scrollContainer.scrollTop = 0; // 👈 Scrolls the layout container back to the top
-    }
-    window.scrollTo({ top: 0, behavior: "instant" });
-  });
+  },
+  { immediate: true }
+);
+// Reset the layout scroll container to the top when the step changes
+watch(currentStep, () => {
+  const scrollContainer = document.querySelector(".overflow-y-auto");
+  if (scrollContainer) {
+    scrollContainer.scrollTop = 0; // 👈 Scrolls the layout container back to the top
+  }
+  window.scrollTo({ top: 0, behavior: "instant" });
+});
 </script>
+
+<style scoped>
+/* 1. Mobile (< 480px): ALL steps are ONLY numbers */
+.step-title {
+  display: none;
+}
+
+/* 2. Medium screens (480px to 1079px): ONLY active step shows title */
+@media (min-width: 480px) and (max-width: 1079px) {
+  .step-title.is-active-step {
+    display: inline;
+  }
+}
+
+/* 3. Full titles stay visible much longer down to 1080px (>= 1080px) */
+@media (min-width: 1080px) {
+  .step-title {
+    display: inline;
+  }
+}
+
+/* Keep smooth horizontal scrolling while hiding the scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>

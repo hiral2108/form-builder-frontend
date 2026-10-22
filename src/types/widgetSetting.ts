@@ -1,3 +1,4 @@
+
 export interface PageRuleSettings {
   has_page_rule: number
   rule_setting: PageRule[]

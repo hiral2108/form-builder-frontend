@@ -2,7 +2,7 @@
   <div class="custom-loader-screen">
     <!-- 🔄 Your branded loading screen -->
     <div class="loader-spinner"></div>
-    <p>Loading your dashboard...</p>
+    <p>Loading...</p>
   </div>
 </template>
 

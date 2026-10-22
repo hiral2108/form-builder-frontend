@@ -10,6 +10,7 @@ import { usePageRuleSettingStore } from "@/stores/pageRuleSetting";
 import { useDateTimeSettingsStore } from "@/stores/dateTimeSettings";
 import { useDayHourSettingsStore } from "@/stores/dayHourSettings";
 import { useCountryTargetingStore } from "@/stores/countryTargeting";
+import { useDevicesStore } from "@/stores/deviceSetting";
 import FormSettingService from "@/services/api/form-setting-services";
 
 const isWidgetDataLoading = ref(true);
@@ -26,6 +27,7 @@ export function formSetting() {
   const DateTimeSettingsStore = useDateTimeSettingsStore();
   const DayHourSettingsStore = useDayHourSettingsStore();
   const CountryTargetingStore = useCountryTargetingStore();
+  const deviceStore = useDevicesStore(); 
 
   const { formFieldSetting } = storeToRefs(FormFieldSettingStore);
   const { formStyleSetting } = storeToRefs(FormStyleSettingStore);
@@ -37,6 +39,7 @@ export function formSetting() {
   const { dateTimeSetting } = storeToRefs(DateTimeSettingsStore);
   const { dayHourSetting } = storeToRefs(DayHourSettingsStore);
   const { countryTargeting } = storeToRefs(CountryTargetingStore);
+  const { deviceSetting } = storeToRefs(deviceStore);
 
   const resetFormStores = () => {
     FormFieldSettingStore.$reset();
@@ -49,6 +52,7 @@ export function formSetting() {
     DateTimeSettingsStore.$reset();
     DayHourSettingsStore.$reset();
     CountryTargetingStore.$reset();
+    deviceStore.$reset(); 
   };
 
   const isEmpty = (val: any): boolean => {
@@ -102,6 +106,7 @@ export function formSetting() {
       dateTimeSetting.value = withDefault(data.date_time_setting, DateTimeSettingsStore.dateTimeSetting);
       dayHourSetting.value = withDefault(data.day_hour_setting, DayHourSettingsStore.dayHourSetting);
       countryTargeting.value = withDefault(data.country_rule_setting, CountryTargetingStore.countryTargeting);
+      deviceSetting.value = withDefault(data.device_setting, deviceStore.deviceSetting);  
     } catch (error) {
       console.error("Failed to load form details:", error);
     } finally {
@@ -128,6 +133,7 @@ export function formSetting() {
     dateTimeSetting,
     dayHourSetting,
     countryTargeting,
+    deviceSetting,
     fetchWidgetSetting,
   };
 }

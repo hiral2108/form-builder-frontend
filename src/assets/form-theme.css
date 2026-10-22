@@ -235,6 +235,22 @@
 }
 
 /* Color and border rules for selected custom radio and checkbox toggles */
+/* .gform-wrapper .discount-type-radio-toggle input[type="radio"]:checked + label > span {
+  border-color: var(--input-text-color) !important;
+}
+.gform-wrapper .discount-type-radio-toggle input[type="radio"]:checked + label > span > span {
+  background-color: var(--input-text-color) !important;
+}
+.gform-wrapper label input[type="checkbox"]:checked + div {
+  background-color: var(--input-text-color) !important;
+  border-color: var(--input-text-color) !important;
+}
+.gform-wrapper .discount-type-radio-toggle label {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+} */
+
+/* Color and border rules for selected custom radio and checkbox toggles */
 .gform-wrapper .discount-type-radio-toggle input[type="radio"]:checked + label > span {
   border-color: var(--input-text-color) !important;
 }
@@ -249,6 +265,19 @@
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
+
+/* 1. White inner background for unselected checkbox box */
+.gform-wrapper label input[type="checkbox"] + div {
+  background-color: #ffffff;
+  border-color: #cbd5e1;
+}
+
+/* 2. White inner background for unselected radio circle */
+.gform-wrapper .discount-type-radio-toggle input[type="radio"] + label > span:first-of-type {
+  background-color: #ffffff;
+  border-color: #cbd5e1;
+}
+/* ------------------ */
 
 /* Overrides browser native date and time picker icon triggers, making them absolute and invisible */
 .gform-wrapper input[type="date"]::-webkit-calendar-picker-indicator,
@@ -355,6 +384,7 @@
   top: 50% !important;
   transform: translateY(-50%) !important;
   bottom: auto !important;
+  z-index: 10 !important;
 }
 /* Adds right side spacing to password field input when eye icon is rendered */
 .gform-wrapper .input-field .relative:has(div) input {

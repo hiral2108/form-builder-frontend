@@ -4,6 +4,7 @@ import type { DisplayRuleSettingType } from "@/stores/DisplayRuleStore";
 import type { SubmissionSettingType } from "@/stores/submissionStore";
 import type { TimeDelaySettingStoreType } from "@/stores/timeDelaySetting";
 import type { ScrollBasedSettingStoreType } from "@/stores/scrollBasedSetting";
+import type { DevicesStoreType } from "@/stores/deviceSetting";
 import type {
   PageRuleSettings,
   DateRuleSettings,
@@ -77,6 +78,7 @@ export interface SaveWidgetSettingPayload {
   date_time_setting: DateRuleSettings;
   day_hour_setting: DayHourRuleSettings;
   country_rule_setting: CountryRuleSetting;
+  devices: DevicesStoreType; 
   widget_id: string;
 }
 
@@ -92,6 +94,7 @@ export interface WidgetDataResponse {
     date_time_setting: DateRuleSettings;
     day_hour_setting: DayHourRuleSettings;
     country_rule_setting: CountryRuleSetting;
+    device_setting: DevicesStoreType;
     widget_id?: string;
   };
 }

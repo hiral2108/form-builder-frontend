@@ -24,31 +24,80 @@ $axios.interceptors.request.use(
   }
 );
 
+function logoutAndRedirect() {
+  sessionStorage.removeItem("authToken");
+  localStorage.removeItem("authToken");
+  window.location.href = "/login";
+}
+
+// Ensures concurrent 401s (multiple in-flight requests all expiring at once)
+// share a single refresh call instead of each firing their own.
+let refreshPromise: Promise<string | null> | null = null;
+
+function refreshAuthToken(): Promise<string | null> {
+  if (!refreshPromise) {
+    refreshPromise = $axios
+      .post("refresh-token")
+      .then((res: any) => {
+        const newToken = res?.access_token;
+        if (!newToken) return null;
+
+        // Preserve whichever storage was already holding the token.
+        if (sessionStorage.getItem("authToken")) sessionStorage.setItem("authToken", newToken);
+        if (localStorage.getItem("authToken")) localStorage.setItem("authToken", newToken);
+        if (!sessionStorage.getItem("authToken") && !localStorage.getItem("authToken")) {
+          sessionStorage.setItem("authToken", newToken);
+          localStorage.setItem("authToken", newToken);
+        }
+
+        return newToken;
+      })
+      .catch(() => null)
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+  return refreshPromise;
+}
+
 $axios.interceptors.response.use(
   function (config: AxiosResponse) {
     // Change the data
     return config.data;
   },
-  function (error: AxiosError) {
+  async function (error: AxiosError) {
     const code = error.response?.status as number;
     const data = error.response?.data as any;
+    const originalRequest = error.config as (typeof error.config & { _retry?: boolean }) | undefined;
 
     if (code === 503) {
       return Promise.reject(error);
     }
 
-    if ([401].includes(code) && !window.location.pathname.includes("/login")) {
-      sessionStorage.removeItem("authToken");
-      localStorage.removeItem("authToken"); // 👈 Clear local storage token too
-      window.location.href = "/login";
-    }
+    const isRefreshCall = originalRequest?.url?.includes("refresh-token");
+    const onLoginPage = window.location.pathname.includes("/login");
 
-    // if ([301, 302].includes(code) && "redirect_url" in data) {
-    //   const a: any = document.createElement("a");
-    //   a.target = data.target || "_blank";
-    //   a.href = data.redirect_url;
-    //   a.click();
-    // }
+    if (code === 401 && !onLoginPage) {
+      // A 401 on the refresh call itself, or on a request we already retried
+      // once after refreshing, means the token genuinely can't be salvaged —
+      // fall back to a full re-auth instead of looping.
+      if (isRefreshCall || originalRequest?._retry) {
+        logoutAndRedirect();
+        return Promise.reject(error);
+      }
+
+      if (originalRequest) {
+        originalRequest._retry = true;
+        const newToken = await refreshAuthToken();
+
+        if (newToken) {
+          return $axios(originalRequest);
+        }
+      }
+
+      logoutAndRedirect();
+      return Promise.reject(error);
+    }
 
     if ([301, 302].includes(code) && data && typeof data === "object" && "redirect_url" in data) {
       const a: any = document.createElement("a");

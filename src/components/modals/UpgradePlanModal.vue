@@ -69,6 +69,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, computed } from "vue";
 import planFeatures from "@/data/planFeatures.json";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
   isShowModal: Boolean,
@@ -79,6 +80,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["closeModal", "confirmSelection"]);
+const router = useRouter();
 
 // Dynamically list all features belonging to the Pro/Upgrade tier
 const unlockedFeatures = computed(() => {
@@ -92,6 +94,7 @@ const closeModalWidget = () => {
 const confirmUpgrade = () => {
   emit("confirmSelection");
   closeModalWidget();
+  router.push("/dashboard");
 };
 
 const handleKeydown = (event: KeyboardEvent) => {

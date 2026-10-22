@@ -98,12 +98,29 @@ function computePopupPosition() {
 
 /* ---------- Parsing & Normalization ---------- */
 function hexToRgba(hex: string): RGBA | null {
-  const h = hex.replace("#", "");
-  if (!/^[0-9a-fA-F]{6}$/.test(h)) return null;
-  const r = parseInt(h.slice(0, 2), 16);
-  const g = parseInt(h.slice(2, 4), 16);
-  const b = parseInt(h.slice(4, 6), 16);
-  return { r, g, b, a: 1 };
+  let h = hex.replace("#", "").trim();
+  if (h.length === 3) {
+    h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+  } else if (h.length === 4) {
+    h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2] + h[3] + h[3];
+  }
+
+  if (/^[0-9a-fA-F]{6}$/.test(h)) {
+    const r = parseInt(h.slice(0, 2), 16);
+    const g = parseInt(h.slice(2, 4), 16);
+    const b = parseInt(h.slice(4, 6), 16);
+    return { r, g, b, a: 1 };
+  }
+
+  if (/^[0-9a-fA-F]{8}$/.test(h)) {
+    const r = parseInt(h.slice(0, 2), 16);
+    const g = parseInt(h.slice(2, 4), 16);
+    const b = parseInt(h.slice(4, 6), 16);
+    const a = Math.round((parseInt(h.slice(6, 8), 16) / 255) * 100) / 100;
+    return { r, g, b, a };
+  }
+
+  return null;
 }
 
 function rgbaStringToObj(input: string): RGBA | null {
@@ -119,11 +136,20 @@ function rgbaStringToObj(input: string): RGBA | null {
 
 function normalizeToRgba(v: any): RGBA | null {
   if (!v && v !== 0) return null;
-  if (typeof v === "object" && v.r !== undefined) return v;
+  if (typeof v === "object" && v.r !== undefined) {
+    return {
+      r: Number(v.r) || 0,
+      g: Number(v.g) || 0,
+      b: Number(v.b) || 0,
+      a: v.a !== undefined ? Number(v.a) : 1
+    };
+  }
   if (typeof v === "string") {
     const s = v.trim();
-    if (/^[0-9a-fA-F]{6}$/.test(s)) return hexToRgba("#" + s);
-    if (/^#[0-9a-fA-F]{6}$/.test(s)) return hexToRgba(s);
+    if (s.startsWith("#") || /^[0-9a-fA-F]{3,8}$/.test(s)) {
+      const parsed = hexToRgba(s);
+      if (parsed) return parsed;
+    }
     const parsed = rgbaStringToObj(s);
     if (parsed) return parsed;
   }
@@ -160,9 +186,16 @@ function onChromeUpdate(chromeValue: any) {
     const rgba = chromeValue.rgba;
     chromeModel.value = { r: rgba.r, g: rgba.g, b: rgba.b, a: rgba.a };
 
-    // Smart emission: if parent binds a string (hex), emit the hex string. Otherwise emit the RGBA object.
+    // Smart emission: if parent binds a string, emit formatted string with opacity support
     if (typeof props.modelValue === "string") {
-      emit("update:modelValue", chromeValue.hex);
+      let colorStr: string;
+      if (props.modelValue.startsWith("rgba") || props.modelValue.startsWith("rgb")) {
+        colorStr = `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`;
+      } else {
+        // Use 8-digit hex when alpha < 1, or 6-digit hex when full opacity (alpha === 1)
+        colorStr = rgba.a < 1 ? (chromeValue.hex8 || chromeValue.hex) : chromeValue.hex;
+      }
+      emit("update:modelValue", colorStr);
     } else {
       emit("update:modelValue", { r: rgba.r, g: rgba.g, b: rgba.b, a: rgba.a });
     }

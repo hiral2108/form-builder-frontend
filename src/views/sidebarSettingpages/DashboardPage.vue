@@ -181,6 +181,7 @@
                   <span class="text-slate-500">{{ formattedPlanVisitors }}</span>
                 </p>
               </div>
+
             </div>
           </div>
 

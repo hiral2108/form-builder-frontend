@@ -32,7 +32,8 @@ onMounted(async () => {
       return
     }
     isLoading.value = true
-    const res1 = await new AuthService().shopifyAddData({ code, shop, host })
+    // Forward every OAuth callback param (incl. hmac, timestamp, state) so the server can verify Shopify's signature
+    const res1 = await new AuthService().shopifyAddData(Object.fromEntries(params.entries()))
     if(res1.status == 1) {
       isLoading.value = false
     }

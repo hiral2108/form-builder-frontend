@@ -56,7 +56,8 @@ onMounted(async () => {
 
   try {
     const { data } = await axios.get(
-        `${import.meta.env.VITE_SQL_API_BASE_URL}shopify/user-by-shop?shop=${shop}`
+        `${import.meta.env.VITE_SQL_API_BASE_URL}shopify/user-by-shop?shop=${shop}`,
+        { headers: { Authorization: `Bearer ${authToken}` } }
     )
 
     if (data) {

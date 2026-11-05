@@ -21,8 +21,8 @@
       </div>
 
       <div class="flex-1 overflow-hidden p-4 bg-slate-50/10">
-                <slot v-if="isVisibleOnDevice" />
-              </div>
+        <slot v-if="isVisibleOnDevice" />
+      </div>
     </div>
 
     <div class="mt-4 flex justify-center hidden lg:flex">

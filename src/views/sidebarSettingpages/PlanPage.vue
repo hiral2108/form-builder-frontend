@@ -479,7 +479,16 @@
       });
 
       if (res?.confirmationUrl) {
-        sessionStorage.setItem("checkoutInProgress", isFirstPlan ? "pro" : "upgrade");
+        // Same Pro plan, Yearly → Monthly: only confetti, no modal
+        const isYearlyToMonthly =
+          userStore.plan_id === targetPlanId &&
+          String(userStore.plan_type || "").toLowerCase() === "yearly" &&
+          selectedPlanType.value === "monthly";
+
+        sessionStorage.setItem(
+          "checkoutInProgress",
+          isFirstPlan ? "pro" : isYearlyToMonthly ? "cycle" : "upgrade"
+        );
         sessionStorage.removeItem("planModalPending");
         const redirectTo = res.confirmationUrl;
         window.top ? (window.top.location.href = redirectTo) : (window.location.href = redirectTo);

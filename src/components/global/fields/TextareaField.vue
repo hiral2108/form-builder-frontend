@@ -8,7 +8,7 @@
       :class="labelClass"
       :style="labelStyle"
     >
-      {{ label }} <span v-if="required" class="text-red-500">*</span>
+      {{ label }}<span v-if="required" class="text-red-500 ml-[3px]">*</span>
     </label>
 
     <!-- Textarea -->

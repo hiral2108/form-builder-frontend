@@ -4,7 +4,7 @@
     <div class="mb-6 flex items-center justify-between gap-4 flex-wrap">
       <h2 class="text-xl font-bold text-slate-800 tracking-tight">Welcome to {{ appName }}</h2>
       <button @click="handleCreateClick"
-        class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10 max-[380px]:w-full max-[380px]:justify-center">
+        class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 hover:bg-teal-700 text-white rounded-xl text-sm font-semibold transition-colors whitespace-nowrap cursor-pointer flex items-center gap-1.5 shadow-sm shadow-teal-600/10">
         <img v-svg-inline src="@/assets/icons/dashboardpage/add-line.svg" class="w-5 h-5" />
         <span>Create Form</span>
       </button>
@@ -128,18 +128,22 @@
     </template>
 
     <template v-else>
-      <div class="bg-gradient-to-r from-teal-50 to-teal-100 border border-teal-200 rounded-2xl p-4 shadow-sm mb-6"
-        v-show="plans && userStore.visitors >= plans.visitors">
-        <div class="flex flex-col min-[640px]:flex-row items-start min-[640px]:items-center justify-between gap-4">
+      <div
+        class="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 rounded-2xl p-6 shadow-sm mb-6"
+        v-show="plans && plans.visitors > 0 && userStore.visitors >= plans.visitors">
+        <div class="flex items-center justify-between gap-6 flex-wrap">
           <div class="flex items-start gap-4 flex-1">
-            <div class="w-12 h-12 bg-teal-200 rounded-xl flex items-center justify-center flex-shrink-0">
+            <div class="w-12 h-12 bg-teal-100 rounded-xl flex items-center justify-center flex-shrink-0">
               <img v-svg-inline src="@/assets/icons/dashboardpage/info.svg" alt="Info" />
             </div>
             <div class="flex-1">
-              <h4 class="text-base font-semibold text-gray-900 mb-2">Visitor Limit Reached</h4>
+              <h4 class="text-base font-semibold text-gray-900 mb-2">
+                Visitor Limit Reached
+              </h4>
               <p class="text-sm text-gray-700 leading-relaxed">
-                Your Form Builder are currently not displaying on your website because you've reached your
-                monthly visitor limit. The feature will automatically reactivate on
+                Your Form Builder forms are currently not displaying on your
+                website because you've reached your monthly visitor limit. The
+                feature will automatically reactivate on
                 <strong class="font-bold text-gray-900">{{ formattedResetDate }}</strong>, or you can
                 <router-link to="/plan"
                   class="text-teal-600 hover:text-teal-700 font-semibold underline cursor-pointer">
@@ -155,7 +159,7 @@
             </div>
           </div>
           <router-link to="/plan"
-            class="px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-xl font-semibold text-sm transition-all duration-200 shadow-lg shadow-teal-200 hover:shadow-xl cursor-pointer whitespace-nowrap flex-shrink-0 w-full min-[640px]:w-auto flex-shrink-0 text-center">
+            class="px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-xl font-semibold text-sm transition-all duration-200 shadow-lg shadow-teal-200 hover:shadow-xl cursor-pointer whitespace-nowrap flex-shrink-0">
             Check Our Plans
           </router-link>
         </div>
@@ -174,12 +178,16 @@
             </div>
             <div class="flex-1">
               <p class="text-sm font-medium text-slate-500 mb-1">Visitors This Cycle</p>
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2 flex-wrap">
                 <p class="text-2xl font-bold text-slate-800 mb-1">
                   {{ formattedUserVisitors }}
                   <span class="text-slate-400 font-normal">/</span>
                   <span class="text-slate-500">{{ formattedPlanVisitors }}</span>
                 </p>
+                <router-link to="/plan"
+                  class="px-3 py-1 bg-teal-50 hover:bg-teal-100 text-teal-600 text-xs font-semibold rounded-lg transition-colors cursor-pointer whitespace-nowrap">
+                  Upgrade
+                </router-link>
               </div>
 
             </div>
@@ -376,9 +384,12 @@ const handleCreateClick = () => {
 };
 
 // Fetch Stats from Backend
-const fetchDashboardStats = async () => {
+let isFetchingStats = false;
+const fetchDashboardStats = async (silent = false) => {
+  if (silent && isFetchingStats) return; // avoid double call (focus + visibilitychange)
+  isFetchingStats = true;
   try {
-    isLoading.value = true; // <-- Turn loader ON
+    if (!silent) isLoading.value = true; // skeleton only on first load / filter change
     getCurrentUser();
     const payload: any = { filter: selectedFilter.value };
     if (selectedFilter.value === 'custom' && dateRange.value) {
@@ -404,6 +415,7 @@ const fetchDashboardStats = async () => {
     console.error("Failed to fetch stats for dashboard:", error);
   } finally {
     isLoading.value = false; // <-- Turn loader OFF when done (success or fail)
+    isFetchingStats = false;
   }
 };
 
@@ -420,8 +432,7 @@ const fetchDashboardStats = async () => {
 
 const handleTabFocus = () => {
   if (document.visibilityState === "visible") {
-    getCurrentUser();
-    fetchDashboardStats();
+    fetchDashboardStats(true); // silent refresh: no skeleton
   }
 };
 onMounted(async () => {

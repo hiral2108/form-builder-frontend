@@ -10,11 +10,11 @@
       </button>
       
       <!-- Render the correct props here -->
-      <div class="min-w-0">
-        <h1 class="text-xl font-bold text-slate-800 leading-tight tracking-tight">
+      <div class="min-w-0 flex-1">
+        <h1 class="text-xl font-bold text-slate-800 leading-tight tracking-tight truncate">
           {{ title }}
         </h1>
-        <p class="text-sm text-slate-500 mt-0.5 hidden sm:block">
+        <p class="text-sm text-slate-500 mt-0.5 truncate" :title="subtitle">
           {{ subtitle }}
         </p>
       </div>

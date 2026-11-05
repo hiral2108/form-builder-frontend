@@ -25,9 +25,10 @@
             <label class="text-sm font-semibold text-gray-700 w-full sm:w-28 sm:flex-shrink-0 pt-1.5">Message to
               Show</label>
             <div class="flex-1 w-full">
-              <div class="quill-editor-wrapper">
+              <div class="quill-editor-wrapper message-editor-bounds">
                 <QuillEditor v-model:content="submissionSetting.messageToShow" contentType="html" theme="snow"
-                  placeholder="Enter confirmation message..." :toolbar="editorToolbar" />
+                  placeholder="Enter confirmation message..." :toolbar="editorToolbar"
+                  :options="{ bounds: '.message-editor-bounds' }" @ready="onEditorReady" />
               </div>
             </div>
           </div>
@@ -120,11 +121,12 @@
                   <label class="text-sm font-semibold text-gray-700 w-full sm:w-28 sm:flex-shrink-0 pt-1.5">Email
                     Body</label>
                   <div class="flex-1 w-full">
-                    <div id="email_body" class="quill-editor-wrapper border rounded-lg overflow-hidden"
+                    <div id="email_body" class="quill-editor-wrapper email-editor-bounds border rounded-lg overflow-hidden"
                       :class="validationErrors.email_body ? 'has-error' : 'border-slate-200'">
                       <QuillEditor v-model:content="submissionSetting.emailSettings.emailBody" contentType="html"
                         theme="snow" placeholder="Enter email body..."
-                        @update:content="delete validationErrors.email_body" :toolbar="editorToolbar" />
+                        @update:content="delete validationErrors.email_body" :toolbar="editorToolbar"
+                        :options="{ bounds: '.email-editor-bounds' }" @ready="onEditorReady" />
                     </div>
                     <p v-if="validationErrors.email_body" class="text-xs text-red-500 mt-1">
                       {{ validationErrors.email_body }}
@@ -245,9 +247,70 @@ import { useSubmissionSettingStore } from "@/stores/submissionStore";
 import { useFormFieldSettingStore } from "@/stores/formFieldStore";
 import { useUserStore } from "@/stores/user.ts";
 
+import type Quill from "quill";
+import FormSettingService from "@/services/api/form-setting-services";
+import { useToast } from "vue-toastification";
+
 const submissionSettingStore = useSubmissionSettingStore();
 const userStore = useUserStore();
 const { submissionSetting, validationErrors } = formSetting();
+
+const toast = useToast();
+
+// ---- Quill images: upload to server and insert the URL (not base64) ----
+const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
+const MAX_IMAGE_SIZE = 1024 * 1024; // 1MB, same as the CTA icon upload
+
+const uploadEditorImage = async (quill: Quill, file: File, index?: number) => {
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    toast.error("Only JPG, JPEG, PNG, WEBP, and GIF files are allowed.");
+    return;
+  }
+  if (file.size > MAX_IMAGE_SIZE) {
+    toast.error("File size should not exceed 1MB.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  try {
+    const response = await new FormSettingService().uploadImage(formData);
+    if (response.status === 1 && response.fullPath) {
+      const insertAt = index ?? quill.getSelection(true)?.index ?? quill.getLength();
+      quill.insertEmbed(insertAt, "image", response.fullPath, "user");
+      quill.setSelection(insertAt + 1, 0, "silent");
+    } else {
+      toast.error(response.message || "Image upload failed");
+    }
+  } catch (error) {
+    console.error("Editor image upload failed:", error);
+    toast.error("Image upload failed");
+  }
+};
+
+const onEditorReady = (quill: Quill) => {
+  // Toolbar image button
+  const toolbar = quill.getModule("toolbar") as { addHandler: (name: string, handler: () => void) => void };
+  toolbar.addHandler("image", () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ALLOWED_IMAGE_TYPES.join(",");
+    input.onchange = () => {
+      const file = input.files?.[0];
+      if (file) uploadEditorImage(quill, file);
+    };
+    input.click();
+  });
+
+  // Drag-and-drop / paste of image files (Quill would insert base64 otherwise)
+  const uploader = quill.getModule("uploader") as {
+    options: { handler: (range: { index: number }, files: File[]) => void };
+  };
+  uploader.options.handler = (range, files) => {
+    files.forEach((file) => uploadEditorImage(quill, file, range.index));
+  };
+};
 
 // Load Form Fields and bind Selected Fields ref
 const formFieldStore = useFormFieldSettingStore();
@@ -459,11 +522,11 @@ watch(
      ========================================================================== */
 :deep(.ql-snow .ql-tooltip) {
   position: absolute !important;
-  top: 6px !important;
+  /* top comes from Quill: placed right under the selected text */
   left: 8px !important;
   right: 8px !important;
   width: auto !important;
-  transform: none !important;
+  transform: translateY(6px) !important;
   background-color: #ffffff !important;
   border: 1px solid #cbd5e1 !important;
   border-radius: 8px !important;
@@ -476,6 +539,11 @@ watch(
   align-items: center !important;
   row-gap: 6px !important;
   column-gap: 8px !important;
+}
+
+/* When there is no room below the text, Quill flips the popup above it */
+:deep(.ql-snow .ql-tooltip.ql-flip) {
+  transform: translateY(-6px) !important;
 }
 
 /* Hidden State */

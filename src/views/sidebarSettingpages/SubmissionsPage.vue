@@ -327,7 +327,7 @@
                 :key="label"
                 class="bg-slate-50 rounded-lg p-3">
                 <label class="block text-xs font-medium text-slate-500 uppercase mb-1">{{ label }}</label>
-                <p class="text-sm text-slate-800">{{ val }}</p>
+                <p class="text-sm text-slate-800 whitespace-pre-line">{{ val }}</p>
               </div>
             </div>
           </div>
@@ -457,9 +457,25 @@
         const submittedData: Record<string, string | number | boolean> = {};
         if (Array.isArray(item.fields)) {
           item.fields.forEach((f) => {
-            if (f.field_name) {
-              submittedData[f.field_name] = f.value;
+            if (!f.field_name) return;
+            const raw: any = f.value;
+            let display: string | number | boolean = "";
+
+            if (Array.isArray(raw)) {
+              // Checkboxes / Multiselect → "Option 4, Option 5, Option 6"
+              display = raw.filter((v) => v !== null && v !== "").join("\n");
+            } else if (raw && typeof raw === "object") {
+              // Old split-name records { first, last } → "First Last"
+              if ("first" in raw || "last" in raw) {
+                display = `${raw.first ?? ""} ${raw.last ?? ""}`.trim();
+              } else {
+                display = Object.values(raw).filter((v) => v !== null && v !== "").join(", ");
+              }
+            } else if (raw !== null && raw !== undefined) {
+              display = raw;
             }
+
+            submittedData[f.field_name] = display;
           });
         }
 

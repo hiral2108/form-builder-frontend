@@ -1,6 +1,6 @@
 <template>
-  <div :style="cssVars"
-    class="gform-wrapper w-full h-full overflow-auto border border-slate-200 rounded-xl transition-colors duration-150">
+  <div :style="[cssVars, { width: 'fit-content', minWidth: 'min(360px, 100%)', maxWidth: 'min(480px, 100%)' }]"
+    class="gform-wrapper h-full overflow-auto border border-slate-200 rounded-xl transition-colors duration-150">
     <div class="w-full min-w-full">
       <div class="gform-header-container">
         <h2 v-if="formStyleSetting.formInfo.formTitle" class="font-bold break-words leading-tight gform-title">
@@ -46,7 +46,7 @@
 
           <div v-else-if="field.type === 'name'" style="width: var(--input-width)">
             <template v-if="field.nameFormat === 'split'">
-              <div class="grid grid-cols-2 gap-1 w-full gform-split-name-grid" style="width: var(--input-width)">
+              <div class="grid grid-cols-2 gap-1 w-full items-end gform-split-name-grid" style="width: var(--input-width)">
                 <div class="relative w-full">
                   <HelpTooltip :message="field.firstNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
                   <InputField :disable="!interactive" :required="field.firstNameRequired == 1 &&
@@ -103,8 +103,7 @@
             <label v-if="formStyleSetting.labelStyle.showLabel === 'show'"
               class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1"
               :class="labelPositionClass(field.labelPlacement)">
-              {{ field.label }}
-              <span v-if="field.required" class="text-red-500">*</span>
+              {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
             </label>
             <SelectField v-model="formData[field.id]" :options="Object.fromEntries(
               [field.placeholder || ' ', ...(field.options || [])].map(
@@ -120,8 +119,7 @@
             <label v-if="formStyleSetting.labelStyle.showLabel === 'show'"
               class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1"
               :class="labelPositionClass(field.labelPlacement)">
-              {{ field.label }}
-              <span v-if="field.required" class="text-red-500">*</span>
+              {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
             </label>
             <div class="relative">
               <button type="button" @click="toggleMultiselect(field.id)" :class="[
@@ -161,8 +159,7 @@
             <label v-if="formStyleSetting.labelStyle.showLabel === 'show'"
               :class="labelPositionClass(field.labelPlacement)"
               class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1">
-              {{ field.label }}
-              <span v-if="field.required" class="text-red-500">*</span>
+              {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
             </label>
             <div class="flex flex-col gap-1 radio-checkbox-options-container items-start text-left">
               <CustomDefaultRadio v-for="(opt, idx) in field.options || []" :key="opt"
@@ -177,8 +174,7 @@
             <label v-if="formStyleSetting.labelStyle.showLabel === 'show'"
               :class="labelPositionClass(field.labelPlacement)"
               class="block text-sm font-semibold pointer-events-none select-none gform-label mb-1">
-              {{ field.label }}
-              <span v-if="field.required" class="text-red-500">*</span>
+              {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
             </label>
             <div class="flex flex-col gap-1 radio-checkbox-options-container items-start text-left">
               <CustomDefaultCheckbox v-for="opt in field.options || []" :key="opt" :label="opt"
@@ -192,8 +188,7 @@
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label v-if="formStyleSetting.labelStyle.showLabel === 'show'"
               class="block text-sm font-semibold gform-label mb-1" :class="labelPositionClass(field.labelPlacement)">
-              {{ field.label }}
-              <span v-if="field.required" class="text-red-500">*</span>
+              {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
             </label>
             <div class="relative" style="width: var(--input-width)">
               <input :disabled="!interactive" type="date" v-model="formData[field.id]" :class="[
@@ -215,8 +210,7 @@
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label v-if="formStyleSetting.labelStyle.showLabel === 'show'"
               class="block text-sm font-semibold gform-label mb-1" :class="labelPositionClass(field.labelPlacement)">
-              {{ field.label }}
-              <span v-if="field.required" class="text-red-500">*</span>
+              {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
             </label>
             <div class="relative" style="width: var(--input-width)">
               <input :disabled="!interactive" type="time" v-model="formData[field.id]" :class="[
@@ -238,8 +232,7 @@
             <HelpTooltip :message="field.helpMessage" class="absolute top-0.5 right-1 z-10" />
             <label v-if="formStyleSetting.labelStyle.showLabel === 'show'"
               class="block text-sm font-semibold gform-label mb-1" :class="labelPositionClass(field.labelPlacement)">
-              {{ field.label }}
-              <span v-if="field.required" class="text-red-500">*</span>
+              {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
             </label>
             <div
               class="border-2 px-4 border-dashed border-slate-200 rounded-xl !h-auto flex flex-col items-center justify-center bg-slate-50/50 gform-input">
@@ -407,7 +400,21 @@ onUnmounted(() => {
   align-items: center !important;
 }
 
+/* Same scrollbar as the store popup, so the form gets the same inner width */
 .gform-wrapper {
   scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #d7d7d7 transparent;
+}
+.gform-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.gform-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+.gform-wrapper::-webkit-scrollbar-thumb {
+  background-color: #d7d7d7;
+  border-radius: 10px;
 }
 </style>

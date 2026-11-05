@@ -187,7 +187,7 @@
 
               <div class="space-y-1.5" v-else-if="field.type === 'name'" style="width: var(--input-width)">
                  <template v-if="field.nameFormat === 'split'">
-                   <div class="grid grid-cols-2 gap-1 w-full gform-split-name-grid" style="width: var(--input-width)">
+                   <div class="grid grid-cols-2 gap-1 w-full items-end gform-split-name-grid" style="width: var(--input-width)">
                     <div class="relative w-full">
                       <HelpTooltip :message="field.firstNameHelpMessage" class="absolute top-0.5 right-1 z-10" />
                       <InputField
@@ -256,7 +256,7 @@
                   class="block text-sm font-semibold text-gray-700 pointer-events-none select-none gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
-                  {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
+                  {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
                 </label>
                 <SelectField
                   :placeholder="field.placeholder || 'Select an option'"
@@ -273,7 +273,7 @@
                   class="block text-sm font-semibold text-slate-700 pointer-events-none select-none gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
-                  {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
+                  {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
                 </label>
                 <div class="flex flex-col gap-1" >
                   <CustomDefaultRadio
@@ -294,7 +294,7 @@
                   class="block text-sm font-semibold text-slate-700 pointer-events-none select-none gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
-                  {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
+                  {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
                 </label>
                 <div class="flex flex-col gap-1">
                   <CustomDefaultCheckbox
@@ -313,7 +313,7 @@
                   class="block text-sm font-semibold text-slate-700 gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
-                  {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
+                  {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
                 </label>
                 <div class="relative" style="width: var(--input-width)">
                   <input
@@ -338,7 +338,7 @@
                   class="block text-sm font-semibold text-slate-700 gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
-                  {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
+                  {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
                 </label>
                 <div class="relative" style="width: var(--input-width)">
                   <input
@@ -363,7 +363,7 @@
                   class="block text-sm font-semibold text-slate-700 gform-label mb-1"
                   :class="labelPositionClass(field.labelPlacement)"
                   :style="labelStyleObject">
-                  {{ field.label }} <span v-if="field.required" class="text-red-500">*</span>
+                  {{ field.label }}<span v-if="field.required" class="text-red-500 ml-[3px]">*</span>
                 </label>
                 <div
                   class="gform-input border-2 border-dashed border-slate-200 rounded-xl !h-auto flex flex-col items-center justify-center bg-slate-50/50">

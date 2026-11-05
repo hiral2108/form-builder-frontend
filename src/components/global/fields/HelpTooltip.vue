@@ -3,11 +3,11 @@
   <span ref="triggerWrapper" style="display: none !important;"></span>
 
   <!-- Teleport the trigger icon inline directly into the label once it is found -->
-  <Teleport v-if="message && labelElement" :to="labelElement">
+  <Teleport v-if="message && iconTarget" :to="iconTarget">
     <span
       ref="trigger"
       class="relative cursor-pointer pointer-events-auto"
-      style="display: inline-flex !important; align-items: center !important; justify-content: center !important; vertical-align: middle !important; height: 1em !important; width: 1em !important; margin: 0 0 0 4px !important; padding: 0 !important; flex-shrink: 0 !important; line-height: 1 !important;"
+      style="display: inline-flex !important; align-items: center !important; justify-content: center !important; vertical-align: middle !important; height: 1em !important; width: 1em !important; margin: 0 0 0 3px !important; padding: 0 !important; flex-shrink: 0 !important; line-height: 1 !important;"
       @mouseenter="show"
       @mouseleave="hide"
     >
@@ -50,6 +50,18 @@ defineProps<{
 const triggerWrapper = ref<HTMLElement | null>(null);
 const trigger = ref<HTMLElement | null>(null);
 const labelElement = ref<HTMLElement | null>(null);
+const iconTarget = ref<HTMLElement | null>(null);
+
+// Put the ⓘ inside the red "*" span (nowrap) so "*ⓘ" never splits.
+// No "*" (field not required) → icon goes in the label as before.
+const updateIconTarget = (label: HTMLElement) => {
+  const star = label.querySelector<HTMLElement>('.text-red-500');
+  if (star && star.style.whiteSpace !== 'nowrap') {
+    star.style.setProperty('white-space', 'nowrap', 'important');
+  }
+  const next = star ?? label;
+  if (iconTarget.value !== next) iconTarget.value = next;
+};
 const visible = ref(false);
 const position = ref({ top: 0, left: 0 });
 
@@ -58,40 +70,36 @@ let applying = false;
 let rafId: number | null = null;
 let cancelled = false;
 
+// Same as front store: label is normal text (block + text-align),
+// the help icon flows inline right after the "*" and wraps with the text.
 const applyLabelFlexStyles = (label: HTMLElement) => {
   if (label.style.display === 'none') {
     return;
   }
 
-  const justify = label.classList.contains('text-right')
-    ? 'flex-end'
+  const align = label.classList.contains('text-right')
+    ? 'right'
     : label.classList.contains('text-center')
       ? 'center'
-      : 'flex-start';
+      : 'left';
 
-  // 👈 Detect if the label is inside the split name grid
+  // Split name labels fill their own half; other labels match the field width
   const isInGrid = label.closest('.gform-split-name-grid');
   const targetWidth = isInGrid ? '100%' : 'var(--input-width)';
 
   const s = label.style;
-  if (
-    s.display === 'flex' &&
-    s.alignItems === 'center' &&
-    s.flexWrap === 'wrap' &&
-    s.width === targetWidth &&
-    s.lineHeight === 'normal' &&
-    s.justifyContent === justify
-  ) {
+  if (s.display === 'block' && s.width === targetWidth && s.textAlign === align) {
     return;
   }
 
   applying = true;
-  s.setProperty('display', 'flex', 'important');
-  s.setProperty('align-items', 'center', 'important');
-  s.setProperty('flex-wrap', 'wrap', 'important');
-  s.setProperty('width', targetWidth, 'important'); // 👈 Set to 100% for grid labels
-  s.setProperty('line-height', 'normal', 'important');
-  s.setProperty('justify-content', justify, 'important');
+  s.removeProperty('align-items');
+  s.removeProperty('flex-wrap');
+  s.removeProperty('justify-content');
+  s.removeProperty('line-height');
+  s.setProperty('display', 'block', 'important');
+  s.setProperty('width', targetWidth, 'important');
+  s.setProperty('text-align', align, 'important');
   Promise.resolve().then(() => { applying = false; });
 };
 
@@ -107,12 +115,19 @@ const setupOnLabel = (fieldWrapper: HTMLElement, label: HTMLElement) => {
 
   labelElement.value = label;
   applyLabelFlexStyles(label);
+  updateIconTarget(label);
 
   labelObserver = new MutationObserver(() => {
+    updateIconTarget(label); // e.g. "Required" toggled → "*" added/removed
     if (applying) return;
     applyLabelFlexStyles(label);
   });
-  labelObserver.observe(label, { attributes: true, attributeFilter: ['class', 'style'] });
+  labelObserver.observe(label, {
+    attributes: true,
+    attributeFilter: ['class', 'style'],
+    childList: true,
+    subtree: true,
+  });
 
   if (card && transitionClasses.length > 0) {
     requestAnimationFrame(() => {
@@ -148,19 +163,25 @@ onBeforeUnmount(() => {
   cancelled = true;
   if (rafId !== null) cancelAnimationFrame(rafId);
   labelObserver?.disconnect();
+  hide();
 });
 
 const show = () => {
   if (!trigger.value) return;
   const rect = trigger.value.getBoundingClientRect();
+  // tooltip is position: fixed → use viewport coords only (no scrollX / scrollY)
   position.value = {
-    top: rect.top + window.scrollY - 8,
-    left: rect.left + rect.width / 2 + window.scrollX,
+    top: rect.top - 8,
+    left: rect.left + rect.width / 2,
   };
   visible.value = true;
+  window.addEventListener('scroll', hide, true);
+  window.addEventListener('resize', hide);
 };
 
 const hide = () => {
   visible.value = false;
+  window.removeEventListener('scroll', hide, true);
+  window.removeEventListener('resize', hide);
 };
 </script>

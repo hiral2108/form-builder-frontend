@@ -37,7 +37,9 @@ onMounted(async () => {
 
     if (res?.status === 1) {
       await getCurrentUser();
-      sessionStorage.setItem("planModalPending", checkoutAttempt === "pro" ? "pro" : "upgrade");
+      if (checkoutAttempt !== "cycle") {
+        sessionStorage.setItem("planModalPending", checkoutAttempt === "pro" ? "pro" : "upgrade");
+      }
       triggerFireworks();
       // showSuccessMessage("Your plan has been updated successfully!");
     } else {

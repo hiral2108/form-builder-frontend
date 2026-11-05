@@ -2,7 +2,7 @@
   <div class="input-field">
     <div class="input-wrapper">
       <label v-if="label" :for="getFieldID" :class="labelClass" :style="labelStyle" class="block text-sm font-semibold text-gray-700 mb-1">
-          <span>{{ label }} <span v-if="required" class="text-red-500">*</span></span>
+          <span>{{ label }}<span v-if="required" class="text-red-500 ml-[3px]">*</span></span>
       </label>
       <div class="relative">
         <input

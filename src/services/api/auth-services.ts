@@ -19,7 +19,7 @@ export default class AuthService {
     return $axios.post(`/shopify/auth`, payload)
   }
 
-  shopifyAddData(payload: {code: string; shop: string; host?: string;}): Promise<SessionAuth> {
+  shopifyAddData(payload: Record<string, string>): Promise<SessionAuth> {
     return $axios.post(`/shopify/addUser`, payload)
   }
 }

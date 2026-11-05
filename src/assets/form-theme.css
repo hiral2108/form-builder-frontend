@@ -330,7 +330,7 @@
   text-overflow: ellipsis !important;
 
   /* Dynamically limit width to keep a safe distance from the calendar/clock icons */
-  max-width: calc(100% - var(--input-padding-left) - 40px) !important;
+  max-width: calc(100% - var(--input-padding-left) - max(var(--input-padding-right), 36px)) !important;
 
   top: calc(var(--input-padding-top) + (var(--input-font-size) / 2) + 3px) !important;
   transform: translateY(-50%) !important;
@@ -340,7 +340,7 @@
 /* Positions custom select/multiselect dropdown icons statically */
 .gform-wrapper .custom-select-box {
   position: relative !important;
-  padding-right: 34px !important;
+  padding-right: max(var(--input-padding-right), 36px) !important;
 }
 /* Truncates the text inside the select box */
 .gform-wrapper .custom-select-box span {
@@ -388,7 +388,12 @@
 }
 /* Adds right side spacing to password field input when eye icon is rendered */
 .gform-wrapper .input-field .relative:has(div) input {
-  padding-right: calc(var(--input-padding-right) + 24px) !important;
+  padding-right: max(var(--input-padding-right), 36px) !important;
+}
+
+.gform-wrapper input[type="date"],
+.gform-wrapper input[type="time"] {
+  padding-right: max(var(--input-padding-right), 36px) !important;
 }
 
 .gform-wrapper.editor-mode > div[id^="field-"] > div:last-child {
@@ -408,4 +413,11 @@ input::-webkit-inner-spin-button {
 }
 input[type="number"] {
   -moz-appearance: textfield !important;
+}
+
+
+/* Split name: label wraps inside its own column, so "*" (with ⓘ) goes to its own line, same as front store */
+.gform-split-name-grid label {
+  overflow-wrap: anywhere !important;
+  min-width: 0 !important;
 }
